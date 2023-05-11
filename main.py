@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 import os
 from langchain.llms import OpenAI
+from fastapi.staticfiles import StaticFiles
 
 #  Load the OpenAI API key from the .env file
 load_dotenv()
@@ -25,10 +26,21 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Create a route to the root endpoint
-@app.get("/")
-async def root():
-    return {"message": "Multimodal Accessible Visulization Backend API"} 
+
+# Mount the "public" directory as a static file directory
+app.mount("/public", StaticFiles(directory="public", html=True), name="public")
+
+# Route to serve the index.html file
+# @app.get("/")
+# async def read_index():
+#     with open("public/index.html", "r") as f:
+#         return f.read()
+    
+
+# # Create a route to the root endpoint
+# @app.get("/")
+# async def root():
+#     return {"message": "Multimodal Accessible Visulization Backend API"} 
     
 # Create a route to the /prompt endpoint with a query param called prompt
 @app.get("/prompt")
