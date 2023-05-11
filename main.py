@@ -1,5 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
+
 from dotenv import load_dotenv
 import os
 from langchain.llms import OpenAI
@@ -27,25 +29,25 @@ app.add_middleware(
 )
 
 
-# Mount the "public" directory as a static file directory
-app.mount("/public", StaticFiles(directory="public", html=True), name="public")
 
-# Route to serve the index.html file
-# @app.get("/")
-# async def read_index():
-#     with open("public/index.html", "r") as f:
-#         return f.read()
+# Create a route to the api root endpoint
+@app.get("/api")
+async def root():
+    return {"message": "Multimodal Accessible Visulization Backend API"} 
     
 
-# # Create a route to the root endpoint
-# @app.get("/")
-# async def root():
-#     return {"message": "Multimodal Accessible Visulization Backend API"} 
-    
-# Create a route to the /prompt endpoint with a query param called prompt
-@app.get("/prompt")
+# Create a route to the /api/prompt endpoint with a query param called prompt
+@app.get("/api/prompt")
 async def prompt(text: str):
     # check if prompt is not None
     response = llm(text)
     return {"prompt": text, "response": response}
 
+
+# Mount the "public" directory as a static file directory
+# This is needed to serve the frontend
+# The order of the routes matters, so this should be the last route
+# Otherwise, it will conflict with the api routes above
+# See FastAPI documentation for more info: https://fastapi.tiangolo.com/tutorial/path-params/#order-matters
+# See StackOverflow for more info: https://stackoverflow.com/questions/73110208/how-to-load-a-different-file-than-index-html-in-fastapi-root-path
+app.mount("/", StaticFiles(directory="public", html=True), name="public")

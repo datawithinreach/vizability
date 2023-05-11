@@ -6,7 +6,7 @@ function sendPrompt() {
     // var text = document.getElementById("prompt").value;
     const text = "Tell me what to do in Maldives"
     console.log("prompt", text);
-    fetch("/prompt?text=" + text)
+    fetch("/api/prompt?text=" + text)
         .then(function(response) {
             return response.json();
         })
