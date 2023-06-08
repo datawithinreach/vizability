@@ -1,0 +1,55 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "A scatterplot showing life expectancy at birth and GDP per capita for countries around the world over a span of 68 years from 1950 to 2018",
+  "width": 1000,
+  "height": 500,
+  "data": {"url": "https://raw.githubusercontent.com/Joszek0723/excess_data/main/scatter_plot_data.json"},
+  "params": [{ 
+                    "name" : "AnnualPeriod", 
+                    "value": 1950,
+                    "bind" : {"input": "range", "min":1950, "max":2018,"step":1 }
+                 }],
+  "transform": [
+    {"filter": "datum.Year === AnnualPeriod"}
+  ],     
+  "mark": {"type": "circle", "filled": true, "tooltip": true},
+  "encoding": {
+    "x": {"field": "GDP per capita", "type": "quantitative", "scale": {"type": "log"}},
+    "y": {"field": "Life expectancy at birth (historical)", "type": "quantitative", "scale": {"zero": false}},
+    "size": {
+      "field": "Population (historical estimates)",
+      "type": "quantitative",
+      "scale": {
+        "type": "sqrt"
+      }
+    },
+    "fill": {
+      "field": "Continent",
+      "type": "nominal",
+      "scale": {
+        "range": ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2"]
+      }
+    },
+    "color": {
+      "field": "Continent",
+      "type": "nominal",
+      "scale": {
+        "range": ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2"]
+      }
+    },
+    "tooltip": [
+      {"field": "Entity", "title": "Country"},
+      {
+        "field": "Life expectancy at birth (historical)",
+        "type": "quantitative",
+        "title": "Life Expectancy (years)"
+      },
+      {
+        "field": "GDP per capita",
+        "type": "quantitative",
+        "title": "GDP per Capita (USD)",
+        "format": "$,.2f"
+      }
+    ]
+  }
+}
