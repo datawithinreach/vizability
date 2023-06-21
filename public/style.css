@@ -128,7 +128,7 @@ to this section's matching END comment to see page-specific styles.
   
   /* Title h1 style */
   .title {
-    color: #2800FF;
+    color: #226291;
     font-family: HK Grotesk;
     font-style: normal;
     font-weight: bold;
@@ -198,7 +198,7 @@ to this section's matching END comment to see page-specific styles.
     font-size: 1rem;
   }
   h2 {
-    color: #2800FF;
+    color: #226291;
   }
 
   /* File Drop Zone */
@@ -213,5 +213,21 @@ to this section's matching END comment to see page-specific styles.
   }
   .hidden {
     display: none; /* Hide the file input element */
+  }
+
+  /* Run Evaluation Button */
+  #testButton {
+    background-color: #226291;
+    color: #ffffff;
+    border: none;
+    border-radius: 20px;
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  #testButton:hover {
+    background-color: #12476a;
   }
   

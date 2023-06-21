@@ -26,7 +26,8 @@ export function loadVGandSendToBackend(vegaLiteInfo) {
 }
 
 export async function getVegaLiteSpec() {
-    return fetch("/api/get-vega-lite-spec")
+    const filePath = "./spec/vega-lite-spec.vg"
+    return fetch("/api/get-backend-file?file_path=" + filePath)
         .then(function (response) {
             return response.json();
         })

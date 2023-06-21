@@ -32,7 +32,7 @@
         <input id="user-query" name="user-query" type="text" />
       </label>
 
-      <button>Submit</button>
+      <button id="form-submit" type="submit">Submit</button>
     </form>
     <div>
       <strong>Your question:</strong> <span id="prompt"></span>
@@ -40,10 +40,14 @@
     <div>
       <strong>Response received: </strong> <span id="response"></span>
     </div>
+    <div>
+      <button id="testButton" type="button">Run Evaluation</button>
+    </div>
   </div>
   <script src="fileLoader.js" type="module"></script>
   <script src="fileDropZone.js" type="module"></script>
   <script src="main.js" type="module"></script>
+  <script src="test.js" type="module"></script>
 </body>
 
 </html>

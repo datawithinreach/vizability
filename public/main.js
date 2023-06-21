@@ -46,7 +46,8 @@ function handleSubmit(event, hierarchy) {
 
 // sends question to OpenAPI for classification and returns output string
 async function classifyQuery(question) {
-  return fetch("/api/get-query-classification?question=" + question, { redirect: 'manual' })
+  const filePath = "gptPrompts/queryClassification.txt"
+  return fetch("/api/get-backend-file?file_path=" + filePath, { redirect: 'manual' })
     .then(function (response) {
       return response.json();
     })
@@ -147,15 +148,13 @@ const handleVegaLiteSpecChange = (event) => {
 
 
   tree = new Tree(document.querySelector('.olli-vis'));
-  // tree.getHierarchy((hierarchy) => {
-  //   descr = descrPre + hierarchy;
-  // });
 };
 
 document.addEventListener('vegaLiteSpecChange', handleVegaLiteSpecChange);
 
 // Attach the submit event listener outside of handleVegaLiteSpecChange
 document.getElementById("ask-question").addEventListener('submit', (event) => {
+  event.preventDefault();
   const hierarchy = tree.getHierarchy((hierarchy) => {
     // Pass the hierarchy to the handleSubmit function
     handleSubmit(event, hierarchy);

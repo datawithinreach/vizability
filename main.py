@@ -143,19 +143,11 @@ async def process_csv(request: Request):
 
     return {"message": "CSV file saved successfully!"}
 
-@app.get("/api/get-vega-lite-spec")
-async def get_vega_lite_spec():
-    file_path = "./spec/vega-lite-spec.vg"
-    with open(file_path, "r") as vg_object:
-        vg_contents = vg_object.read()
-    return {"contents": vg_contents}
-
-@app.get("/api/get-query-classification")
-async def classify_query(question: str):
-    file_path = "gptPrompts/queryClassification.txt"
-    with open(file_path, 'r', encoding="utf8") as file_object:
-        query_classification_contents = file_object.read()
-    return {"contents": query_classification_contents}
+@app.get("/api/get-backend-file")
+async def get_backend_file(file_path: str):
+    with open(file_path, "r") as file_object:
+        contents = file_object.read()
+    return {"contents": contents}
 
 @app.get("/api/apply-agent")
 async def apply_agent(question: str):
