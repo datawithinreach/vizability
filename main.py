@@ -59,8 +59,13 @@ async def process_vega_lite_spec(request: Request):
     # Retrieve the Vega Lite Spec content
     vega_lite_spec_content = data["vgSpec"]
 
-    # Process vega_lite_spec_content_data to remove line breaks
-    vega_lite_spec_content = vega_lite_spec_content.replace("\r\n", "\n")   
+    # Convert to Str
+    if type(vega_lite_spec_content) is str:
+        # Process vega_lite_spec_content_data to remove line breaks
+        vega_lite_spec_content = vega_lite_spec_content.replace("\r\n", "\n")
+
+    elif type(vega_lite_spec_content) is dict:
+        vega_lite_spec_content = json.dumps(vega_lite_spec_content, indent=4) 
 
     # Step 2: Specify the file path and name to save the VG file
     directory = 'spec/'

@@ -1,0 +1,40 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <title>My Website</title>
+    <!-- vega / vega-lite -->
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+  
+    <!-- olli -->
+    <script src="https://cdn.jsdelivr.net/npm/olli@1"></script>
+    <script src="https://cdn.jsdelivr.net/npm/olli-adapters@1"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+  </head>
+  
+  <body>
+    <div class="content" role="main">
+      <!-- This is the start of content for our page -->
+      <h1 class="title">Evaluation</h1>
+      <div>
+        <button type="button" id="run-eval">Run Evaluation</button>
+        <button type="button" id="return" onclick="window.location.href = '../index.html'">Return</button>
+      </div>
+      <div id="vega-container"></div>
+      <div id="olli-container"></div>
+      <div>
+        <strong>Your question:</strong> <span id="prompt"></span>
+      </div>
+      <div>
+        <strong>Response received: </strong> <span id="response"></span>
+      </div>
+      <div>
+        <button type="button" id="download"><a id="download-link" href="#" download>Download Updated CSV</a></button>
+      </div>
+    </div>
+    <script src="test.js" type="module"></script>
+    <script src="testCondenseOlliRender.js" type="module"></script>
+  </body>
+  
+  </html>

@@ -215,8 +215,8 @@ to this section's matching END comment to see page-specific styles.
     display: none; /* Hide the file input element */
   }
 
-  /* Run Evaluation Button */
-  #testButton {
+  /* Navigate to Evaluation Button */
+  #eval {
     background-color: #226291;
     color: #ffffff;
     border: none;
@@ -227,7 +227,7 @@ to this section's matching END comment to see page-specific styles.
     cursor: pointer;
   }
   
-  #testButton:hover {
+  #eval:hover {
     background-color: #12476a;
   }
   

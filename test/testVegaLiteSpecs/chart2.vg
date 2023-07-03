@@ -1,0 +1,37 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 500,
+  "title": "Global Land and Ocean January-December Temperature Anomalies",
+  "data": {
+    "url": "https://raw.githubusercontent.com/Joszek0723/excess_data/main/bar_chart_data.csv"
+  },
+  "mark": "bar",
+  "config": {"scale": {"barBandPaddingInner": 0.3}},
+  "encoding": {
+    "x": {
+      "field": "Year",
+      "type": "ordinal",
+      "axis": {"labelExpr": "datum.value % 10 === 0 ? datum.value : ''"}
+    },
+    "y": {
+      "title": "Temperature Anomaly",
+      "field": "Value",
+      "type": "quantitative",
+      "axis": {
+        "values": [-0.6, -0.2, 0.2, 0.6, 1, 1.4],
+        "format": ".2f",
+        "labelExpr": "datum.value + ' °C'"
+      },
+      "scale": {"domain": [-0.6, 1.4]}
+    },
+    "color": {
+      "field": "Value",
+      "type": "ordinal",
+      "scale": null,
+      "condition": [
+        {"test": "datum.Value < 0", "value": "#226291"},
+        {"test": "datum.Value >= 0", "value": "#E3242B"}
+      ]
+    }
+  }
+}

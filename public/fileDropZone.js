@@ -17,6 +17,7 @@ async function handleFileSelect(event) {
     event.stopPropagation();
     event.preventDefault();
     vegaLiteInfo = await processFile(event.dataTransfer.files);
+    console.log(vegaLiteInfo);
     loadFileAndSendToBackend(vegaLiteInfo);
     loadVGandSendToBackend(vegaLiteInfo);
     const vegaLiteSpec = await getVegaLiteSpec();
@@ -37,6 +38,7 @@ function openFileExplorer() {
 
 document.getElementById('fileInput').addEventListener('change', async function (event) {
     vegaLiteInfo = await processFile(event.target.files);
+    console.log(vegaLiteInfo);
     loadFileAndSendToBackend(vegaLiteInfo);
     loadVGandSendToBackend(vegaLiteInfo);
     const vegaLiteSpec = await getVegaLiteSpec();

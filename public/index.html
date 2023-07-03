@@ -41,13 +41,17 @@
       <strong>Response received: </strong> <span id="response"></span>
     </div>
     <div>
-      <button id="testButton" type="button">Run Evaluation</button>
+      <button type="button" id="eval" onclick="redirectToEval()">Test</button>
+      <script>
+        function redirectToEval() {
+          window.location.href = './eval/index.html';
+        }
+      </script>
     </div>
   </div>
   <script src="fileLoader.js" type="module"></script>
   <script src="fileDropZone.js" type="module"></script>
   <script src="main.js" type="module"></script>
-  <script src="test.js" type="module"></script>
 </body>
 
 </html>

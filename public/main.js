@@ -143,7 +143,7 @@ const handleVegaLiteSpecChange = (event) => {
       pushToContextArray(dataArray, currentElement.ariaLevel);
     }
     printContextArray();
-    myJSON = stringifyContextArray();
+    const myJSON = stringifyContextArray();
   });
 
 

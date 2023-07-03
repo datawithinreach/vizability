@@ -58,7 +58,6 @@ class TreeItem {
       // Create a new mutation observer instance
       this.observer = new MutationObserver((mutationsList, observer) => {
         // Check if the element with class "olli-vis" is added
-        // var parentElement = document.querySelector('.olli-vis');
         mutationsList.forEach( (mutation) => {
           if (mutation.addedNodes.length != 0) {
             this.initialize(mutation.addedNodes[0]);
