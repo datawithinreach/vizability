@@ -4,17 +4,11 @@ from fastapi.staticfiles import StaticFiles
 
 from dotenv import load_dotenv
 import os
-from pathlib import Path
 
 from langchain.llms import OpenAI
 from langchain.agents import create_csv_agent
 from langchain.agents.agent_types import AgentType
-from langchain.agents import create_json_agent, AgentExecutor
-from langchain.agents.agent_toolkits import JsonToolkit
-from langchain.chains import LLMChain
 from langchain.llms.openai import OpenAI
-from langchain.requests import TextRequestsWrapper
-from langchain.tools.json.tool import JsonSpec
 
 import json
 
@@ -82,42 +76,40 @@ async def process_vega_lite_spec(request: Request):
 
 @app.post("/api/process-json")
 async def process_json(request: Request):
+    
     # Step 1: Read the JSON content from the request body
     json_content = await request.body()
 
     # Parse the JSON string
-    data = json.loads(json_content.decode('utf-8'))
-
-    if type(data) is dict :
-        json_content = data['content']
-    else:
-        # Using string concatenation
-        string_concatenation_json_content = '[' + ', '.join(str(item) for item in data) + ']'
-        json_content = string_concatenation_json_content.replace("'", "\"")
-
-    # Load the string as JSON
     data = json.loads(json_content)
 
-    # Convert list to a dict
-    dict_data = {"values": data}
+    # Required Conversion if JSON file is derived from a URL
+    data = data['content']
 
-    # Dump the JSON data with indentation and newlines
-    json_content = json.dumps(dict_data, indent=4)
+    # Extract header
+    header = list(data[0].keys())
 
-    # Step 2: Specify the file path and name to save the CSV file
+    # Create a CSV string
+    csv_string = ','.join(header) + '\n'
+
+    # Extract values and append to the CSV string
+    for item in data:
+        values = [str(item[key]) if item.get(key) is not None and item.get(key) != "" else "None" for key in header]
+        csv_string += ','.join(values) + '\n'
+    
     directory = 'data/'
     if not os.path.exists(directory):
         os.makedirs(directory)
 
     clear_data_dir(directory)
     
-    file_path = "data/file.json"
+    file_path = "data/file.csv"
 
     # Step 3: Save the CSV content as a file in the specified file path
-    with open(file_path, "w") as json_file:
-        json_file.write(json_content)
+    with open(file_path, "w") as csv_file:
+        csv_file.write(csv_string)
 
-    return {"message": "JSON file saved successfully!"}
+    return {"message": "CSV file saved successfully!"}
 
 @app.post("/api/process-csv")
 async def process_csv(request: Request):
@@ -125,11 +117,11 @@ async def process_csv(request: Request):
     csv_content = await request.body()
 
     # Parse the JSON string
-    data = json.loads(csv_content.decode('utf-8'))
+    data = json.loads(csv_content)
 
     # Retrieve the CSV content
     csv_content = data['content']
-
+    
     # Process csv_content to remove line breaks
     csv_content = csv_content.replace("\r\n", "\n")
 
@@ -158,32 +150,15 @@ async def get_backend_file(file_path: str):
 async def apply_agent(question: str):
     # Step 1: Get the absolute path of the file
     directory = 'data'
-    if os.path.isfile("data/file.csv"):
-        file_name = 'file.csv'
-    elif os.path.isfile("data/file.json"):
-        file_name = 'file.json'
+    file_name = 'file.csv'
     file_path = os.path.join(directory, file_name)
 
     # Step 2: Call the create_csv_agent function and obtain the CSV data
-    if file_name == 'file.csv':
-        agent = create_csv_agent(OpenAI(temperature=0), file_path, verbose=True, agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION)
-        response = agent.run(question)
+    agent = create_csv_agent(OpenAI(temperature=0), file_path, verbose=True, agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION)
+    response = agent.run(question)
 
-        # Step 3: Return the CSV data as a response
-        return {"response": response}
-    
-    elif file_name == 'file.json':
-        data = json.loads(Path(file_path).read_text())
-        json_spec = JsonSpec(dict_=data, max_value_length=4000)
-        json_toolkit = JsonToolkit(spec=json_spec)
-
-        json_agent_executor = create_json_agent(
-            llm=OpenAI(temperature=0), toolkit=json_toolkit, verbose=True
-        )
-
-        response = json_agent_executor.run(question)
-
-        return {"response": response}
+    # Step 3: Return the CSV data as a response
+    return {"response": response}
 
 # Create a route to the api root endpoint
 @app.get("/api")

@@ -1,29 +1,40 @@
+// Code for loading the initial VegaLite Spec
+// Both Drag and Drop and Click operations are supported for loading in Spec from local machine
+
 import loadFileAndSendToBackend from "./fileLoader.js";
 import { loadVGandSendToBackend, getVegaLiteSpec } from "./vgLoader.js";
 
+// Stores loaded VegaLite Spec and  accompanying Url/Values
 var vegaLiteInfo = {};
 
+// Event Listeners
 document.getElementById('dropZone').addEventListener('dragover', handleDragOver, false);
 document.getElementById('dropZone').addEventListener('drop', handleFileSelect, false);
 document.getElementById('dropZone').addEventListener('click', openFileExplorer, false);
 
+// METHOD 1
+// User selects, drags, and drops a local .vg file into the file drop zone
+
+// Handles user dragging the file to file drop zone
 function handleDragOver(event) {
     event.stopPropagation();
     event.preventDefault();
     event.dataTransfer.dropEffect = 'copy';
 }
 
+// Loads .vg file and data to the backend
 async function handleFileSelect(event) {
     event.stopPropagation();
     event.preventDefault();
     vegaLiteInfo = await processFile(event.dataTransfer.files);
-    console.log(vegaLiteInfo);
-    loadFileAndSendToBackend(vegaLiteInfo);
+
+    // Format of the data nested within the VegaLite Spec
+    // Potential formats include .csv or .json
+    await loadFileAndSendToBackend(vegaLiteInfo);
     loadVGandSendToBackend(vegaLiteInfo);
     const vegaLiteSpec = await getVegaLiteSpec();
-    // console.log(vegaLiteSpec);
 
-    // Create a custom event with the updated vegaLiteSpec
+    // Create a custom event with the updated VegaLite Spec
     const vegaLiteSpecEvent = new CustomEvent('vegaLiteSpecChange', {
         detail: vegaLiteSpec,
     });
@@ -32,27 +43,36 @@ async function handleFileSelect(event) {
     document.dispatchEvent(vegaLiteSpecEvent);
 }
 
+// METHOD 2
+// User clicks on the file drop zone and subsequently selects .vg file from a file explorer pop up window
+
+// Prompts File Explorer upon clicking the "Drop Vega Lite Spec Here" Input Box
 function openFileExplorer() {
     document.getElementById('fileInput').click();
 }
 
+// Loads .vg file and data to the backend
 document.getElementById('fileInput').addEventListener('change', async function (event) {
     vegaLiteInfo = await processFile(event.target.files);
-    console.log(vegaLiteInfo);
-    loadFileAndSendToBackend(vegaLiteInfo);
+
+    // Format of the data nested within the VegaLite Spec
+    // Potential formats include .csv or .json
+    await loadFileAndSendToBackend(vegaLiteInfo);
     loadVGandSendToBackend(vegaLiteInfo);
     const vegaLiteSpec = await getVegaLiteSpec();
-    // console.log(vegaLiteSpec);
 
     // Create a custom event with the updated vegaLiteSpec
     const vegaLiteSpecEvent = new CustomEvent('vegaLiteSpecChange', {
-        detail: vegaLiteSpec,
+        detail: vegaLiteSpec
     });
 
     // Dispatch the event
     document.dispatchEvent(vegaLiteSpecEvent);
 });
 
+// HELPER FUNCTIONS
+
+// Processes raw .vg file
 async function processFile(files) {
     return new Promise((resolve, reject) => {
         if (files.length > 0) {
@@ -67,21 +87,14 @@ async function processFile(files) {
                     var values = null;
                     if (jsonData.data && jsonData.data.url) {
                         url = jsonData.data.url; // Get the value of the nested ["data"]["url"] key
-                    }
-
-                    else if (jsonData.data && jsonData.data.values) {
-                        values = jsonData.data.values;
-                    }
-
-                    if (url) {
-                        // The ["data"]["url"] key is present and its value is not null
-                        // console.log('URL:', url);
                         resolve({
                             "contents": contents,
                             "url": url
                         });
-                    } 
-                    else if (values) {
+                    }
+
+                    else if (jsonData.data && jsonData.data.values) {
+                        values = jsonData.data.values;
                         resolve({
                             "contents": contents,
                             "values": values
@@ -92,9 +105,9 @@ async function processFile(files) {
                         resolve(null);
                     }
                 };
-                reader.onerror = function (e) {
-                    console.error('Error occurred while reading the file.', e);
-                    reject(e);
+                reader.onerror = function (error) {
+                    console.error('Error occurred while reading the file.', error);
+                    reject(error);
                 };
                 reader.readAsText(file); // Read the file as text
             } else {

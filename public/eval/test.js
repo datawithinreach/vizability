@@ -18,6 +18,7 @@ function convertStringToDictionary(csvString) {
                 }
                 questionsDictionary[Stimuli].push({
                     question: Questions,
+                    classification: '', // Add an empty classification property for each question
                     answer: '' // Add an empty answer property for each question
                 });
             });
@@ -144,21 +145,26 @@ document.getElementById("run-eval").addEventListener("click", async function () 
                         if (queryType.includes("Analytical Query")) {
                             const response = await sendPromptAgent(supplement, question);
                             questionObj.answer = response;
+                            questionObj.classification = "Analytical Query";
                         } else if (queryType.includes("Contextual Query")) {
                             const response = await sendPromptDefault(question);
                             document.getElementById("prompt").textContent = question;
                             document.getElementById("response").textContent = response;
                             questionObj.answer = response;
+                            questionObj.classification = "Contextual Query";
                         } else if (queryType.includes("Visual Query")) {
                             // implement later
                             // use Vega View API
+                            questionObj.classification = "Visual Query";
                         } else if (queryType.includes("Navigation Query")) {
                             // implement later
                             // use hierarchy
+                            questionObj.classification = "Navigation Query";
                         } else {
                             document.getElementById("prompt").textContent = question;
                             document.getElementById("response").textContent = queryType;
                             questionObj.answer = queryType;
+                            questionObj.classification = queryType;
                         }
                     } catch (error) {
                         console.error(error);
@@ -175,7 +181,8 @@ document.getElementById("run-eval").addEventListener("click", async function () 
         return value.map(questionObj => ({
             Stimuli: key,
             Questions: questionObj.question,
-            Answer: questionObj.answer.toString() // Include the answer in the CSV output
+            Classification: questionObj.classification,
+            Answer: questionObj.answer // Include the answer in the CSV output
         }));
     }), { header: true });
 
