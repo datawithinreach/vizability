@@ -22,8 +22,16 @@ class TreeItem {
         this.children.push(treeItem);
     }
 
+    getChildren() {
+        return this.children;
+    }
+
     setParent(treeItem) {
         this.parent = treeItem;
+    }
+
+    getParent() {
+        return this.parent;
     }
 
     getContent() {
@@ -50,6 +58,7 @@ export class CondensedOlliRender {
     initialize() {
         this.populateTreeItemArray();
         const treeItemDictionary = this.convertToDictionary();
+        console.log(treeItemDictionary);
         this.condensedString = this.convertToCSV(treeItemDictionary);
     }
 
@@ -74,7 +83,7 @@ export class CondensedOlliRender {
         for (let i = 1; i < this.treeItemArray.length; i++) {
             const treeItem = this.treeItemArray[i];
             // console.log(treeItem);
-            const hierarchyKey = i === 1 ? 0 : this.getHierarchyKey(treeItem);
+            const hierarchyKey = i === 1 ? 1 : this.getHierarchyKey(treeItem);
             // console.log(hierarchyKey);
 
             treeDictionary[hierarchyKey] = treeItem.getInnerText();
@@ -89,12 +98,12 @@ export class CondensedOlliRender {
 
         let currentNode = treeItem;
         while (currentNode.parent !== null) {
-            key = "." + currentNode.parent.children.indexOf(currentNode) + key;
+            key = "." + (currentNode.parent.children.indexOf(currentNode) + 1) + key;
             // console.log("Key: " + key);
             currentNode = currentNode.parent;
         }
 
-        return key;
+        return key.substring(1, key.length);
     }
 
 

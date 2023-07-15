@@ -3,10 +3,13 @@
   "width": 500,
   "title": "Global Land and Ocean January-December Temperature Anomalies",
   "data": {
-    "url": "https://raw.githubusercontent.com/Joszek0723/excess_data/main/bar_chart_data.csv"
+    "url": "https://raw.githubusercontent.com/Joszek0723/excess_data/main/bar_chart_data.csv",
+    "format": {"type": "csv"}
   },
-  "mark": "bar",
-  "config": {"scale": {"barBandPaddingInner": 0.3}},
+  "transform": [
+    {"calculate": "datum.Value < 0 ? 'negative' : 'positive'", "as": "Category"}
+  ],
+  "mark": {"type": "bar"},
   "encoding": {
     "x": {
       "field": "Year",
@@ -25,13 +28,9 @@
       "scale": {"domain": [-0.6, 1.4]}
     },
     "color": {
-      "field": "Value",
-      "type": "ordinal",
-      "scale": null,
-      "condition": [
-        {"test": "datum.Value < 0", "value": "#226291"},
-        {"test": "datum.Value >= 0", "value": "#E3242B"}
-      ]
+      "field": "Category",
+      "type": "nominal",
+      "scale": {"range": ["#226291", "#E3242B"]}
     }
   }
 }

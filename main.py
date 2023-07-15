@@ -12,6 +12,7 @@ from langchain.llms.openai import OpenAI
 
 import json
 
+  
 def clear_data_dir(folder_path):
     # Get a list of all files in the directory
     file_list = os.listdir(folder_path)
@@ -76,7 +77,6 @@ async def process_vega_lite_spec(request: Request):
 
 @app.post("/api/process-json")
 async def process_json(request: Request):
-    
     # Step 1: Read the JSON content from the request body
     json_content = await request.body()
 
@@ -111,35 +111,6 @@ async def process_json(request: Request):
 
     return {"message": "CSV file saved successfully!"}
 
-@app.post("/api/process-csv")
-async def process_csv(request: Request):
-    # Step 1: Read the CSV content from the request body
-    csv_content = await request.body()
-
-    # Parse the JSON string
-    data = json.loads(csv_content)
-
-    # Retrieve the CSV content
-    csv_content = data['content']
-    
-    # Process csv_content to remove line breaks
-    csv_content = csv_content.replace("\r\n", "\n")
-
-    # Step 2: Specify the file path and name to save the CSV file
-    directory = 'data/'
-    if not os.path.exists(directory):
-        os.makedirs(directory)
-    
-    clear_data_dir(directory)
-
-    file_path = "data/file.csv"
-
-    # Step 3: Save the CSV content as a file in the specified file path
-    with open(file_path, "w") as csv_file:
-        csv_file.write(csv_content)
-
-    return {"message": "CSV file saved successfully!"}
-
 @app.get("/api/get-backend-file")
 async def get_backend_file(file_path: str):
     with open(file_path, "r") as file_object:
@@ -170,7 +141,6 @@ async def root():
 @app.get("/api/prompt")
 async def prompt(question: str):
     response = llm(question)
-    print("hey")
     return {"prompt": question, "response": response}
 
 

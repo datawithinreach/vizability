@@ -30,7 +30,7 @@ Navigation Queries involve questions relating to location within the Olli naviga
 
 "Navigation Query" // Where am I within the Olli navigation?
 
-"Navigation Query" // What is it saying here?
+"Navigation Query" // How can I get from {} to {}?
 
 Contextual Queries involve broad questions that do not necessarily need the graph’s specific data to be answered. 
 

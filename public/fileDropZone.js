@@ -1,8 +1,7 @@
 // Code for loading the initial VegaLite Spec
 // Both Drag and Drop and Click operations are supported for loading in Spec from local machine
 
-import loadFileAndSendToBackend from "./fileLoader.js";
-import { loadVGandSendToBackend, getVegaLiteSpec } from "./vgLoader.js";
+import { loadVGandSendToBackend } from "./vgLoader.js";
 
 // Stores loaded VegaLite Spec and  accompanying Url/Values
 var vegaLiteInfo = {};
@@ -28,15 +27,11 @@ async function handleFileSelect(event) {
     event.preventDefault();
     vegaLiteInfo = await processFile(event.dataTransfer.files);
 
-    // Format of the data nested within the VegaLite Spec
-    // Potential formats include .csv or .json
-    await loadFileAndSendToBackend(vegaLiteInfo);
     loadVGandSendToBackend(vegaLiteInfo);
-    const vegaLiteSpec = await getVegaLiteSpec();
 
     // Create a custom event with the updated VegaLite Spec
     const vegaLiteSpecEvent = new CustomEvent('vegaLiteSpecChange', {
-        detail: vegaLiteSpec,
+        detail: vegaLiteInfo["contents"]
     });
 
     // Dispatch the event
@@ -55,15 +50,11 @@ function openFileExplorer() {
 document.getElementById('fileInput').addEventListener('change', async function (event) {
     vegaLiteInfo = await processFile(event.target.files);
 
-    // Format of the data nested within the VegaLite Spec
-    // Potential formats include .csv or .json
-    await loadFileAndSendToBackend(vegaLiteInfo);
     loadVGandSendToBackend(vegaLiteInfo);
-    const vegaLiteSpec = await getVegaLiteSpec();
 
     // Create a custom event with the updated vegaLiteSpec
     const vegaLiteSpecEvent = new CustomEvent('vegaLiteSpecChange', {
-        detail: vegaLiteSpec
+        detail: vegaLiteInfo["contents"]
     });
 
     // Dispatch the event
@@ -81,29 +72,9 @@ async function processFile(files) {
                 var reader = new FileReader();
                 reader.onload = function (e) {
                     var contents = e.target.result; // Get the file contents as text
-                    var jsonData = JSON.parse(contents); // Parse the JSON data
-
-                    var url = null;
-                    var values = null;
-                    if (jsonData.data && jsonData.data.url) {
-                        url = jsonData.data.url; // Get the value of the nested ["data"]["url"] key
-                        resolve({
-                            "contents": contents,
-                            "url": url
-                        });
-                    }
-
-                    else if (jsonData.data && jsonData.data.values) {
-                        values = jsonData.data.values;
-                        resolve({
-                            "contents": contents,
-                            "values": values
-                        });
-                    }
-                    else {
-                        console.log('The JSON file does not contain the required key ["data"]["url"].');
-                        resolve(null);
-                    }
+                    resolve({
+                        "contents": contents,
+                    })
                 };
                 reader.onerror = function (error) {
                     console.error('Error occurred while reading the file.', error);

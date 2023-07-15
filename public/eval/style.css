@@ -3,7 +3,7 @@ body {
 }
 
 /* Run Evaluation Button */
-#run-eval, #return, #download {
+#run-eval, #run-classification, #return, #download {
   background-color: #226291;
   color: #ffffff;
   border: none;
@@ -16,11 +16,15 @@ body {
 }
 
 #return {
-  width: 150px;
+  width: 100px;
 }
 
 #run-eval {
-  width: 300px;
+  width: 200px;
+}
+
+#run-classification {
+  width: 200px;
 }
 
 #download a {
@@ -28,7 +32,7 @@ body {
   text-decoration: none;
 }
 
-#run-eval:hover, #return:hover, #download:hover {
+#run-eval:hover, #run-classification:hover, #return:hover, #download:hover {
   background-color: #12476a;
 }
 

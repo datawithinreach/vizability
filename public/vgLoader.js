@@ -1,7 +1,7 @@
+// Load VegaLite Spec File and Send to Backend
 export function loadVGandSendToBackend(vegaLiteInfo) {
     if (vegaLiteInfo) {
         const vegaLiteSpec = vegaLiteInfo["contents"];
-        console.log(vegaLiteSpec);
         const dataToSend = {
             vgSpec: vegaLiteSpec
         }
