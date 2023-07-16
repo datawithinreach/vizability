@@ -12,7 +12,7 @@ from langchain.llms.openai import OpenAI
 
 import json
 
-  
+# Helper Function to Delete Data and VegaLite Spec from Previous Rendering
 def clear_data_dir(folder_path):
     # Get a list of all files in the directory
     file_list = os.listdir(folder_path)
@@ -46,7 +46,7 @@ app.add_middleware(
 
 @app.post("/api/process-vega-lite-spec")
 async def process_vega_lite_spec(request: Request):
-    # Step 1: Read the vega lite spec from the request body
+    # Read the vega lite spec from the request body
     vega_lite_spec_content = await request.body()
 
     data = json.loads(vega_lite_spec_content.decode('utf-8'))
@@ -62,14 +62,14 @@ async def process_vega_lite_spec(request: Request):
     elif type(vega_lite_spec_content) is dict:
         vega_lite_spec_content = json.dumps(vega_lite_spec_content, indent=4) 
 
-    # Step 2: Specify the file path and name to save the VG file
+    # Specify the file path and name to save the VG file
     directory = 'spec/'
     if not os.path.exists(directory):
         os.makedirs(directory)
 
     file_path = "spec/vega-lite-spec.vg"
 
-    # Step 3: Save the VG content as a file in the specified file path
+    # Save the VG content as a file in the specified file path
     with open(file_path, "w") as vg_file:
         vg_file.write(vega_lite_spec_content)
     
@@ -77,7 +77,7 @@ async def process_vega_lite_spec(request: Request):
 
 @app.post("/api/process-json")
 async def process_json(request: Request):
-    # Step 1: Read the JSON content from the request body
+    # Read the JSON content from the request body
     json_content = await request.body()
 
     # Parse the JSON string
@@ -105,7 +105,7 @@ async def process_json(request: Request):
     
     file_path = "data/file.csv"
 
-    # Step 3: Save the CSV content as a file in the specified file path
+    # Save the CSV content as a file in the specified file path
     with open(file_path, "w") as csv_file:
         csv_file.write(csv_string)
 
@@ -119,16 +119,16 @@ async def get_backend_file(file_path: str):
 
 @app.get("/api/apply-agent")
 async def apply_agent(question: str):
-    # Step 1: Get the absolute path of the file
+    # Get the absolute path of the file
     directory = 'data'
     file_name = 'file.csv'
     file_path = os.path.join(directory, file_name)
 
-    # Step 2: Call the create_csv_agent function and obtain the CSV data
+    # Call the create_csv_agent function and obtain the CSV data
     agent = create_csv_agent(OpenAI(temperature=0), file_path, verbose=True, agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION)
     response = agent.run(question)
 
-    # Step 3: Return the CSV data as a response
+    # Return the CSV data as a response
     return {"response": response}
 
 # Create a route to the api root endpoint
