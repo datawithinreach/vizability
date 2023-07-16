@@ -131,24 +131,3 @@ function handleSubmit(event, hierarchy) {
       console.error(error); // Handle any errors that occurred during the promise
     });
 }
-
-
-
-// // sends question to OpenAPI for classification and returns output string
-// async function classificationQueryAndNavigationQuery(question, filePath) {
-//   return fetch("/api/get-backend-file?file_path=" + filePath, { redirect: 'manual' })
-//     .then(function (response) {
-//       return response.json();
-//     })
-//     .then(async function (Query) {
-//       var queryContents = Query["contents"];
-
-//       return sendPromptDefault(queryContents + question)
-//         .then(function (output) {
-//           return output; // Return the output value if needed for further processing
-//         })
-//         .catch(function (error) {
-//           console.error(error);
-//         });
-//     });
-// }
