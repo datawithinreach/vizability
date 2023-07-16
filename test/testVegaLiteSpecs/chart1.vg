@@ -1,0 +1,14 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "A line chart that plots the aggregate number of homes for sale in the United States for the given years 2014-2021",
+  "title": "The number of homes for sale nationally has plummeted",
+  "width": 500,
+  "data": {
+    "url": "https://raw.githubusercontent.com/Joszek0723/excess_data/main/line_chart_data.csv"
+  },
+  "mark": "line",
+  "encoding": {
+    "x": {"title": "Date", "field": "date", "type": "temporal"},
+    "y": {"title": "Number of Homes for Sale", "field": "inventory", "type": "quantitative", "axis": {"tickCount": 6}}
+  }
+}

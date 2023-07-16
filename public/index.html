@@ -1,14 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Website</title>
-    <script src="main.js" type="module"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="style.css" rel="stylesheet" type="text/css" />
+  <title>My Website</title>
+  <!-- vega / vega-lite -->
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+
+  <!-- olli -->
+  <script src="https://cdn.jsdelivr.net/npm/olli@1"></script>
+  <script src="https://cdn.jsdelivr.net/npm/olli-adapters@1"></script>
+
+  <!-- name that color -->
+  <!-- <script type="text/javascript" src="https://chir.ag/projects/ntc/ntc.js"></script> -->
 </head>
+
 <body>
-    <h1>Welcome to My Website</h1>
-    <h3 id="prompt"></h3>
-    <p id="response"></p>
+  <div class="content" role="main">
+    <!-- This is the start of content for our page -->
+    <h1 class="title">Chart QnA for Blind!</h1>
+    <div id="user-file-select">
+      <div class="drop-zone" id="dropZone">Drop Vega Lite Spec File Here</div>
+      <label for="fileInput">File Input:</label>
+      <input type="file" id="fileInput" class="hidden" accept=".json, .vg">
+    </div>
+    <div id="vega-container"></div>
+    <div id="olli-container"></div>
+    <form class="qna-form" id="ask-question">
+      <label for="user-query">
+        Ask questions about the chart:
+        <input id="user-query" name="user-query" type="text" />
+      </label>
+
+      <button id="form-submit" type="submit">Submit</button>
+    </form>
+    <div>
+      <strong>Your question:</strong> <span id="prompt"></span>
+    </div>
+    <div>
+      <strong>Response received: </strong> <span id="response"></span>
+    </div>
+    <div>
+      <button type="button" id="eval" onclick="redirectToEval()">Test</button>
+      <script>
+        function redirectToEval() {
+          window.location.href = './eval/index.html';
+        }
+      </script>
+    </div>
+  </div>
+  <script src="fileDropZone.js" type="module"></script>
+  <script src="main.js" type="module"></script>
+  <script src="helperFunctions.js" type="module"></script>
 </body>
+
 </html>
