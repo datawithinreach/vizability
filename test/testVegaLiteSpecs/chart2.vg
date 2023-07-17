@@ -17,13 +17,11 @@
       "axis": {"labelExpr": "datum.value % 10 === 0 ? datum.value : ''"}
     },
     "y": {
-      "title": "Temperature Anomaly",
+      "title": "Temperature Anomaly (°C)",
       "field": "Value",
       "type": "quantitative",
       "axis": {
-        "values": [-0.6, -0.2, 0.2, 0.6, 1, 1.4],
-        "format": ".2f",
-        "labelExpr": "datum.value + ' °C'"
+        "values": [-0.6, -0.2, 0.2, 0.6, 1, 1.4]
       },
       "scale": {"domain": [-0.6, 1.4]}
     },
