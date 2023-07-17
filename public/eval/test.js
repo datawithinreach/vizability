@@ -9,8 +9,6 @@ const descrPost = "Use this information along with everything else you are given
 // MAIN FUNCTION; Runs Evaluation
 async function clickHandler(isEvaluate) {
     const questionsDictionary = await getQuestions();
-    console.log(questionsDictionary);
-
     // After Classifying all Questions, Split into Testing and Validation Sets Based on Strata
 
     function getRandomSubset(array, percent) {
@@ -60,7 +58,7 @@ async function clickHandler(isEvaluate) {
             testing_set[key].push(...testingQuestions);
 
             const validationSample = getRandomSubset(validationQuestions, 0.2);
-            const testingSample = getRandomSubset(testingQuestions, 0.1);
+            const testingSample = getRandomSubset(testingQuestions, 0.05);
 
             validation_set_sample[key] = validation_set_sample[key] || [];
             validation_set_sample[key].push(...validationSample);
@@ -69,12 +67,12 @@ async function clickHandler(isEvaluate) {
             testing_set_sample[key].push(...testingSample);
         }
     }
-
     // Run Evaluation for Testing Set Sample
     // The Corresponding VegaLite Spec and Olli Treeview are Rendered for each Query
     // Each Query is then Answered Using the Pipeline
     for (var [key, value] of Object.entries(testing_set_sample)) {
         try {
+            value = [value[0], value[1]];
             // Render VegaLite Spec Corresponding to the Query being Asked
             const response = await fetch("/api/get-backend-file?file_path=./test/testVegaLiteSpecs/" + key + ".vg");
             const data = await response.json();
@@ -97,7 +95,6 @@ async function clickHandler(isEvaluate) {
                 .renderer("svg")
                 .hover()
                 .runAsync();
-            console.log(view);
             handleDataUpdate(view, vLSpec);
 
             // Render Olli Treeview
@@ -116,7 +113,9 @@ async function clickHandler(isEvaluate) {
             await classifyQuestions(value);
 
             // Trigger only when Run Evaluation DOM Element Button is Clicked
-            if (isEvaluate) { await answerQuestions(value, supplement); }
+            if (isEvaluate) {
+                await answerQuestions(value, supplement);
+            }
 
         } catch (error) {
             console.error(error);
@@ -197,8 +196,8 @@ function convertStringToDictionary(csvString) {
 // Update Data Dictionary with OpenAPI Predicted Classifications
 async function classifyQuestions(value) {
     const filePath = "gptPrompts/queryClassification.txt";
-    const response = await fetch("/api/get-backend-file?file_path=" + filePath, { redirect: 'manual' });
-    const classificationQuery = await response.json();
+    const classificationResponse = await fetch("/api/get-backend-file?file_path=" + filePath, { redirect: 'manual' });
+    const classificationQuery = await classificationResponse.json();
     const classificationQueryContents = classificationQuery["contents"];
 
     for (const classificationObj of value) {
@@ -239,6 +238,7 @@ async function answerQuestions(value, supplement) {
                 document.getElementById("prompt").textContent = question.value;
                 document.getElementById("response").textContent = response;
                 question.value = '';
+                questionObj.answer = response;
             });
         }
         else {

@@ -146,7 +146,7 @@ export async function sendPromptDefault(question) {
   // LLM Uses a Specific CSV Agent
   export async function sendPromptAgent(supplement, question) {
     console.log("prompt", question);
-    fetch("/api/apply-agent?question=" + supplement + question, { redirect: 'manual' })
+    return fetch("/api/apply-agent?question=" + supplement + question, { redirect: 'manual' })
       .then(function (response) {
         return response.json();
       })
@@ -154,6 +154,7 @@ export async function sendPromptDefault(question) {
         console.log("response", data);
         document.getElementById("prompt").textContent = question;
         document.getElementById("response").textContent = data.response;
+        return data.response;
       })
   }
 
