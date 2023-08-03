@@ -7,39 +7,41 @@ import { loadVGandSendToBackend } from "./vgLoader.js";
 var vegaLiteInfo = {};
 
 // Event Listeners
-document.getElementById('dropZone').addEventListener('dragover', handleDragOver, false);
-document.getElementById('dropZone').addEventListener('drop', handleFileSelect, false);
-document.getElementById('dropZone').addEventListener('click', openFileExplorer, false);
+document.getElementById('fileButton').addEventListener('click', openFileExplorer, false);
 
-// METHOD 1
-// User selects, drags, and drops a local .vg file into the file drop zone
+// Method 1
+// User clicks on one of the first four buttons and loads in a hard coded benchmark dataset
 
-// Handles user dragging the file to file drop zone
-function handleDragOver(event) {
-    event.stopPropagation();
-    event.preventDefault();
-    event.dataTransfer.dropEffect = 'copy';
-}
+const buttons = document.querySelectorAll(".method-1");
 
-// Loads .vg file and data to the backend
-async function handleFileSelect(event) {
-    event.stopPropagation();
-    event.preventDefault();
-    vegaLiteInfo = await processFile(event.dataTransfer.files);
+buttons.forEach(function (button) {
+    button.addEventListener("click", async function () {
+        console.log("Button clicked: " + button.textContent);
+        // Render VegaLite Spec Corresponding to the Query being Asked
+        const response = await fetch("/api/get-backend-file?file_path=./test/testVegaLiteSpecs/" + button.dataset.value + ".vg");
+        const data = await response.json();
+        const vLSpec = await JSON.parse(data.contents);
+        // console.log(JSON.stringify(vLSpec));
 
-    loadVGandSendToBackend(vegaLiteInfo);
+        const vLData = {
+            "contents": vLSpec
+        };
 
-    // Create a custom event with the updated VegaLite Spec
-    const vegaLiteSpecEvent = new CustomEvent('vegaLiteSpecChange', {
-        detail: vegaLiteInfo["contents"]
+        // Load VegaLite Spec to the Backend
+        loadVGandSendToBackend(vLData);
+
+        // Create a custom event with the updated vegaLiteSpec
+        const vegaLiteSpecEvent = new CustomEvent('vegaLiteSpecChange', {
+            detail: vLData["contents"]
+        });
+
+        // Dispatch the event
+        document.dispatchEvent(vegaLiteSpecEvent);
     });
-
-    // Dispatch the event
-    document.dispatchEvent(vegaLiteSpecEvent);
-}
+});
 
 // METHOD 2
-// User clicks on the file drop zone and subsequently selects .vg file from a file explorer pop up window
+// User clicks on the fifth button and subsequently selects .vg file from a file explorer pop up window
 
 // Prompts File Explorer upon clicking the "Drop Vega Lite Spec Here" Input Box
 function openFileExplorer() {

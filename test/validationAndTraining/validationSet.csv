@@ -1,0 +1,203 @@
+Stimuli,Questions,Ground_Truth,Evaluation
+chart4,What is the first Western most country on the map?,Analytical Query,validationSet
+chart4,What parts of North America are not in the 80 to 100% range?,Analytical Query,validationSet
+chart4,Is Africa the country that needs the vaccine the most?,Analytical Query,validationSet
+chart4,What is the difference between Austrailia and Africa in percentage wise?,Analytical Query,validationSet
+chart4,What is the vaccination rate in Russia?,Analytical Query,validationSet
+chart4,Which country has the lowest percentage of population that is vaccinated?,Analytical Query,validationSet
+chart4,What is the value of the highest vaccination rate?,Analytical Query,validationSet
+chart4,Where does the United States fall on this chart?,Analytical Query,validationSet
+chart4,What is average vaccination rate in Europe?,Analytical Query,validationSet
+chart4,How many people are vaccinated in England?,Analytical Query,validationSet
+chart4,What period of the time this data represent?,Analytical Query,validationSet
+chart4,What's the most vaccinated country in the chart?,Analytical Query,validationSet
+chart4,How many countries are in average range around 50%?,Analytical Query,validationSet
+chart4,What country in Africa has the lowest vaccination rate?,Analytical Query,validationSet
+chart4,What is the most vaccinated country in Africa?,Analytical Query,validationSet
+chart4,How much is the average point of the whole country?,Analytical Query,validationSet
+chart4,Which country has 50%?,Analytical Query,validationSet
+chart4,How many people are vaccinated in Japan?,Analytical Query,validationSet
+chart4,What are the countries that have the highest vaccination rates?,Analytical Query,validationSet
+chart4,Can you list those 66 countries?,Analytical Query,validationSet
+chart4,What is the vaccination rate of Columbia?,Analytical Query,validationSet
+chart4,What is the standard deviation for average 38.5 percent?,Analytical Query,validationSet
+chart4,How many countries have zero percent?,Analytical Query,validationSet
+chart4,What does 50% mean?,Analytical Query,validationSet
+chart4,What are the countries that have zero percent?,Analytical Query,validationSet
+chart4,How many countries are from 20% through 40%?,Analytical Query,validationSet
+chart4,What ages does this graph cover?,Analytical Query,validationSet
+chart4,What is the data point for Mexico?,Analytical Query,validationSet
+chart4,What country is the least vaccinated?,Analytical Query,validationSet
+chart4,What is the vaccination rate of United States?,Analytical Query,validationSet
+chart4,Which country has the third highest vaccination rate?,Analytical Query,validationSet
+chart4,How many people have been vaccinated in Nigeria?,Analytical Query,validationSet
+chart4,What are the countries that have 100%?,Analytical Query,validationSet
+chart4,What is the first country on the list?,Analytical Query,validationSet
+chart4,Which country is the closest to 50%?,Analytical Query,validationSet
+chart4,Which has the lowest vaccination rate in Asia?,Analytical Query,validationSet
+chart4,How many people are vaccinated in Costa Rica?,Analytical Query,validationSet
+chart4,What is the first country on the map?,Analytical Query,validationSet
+chart4,What percentage of people are vaccinated in Austrailia?,Analytical Query,validationSet
+chart4,Which color represent the highest vaccination rate?,Visual Query,validationSet
+chart4,What shade of green or approximately what percentage of people have received vaccinations in Spain?,Visual Query,validationSet
+chart4,Which countries have the lightest shade of green?,Visual Query,validationSet
+chart4,What color is Mexico?,Visual Query,validationSet
+chart4,What is the title of this graph,Visual Query,validationSet
+chart4,What country in South America has the darkest shade of green?,Visual Query,validationSet
+chart4,What countries are in brigher range?,Visual Query,validationSet
+chart4,What color is North America?,Visual Query,validationSet
+chart4,Can some countries help other countries increase the vaccination rate?,Contextual Query,validationSet
+chart4,when was this data collected?,Contextual Query,validationSet
+chart4,Do you have information on the percent of people who received two doses of a vaccine?,Contextual Query,validationSet
+chart1,What was the average cost of a home in 2013?,Analytical Query,validationSet
+chart1,And what was that decrease?,Analytical Query,validationSet
+chart1,How many houses were sold on my birthday December 21 2020 last year?,Analytical Query,validationSet
+chart1,What is the rate of decrease for the whole chart?,Analytical Query,validationSet
+chart1,What year had more than a million homes for sale?,Analytical Query,validationSet
+chart1,Are these houses including both new homes and homes that were sold before?,Analytical Query,validationSet
+chart1,What is the least expensive house in 2019?,Analytical Query,validationSet
+chart1,How many of these houses were accessibly built for people in wheelchairs?,Analytical Query,validationSet
+chart1,"From the beginning of 2017 to the end of 2017, what was the percentage growth or decline in houses available?",Analytical Query,validationSet
+chart1,What month was this chart published?,Analytical Query,validationSet
+chart1,Which year had the least amount of houses for sale?,Analytical Query,validationSet
+chart1,How many houses were sold in 2017?,Analytical Query,validationSet
+chart1,Which city is the table depicting?,Analytical Query,validationSet
+chart1,How many years are reflected in this table?,Analytical Query,validationSet
+chart1,Which year had the most inventory?,Analytical Query,validationSet
+chart1,What was the least expensive home so for in 2021?,Analytical Query,validationSet
+chart1,Is this data from all of the United States?,Analytical Query,validationSet
+chart1,In which year has the lowest inventory?,Analytical Query,validationSet
+chart1,What is the average amount of houses sold?,Analytical Query,validationSet
+chart1,What is the geographic source of this data?,Analytical Query,validationSet
+chart1,What is the average number of homes for sale from 2015 to 2021?,Analytical Query,validationSet
+chart1,How many months was the inventory above 1 million?,Analytical Query,validationSet
+chart1,"128596, what does that number mean?",Analytical Query,validationSet
+chart1,What were the percentage of increase or decrease in average number of houses on sale between 2015 and 2017?,Analytical Query,validationSet
+chart1,How long will this data be collected for?,Analytical Query,validationSet
+chart1,Where have all houses gone?,Analytical Query,validationSet
+chart1,"In which month were there more homes for sale, June 2015 or July 2015?",Analytical Query,validationSet
+chart1,Which month of the house sales in 2015 is the highest?,Analytical Query,validationSet
+chart1,How much do I have to earn annually to afford a House that is on the market in 2019?,Analytical Query,validationSet
+chart1,What was the average amount of houses sold in 2015?,Analytical Query,validationSet
+chart1,Is the graph broken up into countries?,Visual Query,validationSet
+chart1,What is represented by the X axis?,Visual Query,validationSet
+chart1,Is the table organized ascending or descending?,Visual Query,validationSet
+chart1,What does the y axis represent?,Visual Query,validationSet
+chart1,What is the end of the line?,Visual Query,validationSet
+chart1,"How does the line go, up and down or diagonal?",Visual Query,validationSet
+chart1,What is the highest point on this graph?,Visual Query,validationSet
+chart1,"So to confirm, the first entry or the first column is May 23rd, 2014?",Visual Query,validationSet
+chart1,Is column two showing houses for sale?,Visual Query,validationSet
+chart1,Does the system know the causes for sharp decrease in home sales other than Covid?,Contextual Query,validationSet
+chart1,Where does this data come from?,Contextual Query,validationSet
+chart1,will you give me a house for my birthday this year?,I am sorry but I cannot understand the question,validationSet
+chart2,Between what two years was there the greatest change in temperature anomalies?,Analytical Query,validationSet
+chart2,Was there any consistant change in negative temperature at any decades or beetween certain years?,Analytical Query,validationSet
+chart2,Is the range from negative 1.8 to positive 1.8 temperature?,Analytical Query,validationSet
+chart2,Which years had 1.78 degrees Fahrenheit?,Analytical Query,validationSet
+chart2,And what was that change?,Analytical Query,validationSet
+chart2,Which decade have the largest combined increase?,Analytical Query,validationSet
+chart2,What region has the most increase or decrease in temperature wise?,Analytical Query,validationSet
+chart2,"Why did the year start in 1880, not earlier?",Analytical Query,validationSet
+chart2,So this table shows the lowest lows and the highest highs for each year?,Analytical Query,validationSet
+chart2,What is the average?,Analytical Query,validationSet
+chart2,"This chart has every year from 1880 to 2021, correct?",Analytical Query,validationSet
+chart2,What's the temperature anomaly of 1905?,Analytical Query,validationSet
+chart2,What is the temperature difference between 1944 and 1950? How much decrease?,Analytical Query,validationSet
+chart2,How many years when the temperture is in positive ranges?,Analytical Query,validationSet
+chart2,Which year had the least amount of temperature anomaly?,Analytical Query,validationSet
+chart2,What is the overall trend from 1880 between the temperture and global land and ocean temperature?,Analytical Query,validationSet
+chart2,What is the differnece between highest and lowest temperature anomaly?,Analytical Query,validationSet
+chart2,In which year was the ocean temperature 0.7 degrees Fahrenheit?,Analytical Query,validationSet
+chart2,How many temperture anomolies were there in 2020?,Analytical Query,validationSet
+chart2,Do we see a gradual increase or up and down from time to time?,Analytical Query,validationSet
+chart2,How much was that decrease?,Analytical Query,validationSet
+chart2,What is the change amount in 2015?,Analytical Query,validationSet
+chart2,Are polar bears killed in the data collections of this graph?,Analytical Query,validationSet
+chart2,Are the temperature values on this table for both ocean and land?,Analytical Query,validationSet
+chart2,"As the year goes by, do negative anomalies become less prevalent and positive anomalies become more prevalent?",Analytical Query,validationSet
+chart2,How many years are represented by negative temperatures?,Analytical Query,validationSet
+chart2,What is the lowest temperature anomaly?,Analytical Query,validationSet
+chart2,What was the lowest temperature anomalies?,Analytical Query,validationSet
+chart2,What year was the lowest temperature recorded?,Analytical Query,validationSet
+chart2,What decade saw the greatest change in temperature anomalies?,Analytical Query,validationSet
+chart2,What is the lowest negative anomalies?,Analytical Query,validationSet
+chart2,Which year was the temperature anomaly at its lowest?,Analytical Query,validationSet
+chart2,Is this representative of Antartica?,Analytical Query,validationSet
+chart2,What was the highest temperature recorded in 1904?,Analytical Query,validationSet
+chart2,What was the temperature in 1957?,Analytical Query,validationSet
+chart2,Are the years running along the x-axis?,Visual Query,validationSet
+chart2,What is represented on the x axis?,Visual Query,validationSet
+chart2,What are the blue bars?,Visual Query,validationSet
+chart2,What color are the bars?,Visual Query,validationSet
+chart2,How is this data represented?,Visual Query,validationSet
+chart2,What is the highest bar on this chart?,Visual Query,validationSet
+chart2,What is positive anomalies?,Contextual Query,validationSet
+chart2,What URL did it come from?,Contextual Query,validationSet
+chart2,How are we defining temperature anomalies?,Contextual Query,validationSet
+chart3,which country has the second highest GDP?,Analytical Query,validationSet
+chart3,Does that have the lowest GDP per capita?,Analytical Query,validationSet
+chart3,What is the average life expectancy for the world?,Analytical Query,validationSet
+chart3,What is the average GDP in Africa?,Analytical Query,validationSet
+chart3,What country has the highest life expectancy?,Analytical Query,validationSet
+chart3,What region appears to have the greatest life expectancy?,Analytical Query,validationSet
+chart3,How many countries are listed?,Analytical Query,validationSet
+chart3,What is the average GDP in Europe?,Analytical Query,validationSet
+chart3,How big is the United States?,Analytical Query,validationSet
+chart3,What region of the world has the highest GDP?,Analytical Query,validationSet
+chart3,What is the differnece between Europe and North America?,Analytical Query,validationSet
+chart3,What is the trend of this data?,Analytical Query,validationSet
+chart3,Is 70 in the medium range?,Analytical Query,validationSet
+chart3,What is GDP per capita in the US?,Analytical Query,validationSet
+chart3,What is the life expectancy in Europe?,Analytical Query,validationSet
+chart3,What is the GDP per Capita in Zimbabwe?,Analytical Query,validationSet
+chart3,What country has the highest GDP per capita?,Analytical Query,validationSet
+chart3,What's represented by 78.9 years?,Analytical Query,validationSet
+chart3,What is the GDP per Capita in the United States?,Analytical Query,validationSet
+chart3,What is the average life expectancy for somebody living in Oceana?,Analytical Query,validationSet
+chart3,What is the average Life Expectancy in North America?,Analytical Query,validationSet
+chart3,What is the second highest on the table?,Analytical Query,validationSet
+chart3,what's the difference in the GDP between Qatar and Africa?,Analytical Query,validationSet
+chart3,Is it true that the longer a person lives the more money he makes over the lifetime?,Analytical Query,validationSet
+chart3,What is the GDP in Qatar?,Analytical Query,validationSet
+chart3,what is the life expectancy rate between Hong Kong and Africa?,Analytical Query,validationSet
+chart3,What is the country with the most population?,Analytical Query,validationSet
+chart3,What is the country with the lowest gdp per capita?,Analytical Query,validationSet
+chart3,What is the country with the highest life expectancy to GDP ratio?,Analytical Query,validationSet
+chart3,What is the highest life expectancy?,Analytical Query,validationSet
+chart3,Which country has the second highest life expectancy?,Analytical Query,validationSet
+chart3,What country has the highest GDP per capita in West Africa?,Analytical Query,validationSet
+chart3,Which country has the highest GDP?,Analytical Query,validationSet
+chart3,Does the graph also show the gender and age?,Analytical Query,validationSet
+chart3,What is the life expectancy of Central African Republic?,Analytical Query,validationSet
+chart3,What is the population of Oceania?,Analytical Query,validationSet
+chart3,What is the GDP for the United States?,Analytical Query,validationSet
+chart3,Which of the South American country have the highest life expectancy?,Analytical Query,validationSet
+chart3,What is the life expectancy for people in New Zealand?,Analytical Query,validationSet
+chart3,And what is the GDP?,Analytical Query,validationSet
+chart3,Does the chart also have the information about population like the table has one?,Analytical Query,validationSet
+chart3,Does there appear to be a relationship between GDP per capita and life expectancy?,Analytical Query,validationSet
+chart3,What is the GDP for Palestine?,Analytical Query,validationSet
+chart3,Which country has the lowest life expectancy?,Analytical Query,validationSet
+chart3,By how much?,Analytical Query,validationSet
+chart3,Which country have the highest life expectancy in Asia?,Analytical Query,validationSet
+chart3,What is the average GDP in North America?,Analytical Query,validationSet
+chart3,Which country has the lowest life expectancy?,Analytical Query,validationSet
+chart3,Do Oceania and Europe have similar life expectancy?,Analytical Query,validationSet
+chart3,What color is the United States?,Visual Query,validationSet
+chart3,How does this data look?,Visual Query,validationSet
+chart3,Does each circle give the specific number of population like the table or just the size of the circle?,Visual Query,validationSet
+chart3,Is the picture(chart) in between 50 to 80?,Visual Query,validationSet
+chart3,What regions fall into the clolor of red?,Visual Query,validationSet
+chart3,What continent is green?,Visual Query,validationSet
+chart3,How is this represented?,Visual Query,validationSet
+chart3,How would a person know that that was Equatorial Guinea?,Visual Query,validationSet
+chart3,Are scatterpoints of specific countries displayed?,Visual Query,validationSet
+chart3,What color is Africa?,Visual Query,validationSet
+chart3,What countries are included in Oceania?,Contextual Query,validationSet
+chart3,What is the source of the data?,Contextual Query,validationSet
+chart3,What is meant by upper range?,Contextual Query,validationSet
+chart3,What is the geographical proximity of Burundi to Central African Republic?,Contextual Query,validationSet
+chart3,What does GDP stand for?,Contextual Query,validationSet
+chart3,What is the source of this information? Where did it come from?,Contextual Query,validationSet
+chart3,Does this one that i'm on have a comma in it?,Navigation Query,validationSet

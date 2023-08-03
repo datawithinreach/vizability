@@ -11,8 +11,10 @@
   <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
 
   <!-- olli -->
-  <script src="https://cdn.jsdelivr.net/npm/olli@1"></script>
-  <script src="https://cdn.jsdelivr.net/npm/olli-adapters@1"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/olli@1"></script> -->
+  <script src="https://cdn.jsdelivr.net/gh/datawithinreach/olli@main/docs/olli/olli.js"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/olli-adapters@1"></script> -->
+  <script src="https://cdn.jsdelivr.net/gh/datawithinreach/olli@main/docs/olli/adapters.js"></script>
 
   <!-- name that color -->
   <!-- <script type="text/javascript" src="https://chir.ag/projects/ntc/ntc.js"></script> -->
@@ -21,36 +23,45 @@
 <body>
   <div class="content" role="main">
     <!-- This is the start of content for our page -->
-    <h1 class="title">Chart QnA for Blind!</h1>
+    <h1 class="title">VizAbility - Data Visualization</h1>
     <div id="user-file-select">
-      <div class="drop-zone" id="dropZone">Drop Vega Lite Spec File Here</div>
-      <label for="fileInput">File Input:</label>
+      <div class="button-container">
+        <button class="dynamic-button method-1" data-value="chart1">Line Chart</button>
+        <button class="dynamic-button method-1" data-value="chart2">Bar Chart</button>
+        <button class="dynamic-button method-1" data-value="chart3">Scatter Plot</button>
+        <button class="dynamic-button method-1" data-value="chart4">Chloropleth Map</button>
+        <button class="dynamic-button" id="fileButton">Upload Local File</button>
+      </div> 
       <input type="file" id="fileInput" class="hidden" accept=".json, .vg">
-    </div>
-    <div id="vega-container"></div>
-    <div id="olli-container"></div>
+      <!-- <div class="drop-zone" id="dropZone">Drop Vega Lite Spec File Here</div>
+      <label for="fileInput">File Input:</label>
+      <input type="file" id="fileInput" class="hidden" accept=".json, .vg"> -->
+    </div>                                  
+    <div id="vega-container" aria-hidden="true"></div>
+    <div id="olli-container" aria-live="polite"></div>
     <form class="qna-form" id="ask-question">
       <label for="user-query">
         Ask questions about the chart:
-        <input id="user-query" name="user-query" type="text" />
+        <input id="user-query" name="user-query" type="text" autocomplete="off" />
       </label>
 
       <button id="form-submit" type="submit">Submit</button>
     </form>
-    <div>
-      <strong>Your question:</strong> <span id="prompt"></span>
+    <div id="load-content" role="status" aria-live="polite" aria-busy="false">
+      <h3 id="load-status"></h3>
+      <div id="response-info">
+        <strong>Your question:</strong> <span id="prompt"></span>
+        <strong>Response received: </strong> <span id="response"></span>
+      </div>
     </div>
-    <div>
-      <strong>Response received: </strong> <span id="response"></span>
-    </div>
-    <div>
+    <!-- <div>
       <button type="button" id="eval" onclick="redirectToEval()">Test</button>
       <script>
         function redirectToEval() {
           window.location.href = './eval/index.html';
         }
       </script>
-    </div>
+    </div> -->
   </div>
   <script src="fileDropZone.js" type="module"></script>
   <script src="main.js" type="module"></script>

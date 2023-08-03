@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
@@ -11,6 +11,11 @@ from langchain.agents.agent_types import AgentType
 from langchain.llms.openai import OpenAI
 
 import json
+
+from starlette.responses import JSONResponse
+from io import BytesIO
+import soundfile as sf
+import openai
 
 # Helper Function to Delete Data and VegaLite Spec from Previous Rendering
 def clear_data_dir(folder_path):
@@ -43,6 +48,31 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.post("/api/process-eval-sets")
+async def process_eval_sets(request: Request):
+    data = await request.json()
+    csv_data = data.get("csvData", "")
+    # Process csv_data to remove line breaks
+    csv_data = csv_data.replace("\r\n", "\n")
+    type = data.get("type", "")
+
+    # Define the directory where you want to save the file
+    file_directory = "./test/validationAndTraining/"
+
+    # Ensure the directory exists
+    if not os.path.exists(file_directory):
+        os.makedirs(file_directory)
+
+    # Define the file path based on the provided "type"
+    file_path = os.path.join(file_directory, f"{type}.csv")
+
+    # Write the csvData to the file
+    with open(file_path, "w") as file:
+        file.write(csv_data)
+
+    return {"message": "CSV data has been successfully saved."}
+
 
 @app.post("/api/process-vega-lite-spec")
 async def process_vega_lite_spec(request: Request):
@@ -93,8 +123,19 @@ async def process_json(request: Request):
     csv_string = ','.join(header) + '\n'
 
     # Extract values and append to the CSV string
+    # for item in data:
+    #     values = [str(item[key]) if item.get(key) is not None and item.get(key) != "" else "None" for key in header]
+    #     csv_string += ','.join(values) + '\n'
+
     for item in data:
-        values = [str(item[key]) if item.get(key) is not None and item.get(key) != "" else "None" for key in header]
+        values = []
+        for key in header:
+            if not isinstance(item[key], dict):
+                # If the value is a string, include it as is
+                values.append(str(item[key]) if item.get(key) is not None and item.get(key) != "" else "None")
+            else:
+                # If the value is not a string, use the else statement
+                values.append("Non-String")
         csv_string += ','.join(values) + '\n'
     
     directory = 'data/'
@@ -126,7 +167,14 @@ async def apply_agent(question: str):
 
     # Call the create_csv_agent function and obtain the CSV data
     agent = create_csv_agent(OpenAI(temperature=0), file_path, verbose=True, agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION)
-    response = agent.run(question)
+    # response = agent.run(question)
+    try:
+        response = agent.run(question)
+    except ValueError as e:
+        response = str(e)
+        if not response.startswith("Could not parse LLM output: `"):
+            raise e
+        response = response.removeprefix("Could not parse LLM output: `").removesuffix("`")
 
     # Return the CSV data as a response
     return {"response": response}
@@ -142,6 +190,49 @@ async def root():
 async def prompt(question: str):
     response = llm(question)
     return {"prompt": question, "response": response}
+
+
+@app.get("/api/check_folder")
+def check_folder(folder_path: str):
+    def check_folder_has_files(folder_path):
+        if not os.path.exists(folder_path):
+            return False
+
+        files = os.listdir(folder_path)
+        return len(files) > 0
+    
+    result = check_folder_has_files(folder_path)
+    return {"has_files": result}
+
+
+# Whisper API functionality
+# Upload audio and transcribe it
+# Return output to frontend
+
+from fastapi import UploadFile, File
+from starlette.responses import JSONResponse
+
+@app.post("/api/upload-audio")
+async def upload_audio(audioFile: UploadFile = File(...)):
+    async def transcribe_audio(filename):
+        with open(filename, "rb") as f:
+            audio_data = f.read()
+
+        response = openai.WhisperApi(api_key=os.environ["OPENAI_API_KEY"]).create_transcription(BytesIO(audio_data), "whisper-1")
+        return response["transcription"]
+
+    # Save the audio file to a temporary location on the server
+    file_location = f"./audio/{audioFile.filename}"
+    with open(file_location, "wb") as f:
+        f.write(await audioFile.read())
+
+    # Perform transcription using the Whisper API (similar to the previous Python code)
+    transcription = await transcribe_audio(file_location)
+
+    # Optionally, you can remove the temporary file after processing
+    os.remove(file_location)
+
+    return JSONResponse(content={"transcription": transcription})
 
 
 # Mount the "public" directory as a static file directory

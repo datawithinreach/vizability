@@ -1,0 +1,47 @@
+Stimuli,Questions,Ground_Truth,Evaluation
+chart4,What is the first Western most country on the map?,Analytical Query,validationSetSample
+chart4,What parts of North America are not in the 80 to 100% range?,Analytical Query,validationSetSample
+chart4,How much is the average point of the whole country?,Analytical Query,validationSetSample
+chart4,What are the countries that have the highest vaccination rates?,Analytical Query,validationSetSample
+chart4,What are the countries that have zero percent?,Analytical Query,validationSetSample
+chart4,What's the most vaccinated country in the chart?,Analytical Query,validationSetSample
+chart4,What is the vaccination rate of Columbia?,Analytical Query,validationSetSample
+chart4,Which country is the closest to 50%?,Analytical Query,validationSetSample
+chart4,What color is Mexico?,Visual Query,validationSetSample
+chart4,What shade of green or approximately what percentage of people have received vaccinations in Spain?,Visual Query,validationSetSample
+chart4,Do you have information on the percent of people who received two doses of a vaccine?,Contextual Query,validationSetSample
+chart1,What is the geographic source of this data?,Analytical Query,validationSetSample
+chart1,What was the average cost of a home in 2013?,Analytical Query,validationSetSample
+chart1,How long will this data be collected for?,Analytical Query,validationSetSample
+chart1,How many years are reflected in this table?,Analytical Query,validationSetSample
+chart1,And what was that decrease?,Analytical Query,validationSetSample
+chart1,How many of these houses were accessibly built for people in wheelchairs?,Analytical Query,validationSetSample
+chart1,Is the table organized ascending or descending?,Visual Query,validationSetSample
+chart1,Is column two showing houses for sale?,Visual Query,validationSetSample
+chart1,Does the system know the causes for sharp decrease in home sales other than Covid?,Contextual Query,validationSetSample
+chart1,will you give me a house for my birthday this year?,I am sorry but I cannot understand the question,validationSetSample
+chart2,Which year was the temperature anomaly at its lowest?,Analytical Query,validationSetSample
+chart2,"Why did the year start in 1880, not earlier?",Analytical Query,validationSetSample
+chart2,How many years when the temperture is in positive ranges?,Analytical Query,validationSetSample
+chart2,What is the differnece between highest and lowest temperature anomaly?,Analytical Query,validationSetSample
+chart2,Between what two years was there the greatest change in temperature anomalies?,Analytical Query,validationSetSample
+chart2,What is the lowest negative anomalies?,Analytical Query,validationSetSample
+chart2,What is the change amount in 2015?,Analytical Query,validationSetSample
+chart2,How is this data represented?,Visual Query,validationSetSample
+chart2,What are the blue bars?,Visual Query,validationSetSample
+chart2,What is positive anomalies?,Contextual Query,validationSetSample
+chart3,What is the life expectancy in Europe?,Analytical Query,validationSetSample
+chart3,Does that have the lowest GDP per capita?,Analytical Query,validationSetSample
+chart3,What is the average GDP in Europe?,Analytical Query,validationSetSample
+chart3,What is the trend of this data?,Analytical Query,validationSetSample
+chart3,Which country has the second highest life expectancy?,Analytical Query,validationSetSample
+chart3,Does the graph also show the gender and age?,Analytical Query,validationSetSample
+chart3,What is the GDP per Capita in Zimbabwe?,Analytical Query,validationSetSample
+chart3,What is the second highest on the table?,Analytical Query,validationSetSample
+chart3,which country has the second highest GDP?,Analytical Query,validationSetSample
+chart3,How many countries are listed?,Analytical Query,validationSetSample
+chart3,What color is Africa?,Visual Query,validationSetSample
+chart3,What color is the United States?,Visual Query,validationSetSample
+chart3,What is the geographical proximity of Burundi to Central African Republic?,Contextual Query,validationSetSample
+chart3,What countries are included in Oceania?,Contextual Query,validationSetSample
+chart3,Does this one that i'm on have a comma in it?,Navigation Query,validationSetSample

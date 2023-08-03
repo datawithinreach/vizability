@@ -11,7 +11,12 @@ let vegaLiteSpec = "";
 // Function to Handle Loading in VegaLite Spec
 const handleVegaLiteSpecChange = async function (event) {
   // Update the vegaLiteSpec variable with the new value
-  vegaLiteSpec = await JSON.parse(event.detail);
+  if (typeof event.detail === "string") {
+    vegaLiteSpec = await JSON.parse(event.detail);
+  }
+  else {
+    vegaLiteSpec = event.detail;
+  }
 
   // DOM Element Container that Houses VegaLite SVG
   const vegaContainer = document.getElementById("vega-container");
@@ -73,6 +78,21 @@ document.getElementById("ask-question").addEventListener('submit', (event) => {
   // Obtain Hierarchical String Representation of Olli Treeview
   const condensedString = tree.getCondensedString();
 
+  const loadContent = document.getElementById("load-content");
+  const loadStatus = document.getElementById("load-status");
+  const reponseInfo = document.getElementById("response-info");
+
+  reponseInfo.style.display = "none";
+
+  loadStatus.innerText = "Working. Please wait.";
+
+  loadContent.setAttribute("aria-busy", "true");
+
+  setTimeout(() => {
+    loadContent.setAttribute("aria-hidden", "true");
+  }, 100); // Adjust the delay as needed (100 milliseconds in this example)
+
+
   // Triggers when User Submits Question; Provides Response through OpenAPI
   handleSubmit(event, condensedString);
 });
@@ -95,8 +115,10 @@ function handleSubmit(event, hierarchy) {
   classifyQuery(question.value).then(function (queryType) {
     // Apply Answering Pipeline Based on Classification Response
     if (queryType.includes("Analytical Query") || queryType.includes("Visual Query")) {
-      sendPromptAgent(supplement, question.value);
-      question.value = '';
+      setTimeout(function () {
+        sendPromptAgent(supplement, question.value);
+        question.value = '';
+      }, 5000);
     }
     else if (queryType.includes("Contextual Query")) {
       sendPromptDefault(question.value).then(function (response) {

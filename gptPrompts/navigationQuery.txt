@@ -3,22 +3,23 @@ Below is a description of a data set. Each line of the data set has a sentence a
 Here is an example of how the address scheme works:
 1 // Root
 1.1 // Child 1
-1.1.1 // Grandchild 1
-1.1.2 // Grandchild 2
+1.1.1 // Child 1 of Child 1
+1.1.2 // Child 2 of Child 1
 1.2 // Child 2
 1.3 // Child 3
-1.3.1 // Grandchild 3
-1.3.1.1 // Great Grandchild 1
-1.3.1.2 // Great Grandchild 2
+1.3.1 // Child 1 of Child 3
+1.3.1.1 // Child 1 of Child 1 of Child 3
+1.3.1.2 // Child 2 of Child 1 of Child 3
 
-Furthermore, my model also supports navigation to each item in the data structure using the computer's arrow keys. However, I want you to first consider navigation in terms of the addresses and then convert each move to pressing one of the 4 arrow keys.
+Furthermore, my model also supports navigation to each item in the data structure using the computer's arrow keys. 
+However, I want you to first consider navigation in terms of the addresses and then convert each move to pressing one of the 4 arrow keys.
 
 At each address, the user can only make one of 4 possible moves - if and only if the resulting address is an actual address in the hierarchy:
 
-(Move 1) - Append a ".1" to the right-hand side of the address; for instance, 1.1 -> 1.1.1 This travels down a level in the tree structure, and its corresponding user move is pressing the down arrow key.
-(Move 2) - Detach a ".1" from the right-hand side of the address; for instance, 1.1.1 -> 1.1 This travels up a level in the tree structure, and its corresponding user move is pressing the up arrow key.
-(Move 3) - Perform mathematical addition and add integer 1 to the rightmost digit in the address; for instance, 1.1 -> 1.2 This travels one space to the right in the tree structure, and its corresponding user move is pressing the right arrow key.
-(Move 4) - Perform mathematical subtraction and subtract integer 1 from the rightmost digit in the address; for instance, 1.2 -> 1.1 This travels one space to the left in the tree structure, and its corresponding user move is pressing the left arrow key.
+(Move 1) - Append a ".1" to the adress. This equals pressing the down arrow key.
+(Move 2) - Delete the last 2 indexes of the address. This equals pressing the up arrow key.
+(Move 3) - Perform integer addition and add 1 to the number in the last index of the address. This equals pressing the right arrow key.
+(Move 4) - Perform integer subtraction and subtract 1 from the number in the last index of the address. This equals pressing the left arrow key.
 
 If you use a move that does not explicitly match any of these 4, it is incorrect. Go back and rethink your answer.
 
@@ -27,23 +28,28 @@ Here is an example description and accompanying answer, formatted in a certain w
 Hierarchy,Content
 1 // A Simple Graph
 1.1 // The X-axis
-1.1.1 // The point (1,0) with an x-value of 1
-1.1.2 // The point (3,1) with an x-value of 3
+1.1.1 // The point (1,0,1) with an x-value of 1
+1.1.2 // The point (3,1,2) with an x-value of 3
 1.2 // The Y-axis
-1.2.1 // The point (1,0) with a y-value of 0
-1.2.2 // The point (3,1) with a y-value of 1
+1.2.1 // The point (1,0,1) with a y-value of 0
+1.2.2 // The point (3,1,2) with a y-value of 1
+1.3 // The Z-axis
+1.3.1 // The point (1,0,1) with a z-value of 1
+1.3.2 // The point (3,1,2) with a z-value of 2
 
-Question: How do I get from 1.1.1 to 1.2?
+Question: How do I get from The point (1,0,1) with an x-value of 1 to The Y-axis?
 
 Response: 
-Starting Position: 1.1.1 // The point (1,0) with an x-value of 1.
-1. Press the up arrow key to go up one level (Move 2). Current Position: 1.1 // The X-axis
-2. Press the right arrow key to move one space to the right (Move 3). Current Position: 1.2 // The Y-axis
+1. Press the up arrow key. (Move 2 : 1.1.1 -> 1.1) 
+2. Press the right arrow key. (Move 3 : 1.1 -> 1.2)
 
-Question: How do I get from 1.1.1 to 1.1.2?
+Question: How do I get from The point (3,1,2) with an x-value of 3 to The point (3,1,2) with a z-value of 2?
 
 Response:
-Starting Position: 1.1.1 // The point (1,0) with an x-value of 1.
-1. Press the right arrow key to move one space to the right (Move 3). Current Position: 1.1.2 // The point (3,1) with an x-value of 3
+1. Press the up arrow key. (Move 2 : 1.1.2 -> 1.1)
+2. Press the right arrow key. (Move 3 : 1.1 -> 1.2)
+3. Press the right arrow key. (Move 3 : 1.2 -> 1.3)
+4. Press the down arrow key. (Move 1 : 1.3 -> 1.3.1)
 
+Note, at the end of your answer, check whether your end point is the address of the end point specificed in the question.
 Now it's your turn. Below is the description of a dataset:

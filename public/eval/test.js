@@ -8,71 +8,22 @@ const descrPost = "Use this information along with everything else you are given
 
 // MAIN FUNCTION; Runs Evaluation
 async function clickHandler(isEvaluate) {
-    const questionsDictionary = await getQuestions();
-    // After Classifying all Questions, Split into Testing and Validation Sets Based on Strata
-
-    function getRandomSubset(array, percent) {
-        const subsetSize = Math.ceil(array.length * percent);
-        const shuffled = array.sort(() => Math.random() - 0.5);
-        return shuffled.slice(0, subsetSize);
+    const folderPath = "./test/validationAndTraining";
+    const hasFilesRaw = await fetch('/api/check_folder?folder_path=' + folderPath);
+    const hasFilesData = await hasFilesRaw.json();
+    const hasFiles = hasFilesData.has_files;
+    if (!hasFiles) {
+        await generateValidationAndTestingSets();
     }
 
-    // Initialize the validation_set and testing_set Dictionaries
-    const validation_set = {};
-    const testing_set = {};
-    const validation_set_sample = {};
-    const testing_set_sample = {};
+    // Fetch Testing Set Sample from Backend
+    const questionsDictionary = await getQuestions("test/validationAndTraining/testingSetSample.csv");
 
-    // Iterate over the Input Dictionary
-    for (const [key, value] of Object.entries(questionsDictionary)) {
-        // Initialize the Classification Groups
-        const groups = {
-            "Analytical Query": [],
-            "Visual Query": [],
-            "Contextual Query": [],
-            "Navigation Query": [],
-            "The question cannot be classified": []
-        };
-
-        // Group the Questions Based on Classification
-        for (const question of value) {
-            const { ground_truth } = question;
-            try {
-                groups[ground_truth].push(question);
-            } catch (error) {
-                console.error(error);
-            }
-        }
-
-        // Stratified Random Sampling for each Classification Group
-        for (const [ground_truth, questions] of Object.entries(groups)) {
-            const validationQuestions = getRandomSubset(questions, 0.2);
-            const testingQuestions = questions.filter(
-                question => !validationQuestions.includes(question)
-            );
-
-            validation_set[key] = validation_set[key] || [];
-            validation_set[key].push(...validationQuestions);
-
-            testing_set[key] = testing_set[key] || [];
-            testing_set[key].push(...testingQuestions);
-
-            const validationSample = getRandomSubset(validationQuestions, 0.2);
-            const testingSample = getRandomSubset(testingQuestions, 0.05);
-
-            validation_set_sample[key] = validation_set_sample[key] || [];
-            validation_set_sample[key].push(...validationSample);
-
-            testing_set_sample[key] = testing_set_sample[key] || [];
-            testing_set_sample[key].push(...testingSample);
-        }
-    }
     // Run Evaluation for Testing Set Sample
     // The Corresponding VegaLite Spec and Olli Treeview are Rendered for each Query
     // Each Query is then Answered Using the Pipeline
     for (var [key, value] of Object.entries(testing_set_sample)) {
         try {
-            value = [value[0], value[1]];
             // Render VegaLite Spec Corresponding to the Query being Asked
             const response = await fetch("/api/get-backend-file?file_path=./test/testVegaLiteSpecs/" + key + ".vg");
             const data = await response.json();
@@ -157,8 +108,7 @@ document.getElementById("run-classification").addEventListener("click", function
 
 // Retrive Question Pool from Backend
 // Outputs Dictionary
-async function getQuestions() {
-    const filePath = "./test/testQuestions.csv"
+async function getQuestions(filePath) {
     return fetch("/api/get-backend-file?file_path=" + filePath)
         .then(function (response) {
             return response.json();
@@ -206,7 +156,7 @@ async function classifyQuestions(value) {
         if (classificationResponse.includes("Analytical Query")) { classificationObj.classification = "Analytical Query" }
         else if (classificationResponse.includes("Visual Query")) { classificationObj.classification = "Visual Query" }
         else if (classificationResponse.includes("Contextual Query")) { classificationObj.classification = "Contextual Query" }
-        else { classificationObj.classification = "The question cannot be classified." }
+        else { classificationObj.classification = "I am sorry but I cannot understand the question" }
     }
 }
 
@@ -242,10 +192,114 @@ async function answerQuestions(value, supplement) {
             });
         }
         else {
-            const response = "The question could not be classified.";
+            const response = "I am sorry but I cannot understand the question";
             document.getElementById("prompt").textContent = question;
             document.getElementById("response").textContent = response;
             questionObj.answer = response;
         }
     }
 };
+
+
+async function generateValidationAndTestingSets() {
+    const questionsDictionary = await getQuestions("./test/testQuestions.csv");
+    // After Classifying all Questions, Split into Testing and Validation Sets Based on Strata
+
+    function getRandomSubset(array, percent) {
+        const subsetSize = Math.ceil(array.length * percent);
+        const shuffled = array.sort(() => Math.random() - 0.5);
+        return shuffled.slice(0, subsetSize);
+    }
+
+    async function sendEvalSetToBackend(set, type) {
+        // Convert the Updated Questions Dictionary Back to CSV String
+        const csvData = Papa.unparse(Object.entries(set).flatMap(([key, value]) => {
+            return value.map(questionObj => ({
+                Stimuli: key,
+                Questions: questionObj.question,
+                Ground_Truth: questionObj.ground_truth,
+                Evaluation: type
+            }));
+        }), { header: true });
+
+        const dataToSend = {
+            csvData: csvData,
+            type: type,
+        };
+
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(dataToSend),
+        };
+
+        try {
+            const response = await fetch("/api/process-eval-sets", requestOptions);
+            if (response.ok) {
+                console.log('Data sent successfully to the backend!');
+            } else {
+                console.error('Failed to send data to the backend.');
+            }
+        } catch (error) {
+            console.error('Error while sending data:', error);
+        }
+    }
+
+    // Initialize the validation_set and testing_set Dictionaries
+    const validation_set = {};
+    const testing_set = {};
+    const validation_set_sample = {};
+    const testing_set_sample = {};
+
+    // Iterate over the Input Dictionary
+    for (const [key, value] of Object.entries(questionsDictionary)) {
+        // Initialize the Classification Groups
+        const groups = {
+            "Analytical Query": [],
+            "Visual Query": [],
+            "Contextual Query": [],
+            "Navigation Query": [],
+            "I am sorry but I cannot understand the question": []
+        };
+
+        // Group the Questions Based on Classification
+        for (const question of value) {
+            const { ground_truth } = question;
+            try {
+                groups[ground_truth].push(question);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        // Stratified Random Sampling for each Classification Group
+        for (const [ground_truth, questions] of Object.entries(groups)) {
+            const validationQuestions = getRandomSubset(questions, 0.2);
+            const testingQuestions = questions.filter(
+                question => !validationQuestions.includes(question)
+            );
+
+            validation_set[key] = validation_set[key] || [];
+            validation_set[key].push(...validationQuestions);
+
+            testing_set[key] = testing_set[key] || [];
+            testing_set[key].push(...testingQuestions);
+
+            const validationSample = getRandomSubset(validationQuestions, 0.2);
+            const testingSample = getRandomSubset(testingQuestions, 0.05);
+
+            validation_set_sample[key] = validation_set_sample[key] || [];
+            validation_set_sample[key].push(...validationSample);
+
+            testing_set_sample[key] = testing_set_sample[key] || [];
+            testing_set_sample[key].push(...testingSample);
+        }
+    }
+    await sendEvalSetToBackend(validation_set, "validationSet");
+    await sendEvalSetToBackend(validation_set_sample, "validationSetSample");
+
+    await sendEvalSetToBackend(testing_set, "testingSet");
+    await sendEvalSetToBackend(testing_set_sample, "testingSetSample");
+}
