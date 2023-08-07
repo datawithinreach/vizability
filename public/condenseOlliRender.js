@@ -86,7 +86,7 @@ export class CondensedOlliRender {
             const hierarchyKey = i === 1 ? 1 : this.getHierarchyKey(treeItem);
             // console.log(hierarchyKey);
 
-            treeDictionary[hierarchyKey] = treeItem.getInnerText();
+            treeDictionary[hierarchyKey] = treeItem.getInnerText().replace("Press t to open table.", "");
         }
 
         return treeDictionary;

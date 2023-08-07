@@ -11,7 +11,13 @@ let vegaLiteSpec = "";
 // Function to Handle Loading in VegaLite Spec
 const handleVegaLiteSpecChange = async function (event) {
   // Update the vegaLiteSpec variable with the new value
-  vegaLiteSpec = await JSON.parse(event.detail);
+
+  if (typeof event.detail === "string") {
+    vegaLiteSpec = await JSON.parse(event.detail);
+  }
+  else {
+    vegaLiteSpec = event.detail;
+  }
 
   // DOM Element Container that Houses VegaLite SVG
   const vegaContainer = document.getElementById("vega-container");
@@ -50,7 +56,23 @@ const handleVegaLiteSpecChange = async function (event) {
   OlliAdapters.VegaLiteAdapter(vegaLiteSpec).then((olliVisSpec) => {
     const olliRender = olli(olliVisSpec);
     olliContainer.innerHTML = "";
+    // Create the <p> element
+    var olliInfo = document.createElement("p");
+    olliInfo.id = "olli-instructions";
+    olliInfo.setAttribute("role", "region");
+    olliInfo.setAttribute("tabindex", "0");
+
+    var strongElement = document.createElement("strong");
+    strongElement.textContent = "Explore the structure and components of the chart through a text representation.\nInstructions: Press enter on the treeview to explore the contents of the chart. Navigate using the arrows keys. To exit, press escape.";
+
+    // Append the <strong> element to the <p> element
+    olliInfo.appendChild(strongElement);
+    
+    olliContainer.append(olliInfo);
+    olliInfo.focus();
     olliContainer.append(olliRender);
+
+
 
     // Hierarchical Tree Representation of Olli Treeview
     tree = new CondensedOlliRender(document.querySelector('.olli-vis'));
@@ -73,11 +95,29 @@ document.getElementById("ask-question").addEventListener('submit', (event) => {
   // Obtain Hierarchical String Representation of Olli Treeview
   const condensedString = tree.getCondensedString();
 
+  const loadContent = document.getElementById("load-content");
+  const loadStatus = document.getElementById("load-status");
+  const responseInfo = document.getElementById("response-info");
+
+  // Step 1
+  responseInfo.style.display = "none";
+
+  // Step 2
+  loadStatus.innerHTML = "Working. Please Wait";
+  loadStatus.style.display = "block";
+
+  // Step 3
+  const loadingAnnouncement = setInterval(() => {
+    loadStatus.innerHTML = "Still Loading";
+    loadStatus.style.display = "block";
+  }, 3000);
+
+
   // Triggers when User Submits Question; Provides Response through OpenAPI
-  handleSubmit(event, condensedString);
+  handleSubmit(event, condensedString, loadingAnnouncement);
 });
 
-function handleSubmit(event, hierarchy) {
+function handleSubmit(event, hierarchy, loadingAnnouncement) {
   event.preventDefault();
 
   // Initialize Variables
@@ -94,14 +134,33 @@ function handleSubmit(event, hierarchy) {
   // Classification Categories Include: Analytical Query; Visual Query; Contextual Query; Navigation Query
   classifyQuery(question.value).then(function (queryType) {
     // Apply Answering Pipeline Based on Classification Response
+    let classificationExplanation = "";
     if (queryType.includes("Analytical Query") || queryType.includes("Visual Query")) {
-      sendPromptAgent(supplement, question.value);
+      classificationExplanation = "Your question \"" + question.value + "\" was categorized as being data-driven, and as such, has been answered based on the data in the chart.";
+      sendPromptAgent(supplement, question.value, loadingAnnouncement, classificationExplanation);
+      question.removeAttribute("aria-live");
       question.value = '';
     }
     else if (queryType.includes("Contextual Query")) {
       sendPromptDefault(question.value).then(function (response) {
-        document.getElementById("prompt").textContent = question.value;
-        document.getElementById("response").textContent = response;
+        classificationExplanation = "Your question \"" + question.value + "\" was categorized as being context-seeking, and as such, has been answered based on information found on the web.";
+
+        const loadStatus = document.getElementById("load-status");
+        const loadContent = document.getElementById("load-content");
+        const responseInfo = document.getElementById("response-info");
+
+        // Clear the loading announcement
+        clearInterval(loadingAnnouncement);
+
+        // Step 4
+        loadStatus.innerHTML = "Response Generated";
+
+        // Step 5
+        responseInfo.style.display = "block";
+        
+        document.getElementById("prompt").textContent = "Question: " + classificationExplanation;
+        document.getElementById("response").textContent = "Answer: " + response;
+        question.removeAttribute("aria-live");
         question.value = '';
       });
     }
@@ -112,18 +171,45 @@ function handleSubmit(event, hierarchy) {
 
       // Packaged Question to be Sent to OpenAPI
       const navigationQuestion = supplement + question.value + activeElementString;
+      const classificationExplanation = "Your question \"" + question.value + "\" was categorized as being related to navigating the chart structure, and as such has been answered based on the treeview.";
+      const loadStatus = document.getElementById("load-status");
+      const loadContent = document.getElementById("load-content");
+      const responseInfo = document.getElementById("response-info");
 
       // Answer Navigation Query
       handleNavigationQuery(navigationQuestion).then(function (response) {
-        document.getElementById("prompt").textContent = question.value;
-        document.getElementById("response").textContent = response;
+        // Clear the loading announcement
+        clearInterval(loadingAnnouncement);
+
+        // Step 4
+        loadStatus.innerHTML = "Response Generated";
+
+        // Step 5
+        responseInfo.style.display = "block";
+        document.getElementById("prompt").textContent = "Question: " + classificationExplanation;
+        document.getElementById("response").textContent = "Answer: " + response;
+        question.removeAttribute("aria-live");
         question.value = '';
       });
     }
     // Query Cannot be Classified by LLM
     else {
-      document.getElementById("prompt").textContent = question.value;
+      classificationExplanation = "Your question \"" + question.value + "\" could not be properly categorized.";
+      const loadStatus = document.getElementById("load-status");
+      const loadContent = document.getElementById("load-content");
+      const responseInfo = document.getElementById("response-info");
+
+      // Clear the loading announcement
+      clearInterval(loadingAnnouncement);
+
+      // Step 4
+      loadStatus.innerHTML = "Response Generated";
+
+      // Step 5
+      responseInfo.style.display = "block";
+      document.getElementById("prompt").textContent = classificationExplanation;
       document.getElementById("response").textContent = queryType;
+      question.removeAttribute("aria-live");
       question.value = '';
     }
   })

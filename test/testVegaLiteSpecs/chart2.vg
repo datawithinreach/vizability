@@ -1,13 +1,13 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "width": 500,
+  "width": 400,
   "title": "Global Land and Ocean January-December Temperature Anomalies",
   "data": {
     "url": "https://raw.githubusercontent.com/Joszek0723/excess_data/main/bar_chart_data.csv",
     "format": {"type": "csv"}
   },
   "transform": [
-    {"calculate": "datum.Value < 0 ? 'negative' : 'positive'", "as": "Category"}
+    {"calculate": "datum.Value < 0 ? 'negative' : 'positive'", "as": "Temporal Polarity"}
   ],
   "mark": {"type": "bar"},
   "encoding": {
@@ -26,7 +26,7 @@
       "scale": {"domain": [-0.6, 1.4]}
     },
     "color": {
-      "field": "Category",
+      "field": "Temporal Polarity",
       "type": "nominal",
       "scale": {"range": ["#226291", "#E3242B"]}
     }

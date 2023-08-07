@@ -1,0 +1,45 @@
+Stimuli,Questions,Ground_Truth,Evaluation
+chart4,What countries have higher vaccination status inspite of being in the continent that do not have high vaccination status?,Analytical Query,testingSetSample
+chart4,"Does the chart show what vaccines are being used at all in any way, shape or form?",Analytical Query,testingSetSample
+chart4,What is the average vaccination rate in South America?,Analytical Query,testingSetSample
+chart4,What is the vaccination percent of the country with the highest vaccination rate?,Analytical Query,testingSetSample
+chart4,What is the vaccination rate in the Dominican Republic?,Analytical Query,testingSetSample
+chart4,Is there anybody that has been vaccinated in Mali?,Analytical Query,testingSetSample
+chart4,"In Europe, which is a country that has the highest percentage?",Analytical Query,testingSetSample
+chart4,How many countries are above 80%?,Analytical Query,testingSetSample
+chart4,Is all of Australia the darker shade of green?,Visual Query,testingSetSample
+chart4,What countries are represented by green?,Visual Query,testingSetSample
+chart4,What is the source of this data?,Contextual Query,testingSetSample
+chart1,What is the average number of houses on sale in 2015?,Analytical Query,testingSetSample
+chart1,Did July and August have similar amounts of homes for sale?,Analytical Query,testingSetSample
+chart1,which date had the second lowest inventory rate?,Analytical Query,testingSetSample
+chart1,What is the amount of decrease from 2014 to 2021?,Analytical Query,testingSetSample
+chart1,What year and month have the highest number of houses?,Analytical Query,testingSetSample
+chart1,In what year were the fewest houses sold?,Analytical Query,testingSetSample
+chart1,What does the X axis represent?,Visual Query,testingSetSample
+chart1,How does the year 2016 look on the line?,Visual Query,testingSetSample
+chart1,What does it mean by inventory?,Contextual Query,testingSetSample
+chart2,The overall trend of the chart is that temperatures are increasing over land and oceans?,Analytical Query,testingSetSample
+chart2,What is the general trend in temperature anomalies?,Analytical Query,testingSetSample
+chart2,What is the overall trend of this chart?,Analytical Query,testingSetSample
+chart2,"Between 1921 and 2021, which year had the lowest anomaly?",Analytical Query,testingSetSample
+chart2,What is the range?,Analytical Query,testingSetSample
+chart2,How many years when the temperture is in negative ranges?,Analytical Query,testingSetSample
+chart2,What region is the most impacted by positve anomalies?,Analytical Query,testingSetSample
+chart2,What years are represented by blue bars?,Visual Query,testingSetSample
+chart2,Does the right side have the positive temperature and the left side have negative temperature both along with y-axis?,Visual Query,testingSetSample
+chart2,Why does it start at 1880? What happened then?,Contextual Query,testingSetSample
+chart3,What is the next highest GDP in the table?,Analytical Query,testingSetSample
+chart3,Does overall lower range refer to Africa?,Analytical Query,testingSetSample
+chart3,Which region in the world has the highest population?,Analytical Query,testingSetSample
+chart3,What is it's gross domestic product?,Analytical Query,testingSetSample
+chart3,What is represented by 77.5 years?,Analytical Query,testingSetSample
+chart3,Which country has the lowest GDP and highest life expectancy rate?,Analytical Query,testingSetSample
+chart3,And what is its GDP?,Analytical Query,testingSetSample
+chart3,What is the country in North America with the highest life expectancy?,Analytical Query,testingSetSample
+chart3,What is the correlation between life expectancy and GDP?,Analytical Query,testingSetSample
+chart3,What is the country with the least population?,Analytical Query,testingSetSample
+chart3,What does red mean?,Visual Query,testingSetSample
+chart3,Is the trend line or an equation from the data on that graph?,Visual Query,testingSetSample
+chart3,Why are we comparing domestic product with life expectancy?,Contextual Query,testingSetSample
+chart3,What is the definition of per capita?,Contextual Query,testingSetSample

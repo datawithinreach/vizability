@@ -1,4 +1,17 @@
 Stimuli,Questions,Ground_Truth
+chart4,What is a choropleth?,Contextual Query
+chart4,Is there a difference in vaccination rate in the shade of green between the United States and Canada?,Visual Query
+chart4,What country in South America has the darkest shade of green?,Visual Query
+chart4,What shade of green or approximately what percentage of people have received vaccinations in Spain?,Visual Query
+chart4,How many countries are represented in South America on this map?,Analytical Query
+chart4,What country in Africa has the lowest vaccination rate?,Analytical Query
+chart4,What region is Egypt located in?,Contextual Query
+chart4,What country in Asia has the highest vaccination rate?,Analytical Query
+chart4,Are there higher vaccination rates in South America or North America?,Analytical Query
+chart4,What is the vaccination rate in Russia?,Analytical Query
+chart4,Do you have information on the percent of people who received two doses of a vaccine?,Contextual Query
+chart4,What country has the highest vaccination rate according to the data?,Analytical Query
+chart4,What country has the lowest vaccination rate?,Analytical Query
 chart1,In what year were the highest number of homes for sale?,Analytical Query
 chart1,At what point were the fewest number of houses for sale?,Analytical Query
 chart1,Can you tell me the number of houses that were for sale on the last date of the February?,Analytical Query
@@ -40,6 +53,12 @@ chart3,"Overall, how does life expectancy change per change in GDP?",Analytical 
 chart3,What would be the average trend in change?,Analytical Query
 chart3,What is the correlation between life expectancy and GDP?,Analytical Query
 chart3,"How much does life expectancy change from 50,000 to 100,000 GDP?",Analytical Query
+chart4,Which country is in dire need for the vaccine?,Analytical Query
+chart4,Which country has the lowest percentage of population that is vaccinated?,Analytical Query
+chart4,Is Africa the country that needs the vaccine the most?,Analytical Query
+chart4,What are the countries that have the highest vaccination rates?,Analytical Query
+chart4,What is the value of the highest vaccination rate?,Analytical Query
+chart4,Can some countries help other countries increase the vaccination rate?,Contextual Query
 chart1,What is changing on the y axis?,Visual Query
 chart1,What is the X axis?,Visual Query
 chart1,Why is the cost of houses going up in the end of the year?,Contextual Query
@@ -59,6 +78,12 @@ chart3,What is the average Life Expectancy in Europe?,Analytical Query
 chart3,What is the average GDP in North America?,Analytical Query
 chart3,What is the average Life Expectancy in North America?,Analytical Query
 chart3,Are there lines that connect the life expectancies and GDP that show the correlation? How is the correlation depicted?,Visual Query
+chart4,What's the most vaccinated country in the chart?,Analytical Query
+chart4,What continent (is United Arab Emirates)?,Contextual Query
+chart4,What country is the least vaccinated?,Analytical Query
+chart4,Where does the United States fall on this chart?,Analytical Query
+chart4,"Does the chart show what vaccines are being used at all in any way, shape or form?",Analytical Query
+chart4,What are the variations in South America?,Analytical Query
 chart1,Was there ever a year where there are more than a million homes for sale?,Analytical Query
 chart1,What year had more than a million homes for sale?,Analytical Query
 chart1,What does the line look like?,Visual Query
@@ -91,6 +116,15 @@ chart1,Does the chart also show the specific time of the year?,Analytical Query
 chart1,Is there any other places that I can get some new information like a graph which shows by each region of the US?,Contextual Query
 chart1,What month was this chart published?,Analytical Query
 chart1,Is the chart part of the larger article?,Contextual Query
+chart4,What country has the darkest shades for the lowest and highest?,Visual Query
+chart4,"Across the whole map, are more areas of the world lighter green, darker green or in the middle?",Visual Query
+chart4,What is the standard deviation for average 38.5 percent?,Analytical Query
+chart4,What is the range?,Analytical Query
+chart4,Is 50 percent dark green and 25 percent light green?,Visual Query
+chart4,What is the chart talking about?,Analytical Query
+chart4,Which country have the highest vaccination rate?,Analytical Query
+chart4,Which country have the lowest vaccination rate?,Analytical Query
+chart4,How is the chart sorted?,Visual Query
 chart2,How high is the highest temperture versus the lowest temperature?,Analytical Query
 chart2,In what years did the highest and lowest temperature occur?,Analytical Query
 chart2,Where were the measurement taken?,Analytical Query
@@ -126,9 +160,24 @@ chart2,Are the years running along the x-axis?,Visual Query
 chart2,Is there any line connecting all of the points at which the line of the year intersect with temperture line where you can see the trajextory?,Visual Query
 chart2,Does the bar chart reprsent the year from 1880 to 2021 and table represent from 1880 to 2020?,Analytical Query
 chart2,Are negative temperatures on the left represented along the y-axis?,Visual Query
+chart4,How are the region sorted?,Visual Query
+chart4,What is the vaccination status of France?,Analytical Query
+chart4,What is the vaccination status of US?,Analytical Query
+chart4,What is the percentage at which vaccinated population reach herd immunity?,Contextual Query
+chart4,What period of the time this data represent?,Analytical Query
+chart4,What countries have higher vaccination status inspite of being in the continent that do not have high vaccination status?,Analytical Query
+chart4,Are there any countries that have a lower rate of vaccination on the continent that have high vaccination rate?,Analytical Query
 chart2,Is the trend always going up through the whole time?,Analytical Query
 chart2,How many temperture anomolies were there in 2020?,Analytical Query
 chart2,How is it calculated for each year?,Analytical Query
+chart4,What percentage of people are vaccinated in Austrailia?,Analytical Query
+chart4,What ages does this graph cover?,Analytical Query
+chart4,What is the percentage of people vaccinated in the US?,Analytical Query
+chart4,What is the difference between Austrailia and Africa in percentage wise?,Analytical Query
+chart4,Is there a lot of variation between western European countries and eastern European countries in vaccination rates?,Analytical Query
+chart4,Can you tell me on average how much higher?,Analytical Query
+chart4,Does the data talk about the people with double dose or people having a booster shot?,Analytical Query
+chart4,what types of vaccination type are included?,Analytical Query
 chart1,"Where are the homes sold from? Country, city or state what does it relate to?",Analytical Query
 chart1,Is the graph represent whole US?,Analytical Query
 chart1,Does the system know the causes for sharp decrease in home sales other than Covid?,Contextual Query
@@ -160,6 +209,14 @@ chart1,Is the date of column one going up by specific increment?,Visual Query
 chart1,Are these houses for sale in the US?,Analytical Query
 chart1,Are these house for sale sold by public owners or private owners?,Analytical Query
 chart1,Are these new houses or old houses?,Analytical Query
+chart4,What country have the lowest percent of vaccination rate?,Analytical Query
+chart4,What country have the highest percent of vaccination rate?,Analytical Query
+chart4,What is the highest rate of the country?,Analytical Query
+chart4,What is average vaccination rate in Europe?,Analytical Query
+chart4,What is the median vaccination rate?,Analytical Query
+chart4,What is the median vaccination rate in North America?,Analytical Query
+chart4,What is the vaccination rate in the US?,Analytical Query
+chart4,What is the vaccination rate in Canada?,Analytical Query
 chart2,What is positive anomalies?,Contextual Query
 chart2,What is the highest positive anomalies?,Analytical Query
 chart2,What is the lowest negative anomalies?,Analytical Query
@@ -167,6 +224,11 @@ chart2,What is the average of positive anamolies?,Analytical Query
 chart2,Does this include all countries on the globe?,Analytical Query
 chart2,What is the highest anomolies in the US?,Analytical Query
 chart2,What is the highest anamolies in the north pole?,Analytical Query
+chart4,Can you describe me the what is the difference between the darkest green and the one after that? How the system would describe me those five different light to dark options or colors visually?,Visual Query
+chart4,Is the populations information in the chart?,Visual Query
+chart4,What countries have more than 80% of population vaccinated?,Analytical Query
+chart4,Is there a population specific information? for example not only the percentage of the population vaccinated but gender age elderly person more vaccinated adults or children,Visual Query
+chart4,"Does the data differ based on gender and the age? For instance, elderly population is more vaccinated versus young, or adults versus children",Analytical Query
 chart3,What is Oceania?,Contextual Query
 chart3,What is life expectancy versus GDP for Turkey?,Analytical Query
 chart3,What regions fall into the clolor of red?,Visual Query
@@ -239,6 +301,22 @@ chart3,Which country have the lowest life expectancy in Asia?,Analytical Query
 chart3,which country have the highest life expectancy in North America?,Analytical Query
 chart3,which country have the lowest life expectancy in North America?,Analytical Query
 chart3,Where did United States fall in the chart?,Analytical Query
+chart4,How many people in the US are vaccinated in the table?,Analytical Query
+chart4,How many people are vaccinated in Canada?,Analytical Query
+chart4,How many people are vaccinated in Costa Rica?,Analytical Query
+chart4,How many people are vaccinated in England?,Analytical Query
+chart4,How many people are vaccinated in Austrailia?,Analytical Query
+chart4,How many people are vaccinated in Afghanistan?,Analytical Query
+chart4,How many people are vaccinated in Switzerland?,Analytical Query
+chart4,How many people are vaccinated in Chinia?,Analytical Query
+chart4,How many people are vaccinated in Japan?,Analytical Query
+chart4,Does the US score lower or higher than what percent of the country?,Analytical Query
+chart4,Does Canada score lower or higher than what percent of the country?,Analytical Query
+chart4,Which country was the lowest?,Analytical Query
+chart4,Which country was the highest?,Analytical Query
+chart4,How many countries are in average range around 50%?,Analytical Query
+chart4,How much is the average point of the whole country?,Analytical Query
+chart4,when was this data collected?,Contextual Query
 chart2,What is the lowest temperature anomally between between 1880 to 1940?,Analytical Query
 chart2,What is the highest temperature anomally between between 1880 to 1940?,Analytical Query
 chart2,Is weather and water temperature parallel or today different from year to year?,Analytical Query
@@ -254,6 +332,9 @@ chart1,How many homes are building?,Analytical Query
 chart1,Are these houses including both new homes and homes that were sold before?,Analytical Query
 chart1,"In some areas, are demand and supply the same? And is this for the whole US?",Analytical Query
 chart1,"Do we separate types of homes like single family homes, condos, suburban or urban area?",Analytical Query
+chart4,What kind of vaccine they used?,Analytical Query
+chart4,What is the range of the people vaccinated? Over 18?,Analytical Query
+chart4,What percentage of people over 18 or under 18 were vaccinated?,Analytical Query
 chart3,Are these regions or different countries on the chart?,Visual Query
 chart3,What is the life expectancy in the US?,Analytical Query
 chart3,Is there different between genders for male and female?,Analytical Query
@@ -282,6 +363,26 @@ chart3,What is the correlation?,Analytical Query
 chart3,"Does this mean that the longer someone lives, the more money, they will acquire over their life expectancy?",Analytical Query
 chart3,What is the title of this graph?,Visual Query
 chart3,What is the definition of per capita?,Contextual Query
+chart4,What is the title of this graph,Visual Query
+chart4,"If the United States has a range between 80 and 100% Vaccination, what is the vaccination average for Texas?",Analytical Query
+chart4,What is the average vaccination of Brazil?,Analytical Query
+chart4,what is the average vaccination of the State of Texas in the United States?,Analytical Query
+chart4,What is the vaccinations average for Texas?,Analytical Query
+chart4,How many people have been vaccinated in Nigeria?,Analytical Query
+chart4,Is there anybody vaccinated in Alaska?,Analytical Query
+chart4,What is the population of Antarctica?,Analytical Query
+chart4,What is the population of Australia?,Analytical Query
+chart4,How many people have been vaccinated in Australia?,Analytical Query
+chart4,What color is represented by this value?,Visual Query
+chart4,What is the number of people populated in the Philippines?,Analytical Query
+chart4,Is there anybody that has been vaccinated in Mali?,Analytical Query
+chart4,What color represents this rate?,Visual Query
+chart4,How do you know the difference between dark green and light green?,Visual Query
+chart4,What countries are represented by green?,Visual Query
+chart4,How many countries have a vaccination of 50%?,Analytical Query
+chart4,How many countries have vaccination under 50%?,Analytical Query
+chart4,Which country has the fewest vaccinations?,Analytical Query
+chart4,Are there any vaccinations on a continent not represented on this chart like Antartica?,Analytical Query
 chart2,What part of the globe do these numbers represent?,Analytical Query
 chart2,"Geographically, where is this graph representing?",Analytical Query
 chart2,Where is the temperature anomaly taking place?,Analytical Query
@@ -313,8 +414,23 @@ chart1,In what year were the fewest houses sold?,Analytical Query
 chart1,How many houses were sold in November of 2015?,Analytical Query
 chart1,How many houses were sold on my birthday last year?,Analytical Query
 chart1,How many houses were sold on my birthday December 21 2020 last year?,Analytical Query
-chart1,will you give me a house for my birthday this year?,The question cannot be classified
+chart1,will you give me a house for my birthday this year?,I am sorry but I cannot understand the question
 chart1,How many of these houses were accessibly built for people in wheelchairs?,Analytical Query
+chart4,What parts of North America are not in the 80 to 100% range?,Analytical Query
+chart4,What countries in North America have less than 80% vaccination rate?,Analytical Query
+chart4,what's the vaccination rate of Mexico?,Analytical Query
+chart4,what's the average vaccination rate in Europe?,Analytical Query
+chart4,Which countries in Africa have more than 20% vaccination?,Analytical Query
+chart4,What country has the highest vaccination rate in Africa?,Analytical Query
+chart4,What country has the lowest vaccination rate in Africa?,Analytical Query
+chart4,What country has the highest vaccination rate in the world?,Analytical Query
+chart4,What country has the lowest vaccination rate the world?,Analytical Query
+chart4,How many countries in South America are in the zero to 20% vaccination range?,Analytical Query
+chart4,What continent has the highest vaccination rate?,Analytical Query
+chart4,What is the average vaccination rate for countries in the world?,Analytical Query
+chart4,How many countries are in the zero to 20% vaccination range?,Analytical Query
+chart4,Can you list those 66 countries?,Analytical Query
+chart4,How many countries in Europe are in the 80 to 100% range?,Analytical Query
 chart1,How many homes were for sale in June of 2019?,Analytical Query
 chart1,How many homes were on sale in 2019?,Analytical Query
 chart1,"On average, which month of the year, has the least homes for sale?",Analytical Query
@@ -385,6 +501,55 @@ chart1,Are there any anomalies in the data?,Analytical Query
 chart1,Are there any noticeable things about the data?,Analytical Query
 chart1,What does the X axis represent?,Visual Query
 chart1,What does the y axis represent?,Visual Query
+chart4,What color is this map?,Visual Query
+chart4,What color is North America?,Visual Query
+chart4,What color is the United States?,Visual Query
+chart4,What is the percentage for the United States?,Analytical Query
+chart4,What is the data point for Mexico?,Analytical Query
+chart4,What color is Mexico?,Visual Query
+chart4,What is the range of green?,Visual Query
+chart4,Where is Mexico?,Contextual Query
+chart4,What color is Europe?,Visual Query
+chart4,What percentage of Europe is a lighter shade of green?,Visual Query
+chart4,What percentage is Saudi Arabia?,Analytical Query
+chart4,What color is Saudi Arabia?,Visual Query
+chart4,Where in the range of percentages does Saudi Arabia fall?,Analytical Query
+chart4,What is the country with the least amount of green?,Visual Query
+chart4,What is the country with the highest green?,Visual Query
+chart4,What is the country with the highest percentage?,Analytical Query
+chart4,Which country has 50%?,Analytical Query
+chart4,Which country is the closest to 50%?,Analytical Query
+chart4,Is there a country with 49.8%?,Analytical Query
+chart4,Is there a country with 50.1%?,Analytical Query
+chart4,Is there a country with 13%?,Analytical Query
+chart4,Is there a country with 49.8%?,Analytical Query
+chart4,How many countries are above 90%?,Analytical Query
+chart4,How many countries are above 80%?,Analytical Query
+chart4,How many countries are above 70%?,Analytical Query
+chart4,How many countries are between 70 and 80%?,Analytical Query
+chart4,How many countries are below 90%?,Analytical Query
+chart4,What is it missing?,Analytical Query
+chart4,How many countries are included in this table?,Analytical Query
+chart4,How many countries are included in the map?,Analytical Query
+chart4,What does 50% mean?,Analytical Query
+chart4,What does 49.8% mean?,Analytical Query
+chart4,How many countries have zero percent?,Analytical Query
+chart4,What are the countries that have zero percent?,Analytical Query
+chart4,What are the countries that have 100%?,Analytical Query
+chart4,Name all the countries that have less than 10%.,Analytical Query
+chart4,What are the countries that have less than 10%?,Analytical Query
+chart4,What are the countries that are shaded a light green?,Visual Query
+chart4,What range does light green mean?,Visual Query
+chart4,What are the countries between 20% and 40%?,Analytical Query
+chart4,How many countries are between 20% and 40%?,Analytical Query
+chart4,How many countries are from 20% through 40%?,Analytical Query
+chart4,What is the source of this data?,Contextual Query
+chart4,What is the date of this data?,Analytical Query
+chart4,What is the first country on the list?,Analytical Query
+chart4,What is the percentage for the world?,Analytical Query
+chart4,What is the first country on the map?,Analytical Query
+chart4,What is the first Western most country on the map?,Analytical Query
+chart4,"In Europe, which is a country that has the highest percentage?",Analytical Query
 chart2,What is the trend of this line?,Visual Query
 chart2,What is the trend of this bar chart?,Analytical Query
 chart2,How is this data represented?,Visual Query
@@ -523,6 +688,14 @@ chart1,What were the percentage of increase or decrease in average number of hou
 chart1,What were the percentage of increase or decrease in average number of houses on sale between 2015 and 2017?,Analytical Query
 chart1,"Based on the graph, will the number of houses continue to fall, or will they rise?",Analytical Query
 chart1,Starting from 2015 is the graph started at the highest peak and going down until 2021?,Analytical Query
+chart4,Which color represent the highest vaccination rate?,Visual Query
+chart4,Which region have the highest vaccination rate?,Analytical Query
+chart4,Is United Arab Emirates represented in dark grean or light green?,Visual Query
+chart4,Which country has the lowest vaccination rate?,Analytical Query
+chart4,What is the vaccination rate of United States?,Analytical Query
+chart4,What is the vaccination rate of Canada?,Analytical Query
+chart4,What is the vaccination rate of Saudi Arabian?,Analytical Query
+chart4,What is the sources of this data?,Contextual Query
 chart3,Does the graph also show the gender and age?,Analytical Query
 chart3,Does the graph have the information about the race?,Analytical Query
 chart3,Is there correlation between life expectancy and GDP per Capita?,Analytical Query
@@ -531,10 +704,21 @@ chart3,What is the percentage of the countries that have life expectancy above 8
 chart2,Why does the graph increase and decrease in the certain period?,Analytical Query
 chart2,What region has the most increase or decrease in temperature wise?,Analytical Query
 chart2,What was the average increase in data until now?,Analytical Query
+chart4,"In America, which races are the most vaccinated?",Analytical Query
+chart4,Does the data include booster shot?,Analytical Query
 chart1,What state have the most and least homes for sale?,Analytical Query
 chart1,Are there more home for sale in California or Texas?,Analytical Query
 chart1,What is the average increase and decrease homes for sale in overall graph?,Analytical Query
 chart1,What year has the biggest incrase and decrease?,Analytical Query
+chart4,What is the percentage of vaccination rate in Brazil?,Analytical Query
+chart4,What is the percentage of vaccination rate in United States?,Analytical Query
+chart4,How does Columbia compare to each neighbors?,Analytical Query
+chart4,What is the vaccination rate of Canada?,Analytical Query
+chart4,What is the vaccination rate of Mexico?,Analytical Query
+chart4,What is the vaccination rate of North America?,Analytical Query
+chart4,What is the vaccination rate of Columbia?,Analytical Query
+chart4,What is the vaccination rate of Israel?,Analytical Query
+chart4,What is the vaccination rate of Columbia?,Analytical Query
 chart2,What year is the highest temperature anomaly?,Analytical Query
 chart2,Which decade have the largest combined increase?,Analytical Query
 chart2,Is the increase from the past years or is there any baseline?,Analytical Query
@@ -556,6 +740,23 @@ chart3,Which country has the most GDP per Capita?,Analytical Query
 chart3,What is the life expectancy of Central African Republic?,Analytical Query
 chart3,What is the GDP per Capita of the country with highest life expectancy?,Analytical Query
 chart3,Does any country has lower life expectancy than central African Republic?,Analytical Query
+chart4,"Which part of Asia has a darker shade of green, which has the most vaccinated amount of people?",Visual Query
+chart4,Which has the lowest vaccination rate in Asia?,Analytical Query
+chart4,What is the highest vaccination rate in Africa?,Analytical Query
+chart4,Which country has the third highest vaccination rate?,Analytical Query
+chart4,Which country is in the middle?,Analytical Query
+chart4,Which country has the second to lowest vaccination rate?,Analytical Query
+chart4,What is the vaccination percent of the country with the highest vaccination rate?,Analytical Query
+chart4,Which country has the fifth from the lowest rate?,Analytical Query
+chart4,Does Yemen and Madagascar has the same amount of people who have been vaccinated?,Analytical Query
+chart4,What are the list of countries that are in this study?,Analytical Query
+chart4,What is the vaccination rate percentage of South Africa?,Analytical Query
+chart4,Which continent has the highest vaccination rate?,Analytical Query
+chart4,What is the vaccination rate of United States?,Analytical Query
+chart4,What is the vaccination rate of Canada?,Analytical Query
+chart4,What is the vaccination rate of Malta?,Analytical Query
+chart4,Which country is the fourth highest vaccination rate?,Analytical Query
+chart4,How many people are vaccinated UAE?,Analytical Query
 chart2,What's the difference in temperature of the ocean between 1995 and 2020?,Analytical Query
 chart2,What was the temperature anomaly in the 1800s?,Analytical Query
 chart2,What is the difference between years 1900 and 2020?,Analytical Query
@@ -586,6 +787,10 @@ chart3,Which country has the second highest life expectancy?,Analytical Query
 chart2,Why does the temperature increase in 2021?,Analytical Query
 chart2,"In 1880, why does temperature decrease?",Analytical Query
 chart2,Why did you choose the color red and blue?,Visual Query
+chart4,Which countries are in zero percent?,Analytical Query
+chart4,"What other countries are in the 80 to 100% range range, other than in North America?",Analytical Query
+chart4,Are there more countries with brighter color other than Africa?,Visual Query
+chart4,What countries are in brigher range?,Visual Query
 chart3,What is the scatterplot?,Contextual Query
 chart1,Is the graph increasing or decreasing?,Visual Query
 chart1,What years have house for sale decreasing over time?,Analytical Query
@@ -625,6 +830,23 @@ chart2,What was the average increase between 2011 and 2015?,Analytical Query
 chart2,"Between 2011 and 2021, which year had the highest temperature anomaly?",Analytical Query
 chart2,"In the last century, which year had the lowest temperature anomaly?",Analytical Query
 chart2,"Between 1921 and 2021, which year had the lowest anomaly?",Analytical Query
+chart4,What is the most vaccinated country in Africa?,Analytical Query
+chart4,What is the country with the highest average vaccination in Africa?,Analytical Query
+chart4,What is the average percentage of the population vaccinated in Europe?,Analytical Query
+chart4,Which country has the darkest shade of green in Africa?,Visual Query
+chart4,Is there any country that does not have a dark shade of green in America?,Visual Query
+chart4,How many countries are represented on the map in Africa?,Analytical Query
+chart4,Are there any countries in the world represented that is vaccination rate of 100%?,Analytical Query
+chart4,How many countries in the world have a vaccination rate of less than 20%?,Analytical Query
+chart4,How many countries in the world have a vaccination rate of over 80%?,Analytical Query
+chart4,Are any of the six countries whose vaccination rate is over 80% located in Africa?,Analytical Query
+chart4,Are there any countries whose vaccination rate is lower than 20% located in Europe?,Analytical Query
+chart4,What is the average vaccination rate in South America?,Analytical Query
+chart4,"Are there any countries in South America, with the vaccination rate over 80%?",Analytical Query
+chart4,Is there a bigger breakdown for the area where I live?,Analytical Query
+chart4,Can I get a map of the US?,Contextual Query
+chart4,Can I see more detail?,Contextual Query
+chart4,What's the percentage of vaccination for my state or city?,Analytical Query
 chart2,What is an anomaly?,Contextual Query
 chart2,Why does it start at 1880? What happened then?,Contextual Query
 chart2,"Is this like a particular ocean or is it a particular area, or is this like an average of every weather station the whole world, or is it just coastal readings and land readings, or is it like actually someone goes out in the ocean to take readings to?",Analytical Query
@@ -655,6 +877,17 @@ chart2,"From 1880 to 1940 the bars are blue, correct?",Visual Query
 chart2,Are the bars red between 1940 and 2021?,Visual Query
 chart2,What year was the lowest temperature?,Analytical Query
 chart2,And what year has the highest?,Analytical Query
+chart4,How many different types of shades of green are represented in this map?,Visual Query
+chart4,Which countries have the lightest shade of green?,Visual Query
+chart4,Which countries have the highest vaccination rates?,Analytical Query
+chart4,Is New Zealand included on this map?,Analytical Query
+chart4,What shade of green is New Zealand?,Visual Query
+chart4,Which North American country has the highest vaccination rate?,Analytical Query
+chart4,Which North American country has the lowest vaccination rate?,Analytical Query
+chart4,Which African country has the highest vaccination rate?,Analytical Query
+chart4,Which European country has the highest vaccination rate?,Analytical Query
+chart4,Which Asian country has the highest population rate?,Analytical Query
+chart4,And which South American country has the highest vaccination rate?,Analytical Query
 chart3,Which country has the lowest life expectancy?,Analytical Query
 chart3,Which country has the highest life expectancy?,Analytical Query
 chart3,Which South American country has the lowest life expectancy?,Analytical Query
@@ -702,19 +935,32 @@ chart3,What region has the highest GDP per capita?,Analytical Query
 chart3,Which region has the highest population?,Analytical Query
 chart3,What is Oceania's population compared to Asia's?,Analytical Query
 chart3,What is the average life expectancy of Oceania compared to the average life expectancy of Asia?,Analytical Query
+chart4,Is all of Australia the darker shade of green?,Visual Query
+chart4,Is all of Australia in the 80 to 100% range?,Analytical Query
+chart4,What states in the United States are included in the 80 to 100% range?,Analytical Query
+chart4,What countries in Europe are included in the 80 to 100% range?,Analytical Query
+chart4,What regions in North America are in the lowest percent range?,Analytical Query
 chart3,"Why are there two country names in a row, are they in columns or is there some relationship between the two?",Visual Query
 chart3,"What relationship those have with each other, or are they in totally separate columns?",Visual Query
 chart3,"Okay, so why is Asia and Barbados in the same region?",Analytical Query
 chart3,Am I supposed to understand from this chart that Barbados is part of Asia?,Analytical Query
 chart3,Is Bolivia the first column of the chart and South America the last column of the chart?,Visual Query
 chart3,Why are some spoken to thousands and some not?,Contextual Query
-chart3,Does this one that i'm on have a comma in it?,Contextual Query
+chart3,Does this one that i'm on have a comma in it?,Navigation Query
 chart3,What is the GDP of Costa Rica?,Analytical Query
 chart3,is there anything specific you want me to look for in this chart?,Analytical Query
 chart3,Which country has the highest GDP?,Analytical Query
 chart3,What is the GDP of Qatar?,Analytical Query
 chart3,Which country has the lowest GDP?,Analytical Query
 chart3,is Africa the lowest on this scale?,Analytical Query
+chart4,Does Africa have the least amount of vaccinations?,Analytical Query
+chart4,Which country has the darkest shade of green?,Visual Query
+chart4,Which country has the lowest vaccination rate?,Analytical Query
+chart4,How does the United States compare to Canada as far as vaccinations?,Analytical Query
+chart4,What is the vaccination rate in the Dominican Republic?,Analytical Query
+chart4,And what is the vaccination rate in Mexico?,Analytical Query
+chart4,What is the vaccination rate in Chile?,Analytical Query
+chart4,So what is the vaccination rate in the United Emirates?,Analytical Query
 chart1,Can you please describe the layout of this chart?,Visual Query
 chart1,Which date has the lowest number of houses?,Analytical Query
 chart1,Which date has the highest inventory?,Analytical Query
