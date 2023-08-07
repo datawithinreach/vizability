@@ -1,24 +1,59 @@
 {
     "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-    "description": "A line chart that plots the aggregate number of homes for sale in the United States for the given years 2014-2021",
-    "title": "The number of homes for sale nationally has plummeted",
-    "width": 500,
+    "width": 400,
+    "title": "Global Land and Ocean January-December Temperature Anomalies",
     "data": {
-        "url": "https://raw.githubusercontent.com/Joszek0723/excess_data/main/line_chart_data.csv"
+        "url": "https://raw.githubusercontent.com/Joszek0723/excess_data/main/bar_chart_data.csv",
+        "format": {
+            "type": "csv"
+        }
     },
-    "mark": "line",
+    "transform": [
+        {
+            "calculate": "datum.Value < 0 ? 'negative' : 'positive'",
+            "as": "Temporal Polarity"
+        }
+    ],
+    "mark": {
+        "type": "bar"
+    },
     "encoding": {
         "x": {
-            "title": "Date",
-            "field": "date",
-            "type": "temporal"
+            "field": "Year",
+            "type": "ordinal",
+            "axis": {
+                "labelExpr": "datum.value % 10 === 0 ? datum.value : ''"
+            }
         },
         "y": {
-            "title": "Number of Homes for Sale",
-            "field": "inventory",
+            "title": "Temperature Anomaly (\u00c2\u00b0C)",
+            "field": "Value",
             "type": "quantitative",
             "axis": {
-                "tickCount": 6
+                "values": [
+                    -0.6,
+                    -0.2,
+                    0.2,
+                    0.6,
+                    1,
+                    1.4
+                ]
+            },
+            "scale": {
+                "domain": [
+                    -0.6,
+                    1.4
+                ]
+            }
+        },
+        "color": {
+            "field": "Temporal Polarity",
+            "type": "nominal",
+            "scale": {
+                "range": [
+                    "#226291",
+                    "#E3242B"
+                ]
             }
         }
     }

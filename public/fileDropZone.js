@@ -30,6 +30,9 @@ buttons.forEach(function (button) {
         // Load VegaLite Spec to the Backend
         loadVGandSendToBackend(vLData);
 
+        // Render QnA to the DOM
+        document.getElementById("ask-question").style.display = "block";
+
         // Create a custom event with the updated vegaLiteSpec
         const vegaLiteSpecEvent = new CustomEvent('vegaLiteSpecChange', {
             detail: vLData["contents"]

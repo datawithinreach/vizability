@@ -58,6 +58,11 @@ async function sendAudioData(audioBlob) {
       if (response.ok) {
         const transcription = await response.json();
         console.log("Transcription:", transcription);
+        const userQuery = document.getElementById("user-query");
+        userQuery.value = transcription["transcription"]["text"];
+        userQuery.setAttribute("aria-live", "assertive");
+        const formSubmit = document.getElementById("form-submit");
+        formSubmit.click();
       } else {
         console.error("Failed to upload audio. Status:", response.status);
       }

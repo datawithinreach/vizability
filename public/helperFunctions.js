@@ -145,37 +145,30 @@ export async function sendPromptDefault(question) {
 
 // Sends Question to OpenAPI and Casts Output Answer to DOM Elements
 // LLM Uses a Specific CSV Agent
-export async function sendPromptAgent(supplement, question) {
+export async function sendPromptAgent(supplement, question, loadingAnnouncement, classificationExplanation) {
   console.log("prompt", supplement + question);
   return fetch("/api/apply-agent?question=" + supplement + question, { redirect: 'manual' })
     .then(function (response) {
       return response.json();
     })
     .then(function (data) {
+      const loadStatus = document.getElementById("load-status");
       const loadContent = document.getElementById("load-content");
-      console.log("response", data);
+      const responseInfo = document.getElementById("response-info");
 
-      document.getElementById("load-status").innerText = "Response Generated";
+      // Clear the loading announcement
+      clearInterval(loadingAnnouncement);
 
-      loadContent.setAttribute("aria-busy", "true");
+      // Step 4
+      loadStatus.innerHTML = "Response Generated";
 
-      document.getElementById("response-info").style.display = "block";
+      // Step 5
+      responseInfo.style.display = "block";
+      document.getElementById("prompt").innerText = "Question: " + classificationExplanation;
+      document.getElementById("response").innerText = "Answer: " + data.response;
 
-      document.getElementById("prompt").innerText = question;
-      document.getElementById("response").innerText = data.response;
-
-      loadContent.removeAttribute("aria-hidden");
-      loadContent.setAttribute("aria-busy", "false");
       return data.response;
     })
-  // document.getElementById("response-info").setAttribute("aria-busy", "false");
-
-  // document.getElementById("load-status").innerText = "Response Generated";
-
-  // document.getElementById("response-info").style.display = "block";
-
-  // document.getElementById("prompt").innerText = "question";
-  // document.getElementById("response").innerText = "Analytical Query";
 }
 
 export async function handleNavigationQuery(question) {

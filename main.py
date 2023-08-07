@@ -31,6 +31,7 @@ def clear_data_dir(folder_path):
 #  Load the OpenAI API key from the .env file
 load_dotenv()
 os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
+openai.api_key = os.environ["OPENAI_API_KEY"]
 
 #  Create an instance of the OpenAI class
 llm = OpenAI(model_name="text-davinci-003", temperature=0.9)
@@ -215,11 +216,14 @@ from starlette.responses import JSONResponse
 @app.post("/api/upload-audio")
 async def upload_audio(audioFile: UploadFile = File(...)):
     async def transcribe_audio(filename):
-        with open(filename, "rb") as f:
-            audio_data = f.read()
+        # with open(filename, "rb") as f:
+        #     audio_data = f.read()
+        audio_file= open(filename, "rb")
 
-        response = openai.WhisperApi(api_key=os.environ["OPENAI_API_KEY"]).create_transcription(BytesIO(audio_data), "whisper-1")
-        return response["transcription"]
+
+        # response = openai.WhisperApi(api_key=os.environ["OPENAI_API_KEY"]).create_transcription(BytesIO(audio_data), "whisper-1")
+        response = openai.Audio.transcribe("whisper-1", audio_file)
+        return response
 
     # Save the audio file to a temporary location on the server
     file_location = f"./audio/{audioFile.filename}"

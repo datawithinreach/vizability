@@ -279,10 +279,10 @@ h2 {
   background-color: #12476a;
 }
 
-#response-info, #question-info {
+/* #response-info, #question-info {
   display: none;
 }
 
-#response-info strong, #response-info span {
+#response-info strong {
   display: block;
-}
+} */

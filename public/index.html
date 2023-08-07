@@ -24,6 +24,7 @@
   <div class="content" role="main">
     <!-- This is the start of content for our page -->
     <h1 class="title">VizAbility - Data Visualization</h1>
+    <h2>Load in a chart by selecting one of the four options or upload your own file.<br>Explore the structure and components of the chart through a text representation.<br>Supplement your knowledge of the chart by asking questions, either through typing or voice input.</h2>
     <div id="user-file-select">
       <div class="button-container">
         <button class="dynamic-button method-1" data-value="chart1">Line Chart</button>
@@ -38,22 +39,40 @@
       <input type="file" id="fileInput" class="hidden" accept=".json, .vg"> -->
     </div>                                  
     <div id="vega-container" aria-hidden="true"></div>
-    <div id="olli-container" aria-live="polite"></div>
-    <form class="qna-form" id="ask-question">
-      <label for="user-query">
-        Ask questions about the chart:
-        <input id="user-query" name="user-query" type="text" autocomplete="off" />
-      </label>
+    <div id="aria-info" aria-live="polite">
+      <div id="olli-container"></div>
+      <hr>
+      <form class="qna-form" id="ask-question" style="display: none;">
+        <label for="user-query">
+          <p>Supplement your knowledge of the chart by asking questions, either through typing or voice input.</p>
+          <input id="user-query" name="user-query" type="text" autocomplete="off" aria-label="Text Input"/>
+        </label>
 
-      <button id="form-submit" type="submit">Submit</button>
-    </form>
-    <div id="load-content" role="status" aria-live="polite" aria-busy="false">
+        <button id="recordButton" type="button" aria-label="To begin voice input press enter. To end and submit, press enter again.">Start Recording</button>
+        <button id="form-submit" type="submit">Submit</button>
+      </form>
+    </div>
+    <!-- <div id="load-content" role="status" aria-live="polite" aria-busy="false">
       <h3 id="load-status"></h3>
       <div id="response-info">
         <strong>Your question:</strong> <span id="prompt"></span>
         <strong>Response received: </strong> <span id="response"></span>
       </div>
+    </div> -->
+
+    <div id="load-content" aria-live="assertive">
+      <h3 id="load-status"></h3>
+      <div id="response-info" style="display: none;" aria-live="polite">
+        <!-- <p> <strong>Your question:</strong> <span id="prompt"></span> </p>
+        <p> <strong>Response received: </strong> <span id="response"></span> </p> -->
+        <p id="prompt"></p>
+        <p id="response"></p>
+      </div>
     </div>
+
+    <!-- <div>
+      <button id="recordButton">Start Recording</button>
+    </div> -->
     <!-- <div>
       <button type="button" id="eval" onclick="redirectToEval()">Test</button>
       <script>
@@ -66,6 +85,7 @@
   <script src="fileDropZone.js" type="module"></script>
   <script src="main.js" type="module"></script>
   <script src="helperFunctions.js" type="module"></script>
+  <script src="recordAudio.js" type="module"></script>
 </body>
 
 </html>
