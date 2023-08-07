@@ -2,11 +2,17 @@
 
 ## Development
 * Create `.env` and add `OPENAI_API_KEY = [api key]`
+* Create a virtual environment to manage dependencies
+  ```
+  python -m venv venv
+  source venv/bin/activate 
+  ```
+  For Windows use `venv\Scripts\activate`
 * Run the following commands on the terminal
-```
-pip install -r requirements.txt
-uvicorn main:app --reload
-```
+  ```
+  pip install -r requirements.txt
+  uvicorn main:app --reload
+  ```
 * Client is in the `public` folder
 * Backend API routes are in `main.py`
 
