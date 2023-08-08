@@ -226,6 +226,10 @@ async def upload_audio(audioFile: UploadFile = File(...)):
         return response
 
     # Save the audio file to a temporary location on the server
+    directory = "./audio"
+
+    if not os.path.exists(directory):
+        os.makedirs(directory)
     file_location = f"./audio/{audioFile.filename}"
     with open(file_location, "wb") as f:
         f.write(await audioFile.read())
@@ -234,7 +238,7 @@ async def upload_audio(audioFile: UploadFile = File(...)):
     transcription = await transcribe_audio(file_location)
 
     # Optionally, you can remove the temporary file after processing
-    os.remove(file_location)
+    # os.remove(file_location)
 
     return JSONResponse(content={"transcription": transcription})
 
