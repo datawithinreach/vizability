@@ -4,6 +4,7 @@ class TreeItem {
         this.ariaLevel = this.setAriaLevel();
         this.parent = parent;
         this.children = children;
+        this.address = "";
     }
 
     setAriaLevel() {
@@ -12,6 +13,9 @@ class TreeItem {
         }
         // Since the content of head is null, its aria-level is 0
         return 0;
+    }
+    setAddress(address) {
+        this.address = address;
     }
 
     getAriaLevel() {
@@ -52,14 +56,18 @@ export class CondensedOlliRender {
         this.head = new TreeItem(null);
         this.condensedString = "";
         this.treeItemArray = [this.head];
+        this.addressArray = [];
         this.initialize();
     }
 
     initialize() {
         this.populateTreeItemArray();
+        // console.log(this.treeItemArray);
         const treeItemDictionary = this.convertToDictionary();
-        console.log(treeItemDictionary);
+        // console.log(treeItemDictionary);
         this.condensedString = this.convertToCSV(treeItemDictionary);
+        console.log(this.addressArray);
+        console.log(this.condensedString);
     }
 
     getCondensedString() {
@@ -68,14 +76,23 @@ export class CondensedOlliRender {
 
     convertToCSV(treeItemDictionary) {
         let csvString = "Hierarchy,Content\n";
-      
-        for (const [hierarchy, content] of Object.entries(treeItemDictionary)) {
-          csvString += `${hierarchy} // ${content}\n`;
+
+        for (let [hierarchy, content] of Object.entries(treeItemDictionary)) {
+            let firstPeriodIndex = content.getInnerText().indexOf(".");
+            let ofIndex = content.getInnerText().indexOf(" of ");
+
+            if (ofIndex !== -1 && firstPeriodIndex !== -1 && ofIndex < firstPeriodIndex) {
+                content = content.getInnerText().slice(firstPeriodIndex + 2);
+            } else {
+                content = content.getInnerText();
+            }
+
+            csvString += `${hierarchy} // ${content.replace("Press t to open table.", "")}\n`;
         }
-      
+
         return csvString;
-      }
-      
+    }
+
 
     convertToDictionary() {
         const treeDictionary = {};
@@ -83,10 +100,12 @@ export class CondensedOlliRender {
         for (let i = 1; i < this.treeItemArray.length; i++) {
             const treeItem = this.treeItemArray[i];
             // console.log(treeItem);
-            const hierarchyKey = i === 1 ? 1 : this.getHierarchyKey(treeItem);
+            const hierarchyKey = i === 1 ? "1" : this.getHierarchyKey(treeItem);
             // console.log(hierarchyKey);
 
-            treeDictionary[hierarchyKey] = treeItem.getInnerText().replace("Press t to open table.", "");
+            treeItem.setAddress(hierarchyKey);
+            this.addressArray.push(hierarchyKey);
+            treeDictionary[hierarchyKey] = treeItem;
         }
 
         return treeDictionary;
