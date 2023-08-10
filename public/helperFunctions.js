@@ -191,6 +191,12 @@ export async function handleNavigationQuery(question) {
 
 export function getActiveAddress(activeElement, hierarchy) {
   activeElement = activeElement.replace("Press t to open table.", "");
+  let firstPeriodIndex = activeElement.indexOf(".");
+  let ofIndex = activeElement.indexOf(" of ");
+
+  if (ofIndex !== -1 && firstPeriodIndex !== -1 && ofIndex < firstPeriodIndex) {
+    activeElement = activeElement.slice(firstPeriodIndex + 2);
+  }
   console.log(activeElement);
   const hierarchyArray = hierarchy.split("\n");
   for (let element of hierarchyArray) {
