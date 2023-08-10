@@ -14,6 +14,7 @@
   ],     
   "mark": {"type": "circle", "filled": true, "tooltip": true},
   "encoding": {
+    "detail": {"field": "Entity", "title": "Country"},
     "x": {"field": "GDP per capita", "type": "quantitative", "scale": {"type": "log"}},
     "y": {"field": "Life expectancy at birth (historical)", "type": "quantitative", "scale": {"zero": false}},
     "size": {

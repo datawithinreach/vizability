@@ -40,11 +40,11 @@
     },
     {
       "calculate": "datum.people_fully_vaccinated_pct_of_pop_display ? toNumber(replace(datum.people_fully_vaccinated_pct_of_pop_display, /%\\*?$|\\*%$/, '')) : null",
-      "as": "people_fully_vaccinated_pct_of_pop_display"
+      "as": "percent_fully_vaccinated"
     },
     {
       "filter": {
-        "field": "people_fully_vaccinated_pct_of_pop_display",
+        "field": "percent_fully_vaccinated",
         "valid": true
       }
     }
@@ -53,7 +53,7 @@
   "encoding": {
     "color": {
       "title": "% of Population Vaccinated",
-      "field": "people_fully_vaccinated_pct_of_pop_display",
+      "field": "percent_fully_vaccinated",
       "type": "quantitative",
       "scale": {"scheme": "redyellowgreen"}
     },
@@ -61,7 +61,7 @@
     "tooltip": [
       {"field": "properties.name", "title": "Country"},
       {
-        "field": "people_fully_vaccinated_pct_of_pop_display",
+        "field": "percent_fully_vaccinated",
         "type": "quantitative",
         "title": "% of Population Vaccinated"
       }
