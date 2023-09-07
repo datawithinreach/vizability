@@ -1,0 +1,31 @@
+You will be provided with a question, the correct answer to the question, as well as response to the question tha is either correct or incorrect.
+Your task is to use a Likert Scale of Quality to rank the response in relation to the correct answer provided to you.
+The Likert Scale of Quality is as follows:
+{Very Poor}, {Poor}, {Fair}, {Good}, {Very Good}
+Note that your response must be exactly one of these quality ratings.
+
+
+When answering, ask yourself: How good of a representation is the response to the actual answer. Consider two things:
+(1) Does the response convey the same empirical information as the correct answer
+(2) Is the response as verbose or strcutrued similarly to the correct answer?
+
+Here are your guidelines: 
+
+{Very Poor}: The response does not meet guidelines (1) and (2)
+{Poor}: The response meets guideline (2) but not (1)
+{Fair}: Guideline (2) is met, but it is ambigious whether guideline (1) is met, based solely on the vagueness of the question.
+{Good}: The response meets guideline (1) but not (2)
+{Very Good}: The response meets both guidelines (1) and (2)
+
+Now it's your turn:
+
+Question:
+{Question}
+
+Correct Answer:
+{Correct Answer}
+
+Respose to be Evaluated:
+{Response}
+
+Applying the guidelines and likert scale, how well does the response stack up to the correct answer?

@@ -1,47 +1,9 @@
 Analytical Queries involve any possible lookup operations, computations, or analysis involving data.
 
-"Analytical Query" // What country in Asia has the highest vaccination rate?
-
-"Analytical Query" // What is this graph showing?
-
-"Analytical Query" // Describe the data.
-
-"Analytical Query" // Can you tell me the number of houses that were for sale on the last date of February?
-
-"Analytical Query" // For the time from September 2019 to September 2020, what was the average decrease in homes for sale?
-
-"Analytical Query" // Between what two years was there the greatest change in temperature anomalies?
-
 Visual Queries involve references to visual cues such as color or graph shape/characteristics. 
 
-"Visual Query" // Is there a difference in vaccination rate in the shade of green between the United States and Canada?
+Navigation Queries involve questions relating to location within the Olli navigation table. They usually take up the form: 'How do I get from () to ().'
 
-"Visual Query" // Across the whole map, are more areas of the world lighter green, darker green or in the middle?
-
-"Visual Query" // How does the line go, up and down or diagonal?
-
-"Visual Query" // What color is Europe?
-
-Navigation Queries involve questions relating to location within the Olli navigation table. 
-
-"Navigation Query" // How do I navigate to the year 2020?
-
-"Navigation Query" // Where can the x-axis information about years be found?
-
-"Navigation Query" // Where am I within the Olli navigation?
-
-"Navigation Query" // How can I get from {} to {}?
-
-Contextual Queries involve broad questions that do not necessarily need the graph’s specific data to be answered. 
-
-"Contextual Query" // What is a choropleth?
-
-"Contextual Query" // What exactly is a scatter plot?
-
-"Contextual Query" // What is GDP?
-
-"Contextual Query" // Please describe what you mean by anomaly.
-
-
+Contextual Queries involve broad questions that do not necessarily need the graph's specific data to be answered. 
 
 Your objective is to classify the following question into one of these 4 categories: ["Analytical Query", "Visual Query", "Navigation Query", "Contextual Query"]. If you do not know how to classify the question, return "I am sorry but I cannot understand the question" and nothing more. If you can classify it, your answer should only be two words: {Type of Query} Query. Refer back to the examples above to help classify the question:

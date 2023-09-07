@@ -5,6 +5,7 @@ class TreeItem {
         this.parent = parent;
         this.children = children;
         this.address = "";
+        this.isActiveChild = false;
     }
 
     setAriaLevel() {
@@ -14,9 +15,20 @@ class TreeItem {
         // Since the content of head is null, its aria-level is 0
         return 0;
     }
+
+    setIsActiveChild(isActiveChild) {
+        this.isActiveChild = isActiveChild;
+    }
+
+    getIsActiveChild() {
+        return this.isActiveChild;
+    }
+
     setAddress(address) {
         this.address = address;
     }
+
+    getAddress() { return this.address; }
 
     getAriaLevel() {
         return this.ariaLevel;
@@ -50,24 +62,52 @@ class TreeItem {
     }
 }
 
+class Queue {
+    constructor() {
+        this.elements = [];
+    }
+    
+    enqueue(element) {
+        this.elements.push(element);
+    }
+    
+    dequeue() {
+        return this.elements.shift();
+    }
+
+    isEmpty() {
+        return this.elements.length === 0;
+    }
+
+    size() {
+        return this.elements.length;
+    }
+    
+    shift() {
+        if (this.elements.length === 0) {
+            return null;
+        }
+        const shiftedElement = this.elements[0];
+        this.elements.splice(0, 1);
+        return shiftedElement;
+    }
+}
+
 export class CondensedOlliRender {
     constructor(olliVis) {
         this.olliVis = olliVis;
         this.head = new TreeItem(null);
         this.condensedString = "";
         this.treeItemArray = [this.head];
+        this.treeItemDictionary = {};
         this.addressArray = [];
         this.initialize();
     }
 
     initialize() {
         this.populateTreeItemArray();
-        // console.log(this.treeItemArray);
-        const treeItemDictionary = this.convertToDictionary();
-        // console.log(treeItemDictionary);
-        this.condensedString = this.convertToCSV(treeItemDictionary);
-        console.log(this.addressArray);
-        console.log(this.condensedString);
+        this.treeItemDictionary = this.convertToDictionary();
+        this.condensedString = this.convertToCSV(this.treeItemDictionary);
     }
 
     getCondensedString() {
@@ -99,11 +139,12 @@ export class CondensedOlliRender {
 
         for (let i = 1; i < this.treeItemArray.length; i++) {
             const treeItem = this.treeItemArray[i];
-            // console.log(treeItem);
             const hierarchyKey = i === 1 ? "1" : this.getHierarchyKey(treeItem);
-            // console.log(hierarchyKey);
 
             treeItem.setAddress(hierarchyKey);
+            if (hierarchyKey.endsWith("1")) {
+                treeItem.setIsActiveChild(true);
+            }
             this.addressArray.push(hierarchyKey);
             treeDictionary[hierarchyKey] = treeItem;
         }
@@ -118,7 +159,6 @@ export class CondensedOlliRender {
         let currentNode = treeItem;
         while (currentNode.parent !== null) {
             key = "." + (currentNode.parent.children.indexOf(currentNode) + 1) + key;
-            // console.log("Key: " + key);
             currentNode = currentNode.parent;
         }
 
@@ -154,5 +194,176 @@ export class CondensedOlliRender {
         }
     }
 
+    printIsActiveChildNodes() {
+        this.treeItemArray.forEach(node => {
+            if (node.getIsActiveChild()) {
+            }
+        })
+    }
+
+    getNodeFromAddress(address) {
+        const index = this.treeItemArray.findIndex(obj => obj.getAddress() == address);
+        return this.treeItemArray[index];
+    }
+
+    getShortestPath(startNode, endNode) {
+
+        function checkIfInVisited(visited, newAdress, currentAddress) {
+            for (let i = 0; i < visited.length; i++) {
+                if (visited[i][[newAdress]] && visited[i][[newAdress]][0] == currentAddress) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function getIndexWithinParent(node) {
+            const parent = node.getParent();
+            if (parent) {
+                const children = parent.getChildren();
+                const index = children.findIndex(obj => obj.getAddress() === node.getAddress());
+                return index;
+            }
+            return -1;
+        }
+
+        // ERROR CHECK LATER
+        function getActiveChildAddress(node) {
+            const children = node.getChildren();
+            for (let i = 0; i < children.length; i++) {
+                if (children[i].getIsActiveChild()) {
+                    return children[i].getAddress();
+                }
+            }
+            return null;
+        }
+
+        const queue = new Queue();
+        queue.enqueue({ node: startNode, address: startNode.getAddress(), activeChildAddress: getActiveChildAddress(startNode), indexWithinParent: getIndexWithinParent(startNode)});
+        // const visited = { [startNode.getAddress()]: [] };
+        const visited = [];
+        
+        while (queue.size() > 0) {
+            const { node: currentNode, address: currentAddress, activeChildAddress: activeChildAddress, indexWithinParent: indexWithinParent } = queue.shift();
+            
+            if (currentAddress === endNode.getAddress()) {
+                break;
+            }
+            
+            // Movement: Move left
+            if (indexWithinParent > 0) {
+                const newAddress = currentAddress.slice(0, -1) + indexWithinParent;
+                if (this.treeItemDictionary[newAddress]) {
+                    const newNode = this.getNodeFromAddress(newAddress);
+                    queue.enqueue({ node: newNode, address: newAddress, activeChildAddress: getActiveChildAddress(newNode), indexWithinParent: indexWithinParent - 1});
+                    if (!checkIfInVisited(visited, newAddress, currentAddress)) {
+                        visited.push({ [newAddress]: [currentAddress, "left"] });
+                    }
+                }
+            }
+            
+            // Movement: Move right
+            if (indexWithinParent < (currentNode.getParent().getChildren().length - 1)) {
+                const newAddress = currentAddress.slice(0, -1) + (indexWithinParent + 2);
+                if (this.treeItemDictionary[newAddress]) {
+                    const newNode = this.getNodeFromAddress(newAddress);
+                    queue.enqueue({ node: newNode, address: newAddress, activeChildAddress: getActiveChildAddress(newNode), indexWithinParent: indexWithinParent + 1});
+                    // if (!visited[currentAddress]) {
+                    //     visited[currentAddress] = [];
+                    // }
+                    // visited[currentAddress].push(newAddress);
+                    if (!checkIfInVisited(visited, newAddress, currentAddress)) {
+                        visited.push({ [newAddress]: [currentAddress, "right"] });
+                    }
+                } 
+            }
+            
+            // Movement: Move up (without changing active child)
+            if (currentNode.getParent()) {
+                const newAddress = currentAddress.slice(0, -2);
+                if (this.treeItemDictionary[newAddress]) {
+                    const newNode = this.getNodeFromAddress(newAddress);
+                    queue.enqueue({ node: newNode, address: newAddress, activeChildAddress: getActiveChildAddress(newNode), indexWithinParent: getIndexWithinParent(newNode)});
+                    // if (!visited[currentAddress]) {
+                    //     visited[currentAddress] = [];
+                    // }
+                    // visited[currentAddress].push(newAddress);
+                    if (!checkIfInVisited(visited, newAddress, currentAddress)) {
+                        visited.push({ [newAddress]: [currentAddress, "up"] });
+                    }
+                }
+            }
+            
+            // Movement: Move down TO DO
+            // set all addresses ending in one initially to activeChildAddress
+            if (currentNode.getChildren().length != 0) {
+                const newAddress = activeChildAddress;
+                if (activeChildAddress) {
+                    const newNode = this.getNodeFromAddress(activeChildAddress);
+                    queue.enqueue({ node: newNode, address: newAddress, activeChildAddress: getActiveChildAddress(newNode), indexWithinParent: getIndexWithinParent(newNode)});
+                    // if (!visited[currentAddress]) {
+                    //     visited[currentAddress] = [];
+                    // }
+                    // visited[currentAddress].push(newAddress);
+                    if (!checkIfInVisited(visited, newAddress, currentAddress)) {
+                        visited.push({ [newAddress]: [currentAddress, "down"] });
+                    }
+                }
+            }
+        }
+        
+        // Find End Node
+        let endingNodeInVisited = null;
+        for (let i = 0; i < visited.length; i++) {
+            const key = Object.keys(visited[i]);
+            if (key[0] == endNode.getAddress()) {
+                endingNodeInVisited = visited[i];
+            }
+        }
+
+        let path = [];
+        path.push(Object.values(endingNodeInVisited)[0]);
+        const visitedQueue = new Queue();
+        visitedQueue.enqueue(path);
+        while (visitedQueue.size() > 0) {
+            path = visitedQueue.dequeue();
+
+            if (path[path.length - 1][0] == startNode.getAddress()) {
+                break;
+            }
+
+            for (let i = 0; i < visited.length; i++) {
+                
+                if (Object.keys(visited[i])[0] == path[path.length - 1][0]) {
+                    let copyOfPath = [];
+                    for (let i = 0; i < path.length; i++) {
+                        copyOfPath.push(path[i]);
+                    }
+                    copyOfPath.push(Object.values(visited[i])[0]);
+                    visitedQueue.enqueue(copyOfPath);
+                    // path.pop();
+                }
+            }
+        }
+        let stringOutput = "";
+        for (let i = (path.length - 1); i >= 0; i--) {
+            stringOutput += "Press the " + path[i][1] + " arrow key. ";
+        }
+        return stringOutput;
+        // let currentNodeInVisited = endingNodeInVisited;
+        // while (Object.values(currentNodeInVisited)[0] != startNode.getAddress()) {
+
+        // }
+
+        // Reconstruct path
+        // const path = [endNode.address];
+        // let parentAddress = visited[endNode.address];
+        // while (parentAddress) {
+        //     path.unshift(parentAddress);
+        //     parentAddress = visited[parentAddress];
+        // }
+        
+        // return path;
+    }
 
 }

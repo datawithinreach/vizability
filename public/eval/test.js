@@ -3,26 +3,49 @@ import { loadVGandSendToBackend } from "./../vgLoader.js";
 import { handleDataUpdate, sendPromptDefault, sendPromptAgent, getActiveAddress, handleNavigationQuery } from "../helperFunctions.js";
 
 // Initialize Global Variables
-const descrPre = "Here's a description of a data set. It is a hierarchy/tree data structure, where each sentence is preceded by its placement within the tree. For instance, 0.0.1 refers to the second child of the first child of the head:\n";
-const descrPost = "Use this information along with everything else you are given to answer the following question: \n";
-
+const isTest = true;
+const descrPre = "\nHere's a description of a data set. It is a hierarchy/tree data structure, where each sentence is preceded by its placement within the tree. For instance, 1.1.2 refers to the second child of the first child of the head:\n";
+const descrPost = "\nMake sure to format all numerical responses appropriately, using things such as commas, dollar signs, appropriate rounding, and other identifiers when necessary. Your answers should be verbose and must repeat the question. Your answers must include all UNIX timestamps as calendar dates. If the question itself is too ambiguous or references data that you are not given, respond with \"I am sorry but I cannot understand the question\" and nothing more. Use this information along with everything else you are given to answer the following question: \n";
+  
 // MAIN FUNCTION; Runs Evaluation
 async function clickHandler(isEvaluate) {
-    const folderPath = "./test/validationAndTraining";
-    const hasFilesRaw = await fetch('/api/check_folder?folder_path=' + folderPath);
-    const hasFilesData = await hasFilesRaw.json();
-    const hasFiles = hasFilesData.has_files;
-    if (!hasFiles) {
-        await generateValidationAndTestingSets();
-    }
+    // const folderPath = "./test/validationAndTraining";
+    // const hasFilesRaw = await fetch('/api/check_folder?folder_path=' + folderPath);
+    // const hasFilesData = await hasFilesRaw.json();
+    // const hasFiles = hasFilesData.has_files;
+    // if (!hasFiles) {
+    //     await generateValidationAndTestingSets();
+    // }
 
     // Fetch Testing Set Sample from Backend
-    const questionsDictionary = await getQuestions("test/validationAndTraining/testingSetSample.csv");
+    const testingSetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQqI7MVGIhfO2pC15SoFvx9GDVCjS9s2XT33udfK9ck0YHW_ztZ0b0hCaTfcOoisRo8sakelJ4w2Lho/pub?gid=1871207598&single=true&output=csv";
+    // const testingSetSample = await getQuestions("test/validationAndTraining/testingSetSample.csv");
+    const testingSet = await getQuestions(testingSetURL);
+
+    const testingSetSample = {};
+
+    for (const key in testingSet) {
+        if (testingSet.hasOwnProperty(key)) {
+            testingSetSample[key] = testingSet[key].slice(0, 3);
+        }
+    }
+
+
+    console.log(testingSetSample);
+    // console.log(testingSet);
+    // const testingSetSample = {
+    //     "chart1": [testingSet["chart1"][0], testingSet["chart1"][1], testingSet["chart1"][2]],
+    //     "chart2": [testingSet["chart2"][0], testingSet["chart2"][1], testingSet["chart2"][2]],
+    //     "chart3": [testingSet["chart3"][0], testingSet["chart3"][1], testingSet["chart3"][2]],
+    //     "chart4": [testingSet["chart4"][0], testingSet["chart4"][1], testingSet["chart4"][2]]
+    // }
+    // console.log(testingSetSample);
+
 
     // Run Evaluation for Testing Set Sample
     // The Corresponding VegaLite Spec and Olli Treeview are Rendered for each Query
     // Each Query is then Answered Using the Pipeline
-    for (var [key, value] of Object.entries(testing_set_sample)) {
+    for (var [key, value] of Object.entries(testingSetSample)) {
         try {
             // Render VegaLite Spec Corresponding to the Query being Asked
             const response = await fetch("/api/get-backend-file?file_path=./test/testVegaLiteSpecs/" + key + ".vg");
@@ -73,14 +96,26 @@ async function clickHandler(isEvaluate) {
         }
     }
 
+    // Assess LLM response
+    // for (var [key, value] of Object.entries(testingSetSample)) {
+    //     for (const obj of value) {
+    //         console.log(obj.answer);
+
+    //     }
+    // }
+
     // Convert the Updated Questions Dictionary Back to CSV String
-    const csvData = Papa.unparse(Object.entries(testing_set_sample).flatMap(([key, value]) => {
+    const csvData = Papa.unparse(Object.entries(testingSetSample).flatMap(([key, value]) => {
         return value.map(questionObj => ({
             Stimuli: key,
             Questions: questionObj.question,
             Ground_Truth: questionObj.ground_truth,
             Classification: questionObj.classification,
-            Answer: questionObj.answer // Include the answer in the CSV output
+            Classification_Assessment: questionObj.classification_assessment,
+            Verbose_Ground_Truth: questionObj.verbose_ground_truth,
+            Answer: questionObj.answer, // Include the answer in the CSV output
+            Assessment: questionObj.assessment,
+            Binary_Assessment: questionObj.binary_assessment
         }));
     }), { header: true });
 
@@ -108,15 +143,27 @@ document.getElementById("run-classification").addEventListener("click", function
 
 // Retrive Question Pool from Backend
 // Outputs Dictionary
-async function getQuestions(filePath) {
-    return fetch("/api/get-backend-file?file_path=" + filePath)
-        .then(function (response) {
-            return response.json();
+async function getQuestions(testingSetURL) {
+    return fetch(testingSetURL)
+        .then(response => response.text())
+        .then(csvData => {
+            console.log(csvData); // The fetched CSV data as a string
+            return convertStringToDictionary(csvData);
         })
-        .then(function (data) {
-            const contents = data.contents;
-            return convertStringToDictionary(contents);
-        })
+        .catch(error => {
+            console.error('Error fetching CSV:', error);
+        });
+
+
+
+    // return fetch("/api/get-backend-file?file_path=" + filePath)
+    //     .then(function (response) {
+    //         return response.json();
+    //     })
+    //     .then(function (data) {
+    //         const contents = data.contents;
+    //         return convertStringToDictionary(contents);
+    //     })
 }
 
 function convertStringToDictionary(csvString) {
@@ -126,7 +173,7 @@ function convertStringToDictionary(csvString) {
         delimiter: ',',
         complete: function (results) {
             results.data.forEach((row) => {
-                const { Stimuli, Questions, Ground_Truth } = row;
+                const { Stimuli, Questions, Ground_Truth, Verbose_Ground_Truth } = row;
                 if (!questionsDictionary[Stimuli]) {
                     questionsDictionary[Stimuli] = [];
                 }
@@ -134,7 +181,11 @@ function convertStringToDictionary(csvString) {
                     question: Questions,
                     ground_truth: Ground_Truth,
                     classification: '', // Add an empty classification property for each question
-                    answer: '' // Add an empty answer property for each question
+                    classification_assessment: '',
+                    verbose_ground_truth: Verbose_Ground_Truth,
+                    answer: '', // Add an empty answer property for each question
+                    assessment: '',
+                    binary_assessment: ''
                 });
             });
         },
@@ -145,28 +196,46 @@ function convertStringToDictionary(csvString) {
 // Classify Questions 
 // Update Data Dictionary with OpenAPI Predicted Classifications
 async function classifyQuestions(value) {
-    const filePath = "gptPrompts/queryClassification.txt";
-    const classificationResponse = await fetch("/api/get-backend-file?file_path=" + filePath, { redirect: 'manual' });
-    const classificationQuery = await classificationResponse.json();
-    const classificationQueryContents = classificationQuery["contents"];
+    // const filePath = "gptPrompts/queryClassification.txt";
+    // const classificationResponse = await fetch("/api/get-backend-file?file_path=" + filePath, { redirect: 'manual' });
+    // console.log(value.question);
+    // const classificationResponse = await fetch("/api/get-validation-few-shot-prompting?user_query=" + value.question, { redirect: 'manual' });
+    // const classificationQuery = await classificationResponse.json();
+    // const classificationQueryContents = classificationQuery["contents"];
 
     for (const classificationObj of value) {
         const question = classificationObj.question;
+        const groundTruth = classificationObj.ground_truth;
+        let classificationAssessment = "Incorrect";
+
+        const classificationTemplate = await fetch("/api/get-validation-few-shot-prompting?user_query=" + question, { redirect: 'manual' });
+        const classificationQuery = await classificationTemplate.json();
+        const classificationQueryContents = classificationQuery["contents"];
         const classificationResponse = await sendPromptDefault(classificationQueryContents + question);
         if (classificationResponse.includes("Analytical Query")) { classificationObj.classification = "Analytical Query" }
         else if (classificationResponse.includes("Visual Query")) { classificationObj.classification = "Visual Query" }
         else if (classificationResponse.includes("Contextual Query")) { classificationObj.classification = "Contextual Query" }
         else { classificationObj.classification = "I am sorry but I cannot understand the question" }
+        document.getElementById("prompt").innerText = "Question: " + question;
+        document.getElementById("response").innerText = "Response: " + classificationObj.classification;
+
+        if (classificationObj.classification == groundTruth) {
+            classificationAssessment = "Correct";
+        }
+        classificationObj.classification_assessment = classificationAssessment;
     }
 }
 
 // Answer Queries Based on Previously Determined Classifications
 async function answerQuestions(value, supplement) {
     for (const questionObj of value) {
+
         const question = questionObj.question;
         const classification = questionObj.classification;
+        const groundTruth = questionObj.verbose_ground_truth;
+
         if (classification.includes("Analytical Query") || classification.includes("Visual Query")) {
-            const response = await sendPromptAgent(supplement, question);
+            const response = await sendPromptAgent(supplement, question, null, null, isTest);
             questionObj.answer = response;
         }
         else if (classification.includes("Contextual Query")) {
@@ -197,6 +266,63 @@ async function answerQuestions(value, supplement) {
             document.getElementById("response").textContent = response;
             questionObj.answer = response;
         }
+
+        const assessmentQuestionFilePath = "gptPrompts/likertScaleEvaluationQuery.txt";
+        const assessmentQuestionTemplateRaw = await fetch("/api/get-backend-file?file_path=" + assessmentQuestionFilePath);
+        const assessmentQuestionTemplateJSON = await assessmentQuestionTemplateRaw.json();
+        let assessmentQuestionTemplate = assessmentQuestionTemplateJSON["contents"];
+
+        assessmentQuestionTemplate = assessmentQuestionTemplate
+            .replace("{Question}", question)
+            .replace("{Correct Answer}", groundTruth)
+            .replace("{Response}", questionObj.answer);
+
+        const assessmentRaw = await sendPromptDefault(assessmentQuestionTemplate);
+        let assessment = "";
+
+        switch (true) {
+            case assessmentRaw.includes("Very Poor"):
+                assessment = "Very Poor";
+                break;
+            case assessmentRaw.includes("Poor"):
+                assessment = "Poor";
+                break;
+            case assessmentRaw.includes("Fair"):
+                assessment = "Fair";
+                break;
+            case assessmentRaw.includes("Very Good"):
+                assessment = "Very Good";
+                break;
+            case assessmentRaw.includes("Good"):
+                assessment = "Good"
+                break;
+            default:
+                assessment = "Could Not Be Assessed";
+        }
+
+        questionObj.assessment = assessment;
+
+        const binaryAssessmentQuestionFilePath = "gptPrompts/binaryEvaluationQuery.txt";
+        const binaryAssessmentQuestionTemplateRaw = await fetch("/api/get-backend-file?file_path=" + binaryAssessmentQuestionFilePath);
+        const binaryAssessmentQuestionTemplateJSON = await binaryAssessmentQuestionTemplateRaw.json();
+        let binaryAssessmentQuestionTemplate = binaryAssessmentQuestionTemplateJSON["contents"];
+
+        binaryAssessmentQuestionTemplate = binaryAssessmentQuestionTemplate
+            .replace("{Question}", question)
+            .replace("{Correct Answer}", groundTruth)
+            .replace("{Response}", questionObj.answer);
+
+        let binaryAssessment = "";
+        switch (true) {
+            case binaryAssessmentQuestionTemplate.includes("Incorrect"):
+                binaryAssessment = "Incorrect";
+                break;
+            case binaryAssessmentQuestionTemplate.includes("Correct"):
+                binaryAssessment = "Correct";
+                break;
+        }
+
+        questionObj.binary_assessment = binaryAssessment;
     }
 };
 
@@ -247,11 +373,11 @@ async function generateValidationAndTestingSets() {
         }
     }
 
-    // Initialize the validation_set and testing_set Dictionaries
-    const validation_set = {};
-    const testing_set = {};
-    const validation_set_sample = {};
-    const testing_set_sample = {};
+    // Initialize the validationSet and testingSet Dictionaries
+    const validationSet = {};
+    const testingSet = {};
+    const validationSetSample = {};
+    const testingSetSample = {};
 
     // Iterate over the Input Dictionary
     for (const [key, value] of Object.entries(questionsDictionary)) {
@@ -281,25 +407,25 @@ async function generateValidationAndTestingSets() {
                 question => !validationQuestions.includes(question)
             );
 
-            validation_set[key] = validation_set[key] || [];
-            validation_set[key].push(...validationQuestions);
+            validationSet[key] = validationSet[key] || [];
+            validationSet[key].push(...validationQuestions);
 
-            testing_set[key] = testing_set[key] || [];
-            testing_set[key].push(...testingQuestions);
+            testingSet[key] = testingSet[key] || [];
+            testingSet[key].push(...testingQuestions);
 
             const validationSample = getRandomSubset(validationQuestions, 0.2);
             const testingSample = getRandomSubset(testingQuestions, 0.05);
 
-            validation_set_sample[key] = validation_set_sample[key] || [];
-            validation_set_sample[key].push(...validationSample);
+            validationSetSample[key] = validationSetSample[key] || [];
+            validationSetSample[key].push(...validationSample);
 
-            testing_set_sample[key] = testing_set_sample[key] || [];
-            testing_set_sample[key].push(...testingSample);
+            testingSetSample[key] = testingSetSample[key] || [];
+            testingSetSample[key].push(...testingSample);
         }
     }
-    await sendEvalSetToBackend(validation_set, "validationSet");
-    await sendEvalSetToBackend(validation_set_sample, "validationSetSample");
+    await sendEvalSetToBackend(validationSet, "validationSet");
+    await sendEvalSetToBackend(validationSetSample, "validationSetSample");
 
-    await sendEvalSetToBackend(testing_set, "testingSet");
-    await sendEvalSetToBackend(testing_set_sample, "testingSetSample");
+    await sendEvalSetToBackend(testingSet, "testingSet");
+    await sendEvalSetToBackend(testingSetSample, "testingSetSample");
 }

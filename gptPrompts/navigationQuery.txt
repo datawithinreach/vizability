@@ -1,55 +1,34 @@
-Below is a description of a data set. Each line of the data set has a sentence and an accompanying address, which represents its place in the hierarchical tree data structure.
+The following question is asking how to get from a starting point to an ending point.
+Your goal is to identify the addresses of the starting and ending points specificed in the question.
+To obtain the addresses, you will use a supplement table that maps each point to its address within a tree data structure.
 
-Here is an example of how the address scheme works:
-1 // Root
-1.1 // Child 1
-1.1.1 // Child 1 of Child 1
-1.1.2 // Child 2 of Child 1
-1.2 // Child 2
-1.3 // Child 3
-1.3.1 // Child 1 of Child 3
-1.3.1.1 // Child 1 of Child 1 of Child 3
-1.3.1.2 // Child 2 of Child 1 of Child 3
+Here is an example of one supplement, a question, and the answer you should respond with:
 
-Furthermore, my model also supports navigation to each item in the data structure using the computer's arrow keys. 
-However, I want you to first consider navigation in terms of the addresses and then convert each move to pressing one of the 4 arrow keys.
+Hierarchy, Content
+1 // A graph with an x and y axis
+1.1 // X-axis, labeled hour
+1.1.1 // Hour equals 1
+1.1.2 // Hour equals 2
+1.1.3 // Hour equals 3
+1.2 // Y-axis, labeled miles
+1.2.1 // Miles equals 5
+1.2.2 // Miles equals 12
+1.2.3 // Miles equals 14
 
-At each address, the user can only make one of 4 possible moves - if and only if the resulting address is an actual address in the hierarchy:
+Active Element: 1.1.1 // Hour equals 1
 
-(Move 1) - Append a ".1" to the adress. This equals pressing the down arrow key.
-(Move 2) - Delete the last 2 indexes of the address. This equals pressing the up arrow key.
-(Move 3) - Perform integer addition and add 1 to the number in the last index of the address. This equals pressing the right arrow key.
-(Move 4) - Perform integer subtraction and subtract 1 from the number in the last index of the address. This equals pressing the left arrow key.
+Question: How do I get from here to the Y-axis?
 
-If you use a move that does not explicitly match any of these 4, it is incorrect. Go back and rethink your answer.
+Answer: Starting Point: "Hour equals 1"; Starting Address: 1.1.1; Ending Point: "Y-axis, labeled miles"; Ending Address: 1.2
 
-Here is an example description and accompanying answer, formatted in a certain way. Use this format when you answer.
+Question: How do I get to 14 miles from hour 3?
 
-Hierarchy,Content
-1 // A Simple Graph
-1.1 // The X-axis
-1.1.1 // The point (1,0,1) with an x-value of 1
-1.1.2 // The point (3,1,2) with an x-value of 3
-1.2 // The Y-axis
-1.2.1 // The point (1,0,1) with a y-value of 0
-1.2.2 // The point (3,1,2) with a y-value of 1
-1.3 // The Z-axis
-1.3.1 // The point (1,0,1) with a z-value of 1
-1.3.2 // The point (3,1,2) with a z-value of 2
+Answer: Starting Point: "Hour equals 3"; Starting Address: 1.1.3; Ending Point: "Miles equals 14"; Ending Address: 1.2.3
 
-Question: How do I get from The point (1,0,1) with an x-value of 1 to The Y-axis?
+Question: How do I get from here to the second hour?
 
-Response: 
-1. Press the up arrow key. (Move 2 : 1.1.1 -> 1.1) 
-2. Press the right arrow key. (Move 3 : 1.1 -> 1.2)
+Answer: Starting Point: "Hour equals 1"; Starting Address: 1.1.1; Ending Point: "Hour equals 2"; Ending Address: 1.1.2
 
-Question: How do I get from The point (3,1,2) with an x-value of 3 to The point (3,1,2) with a z-value of 2?
+Make sure to format your answers exactly as I have shown. 
 
-Response:
-1. Press the up arrow key. (Move 2 : 1.1.2 -> 1.1)
-2. Press the right arrow key. (Move 3 : 1.1 -> 1.2)
-3. Press the right arrow key. (Move 3 : 1.2 -> 1.3)
-4. Press the down arrow key. (Move 1 : 1.3 -> 1.3.1)
-
-Note, at the end of your answer, check whether your end point is the address of the end point specificed in the question.
-Now it's your turn. Below is the description of a dataset:
+Now it's your turn; answer this question:

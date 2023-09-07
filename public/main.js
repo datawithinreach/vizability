@@ -1,12 +1,19 @@
-import { handleDataUpdate, sendPromptAgent, sendPromptDefault, classifyQuery, handleNavigationQuery, getActiveAddress } from "./helperFunctions.js";
+import { handleDataUpdate, sendPromptAgent, sendPromptDefault, classifyQuery, handleNavigationQuery } from "./helperFunctions.js";
 import { CondensedOlliRender } from "./condenseOlliRender.js";
+import { Stack } from "./stack.js";
 
 // Initialize All Global Variables
 let activeElement = '';
+let activeElementNode = null;
+let activeElementNodeAddress = null;
+let activeElementNodeInnerText = null;
 let tree;
 let vegaLiteSpec = "";
+const isTest = false;
+
 
 // STEP 1 -> Load VegaLite Spec and Olli Treeview
+
 
 // Function to Handle Loading in VegaLite Spec
 const handleVegaLiteSpecChange = async function (event) {
@@ -48,13 +55,66 @@ const handleVegaLiteSpecChange = async function (event) {
   // Code to Render the Olli Treeview
   const olliContainer = document.getElementById("olli-container");
 
-  // Add an Event Listener to olliContainer to Gauge Active Element
-  olliContainer.addEventListener('keyup', function (event) {
-    activeElement = event.srcElement.firstChild.innerText;
-  });
 
+  // STEP 1.5 -> Check for User Keyboard Navigation of the Olli Treeview
+
+
+  // Stack used to Track Active Elements within Treeview
+  const activeElementStack = new Stack();
+
+  function setUpEventListener(olliContainer, activeElementStack) {
+    function nestedEventListener(event) { 
+      event.stopImmediatePropagation(); // necessary to prevent the creation of subsequent nested event listeners
+      activeElement = event.srcElement.firstChild.innerText;
+
+      // Retrieve Active Element Node Object from activeElement Variable
+      const index = tree.getTreeItemArray().findIndex(obj => obj.getInnerText() === activeElement);
+      activeElementNode = tree.getTreeItemArray()[index];
+      activeElementNodeAddress = activeElementNode.getAddress();
+      activeElementNodeInnerText = activeElementNode.getInnerText();
+
+      // Check for Up Arrow KeyUp
+      if (event.keyCode === 38) {
+        const previousElement = activeElementStack.peek();
+        let correspondingElement = null;
+
+        // Get Previous Element Node Object
+        tree.getTreeItemArray().forEach(element => {
+          if (element.getInnerText() == previousElement.getInnerText()) {
+            correspondingElement = element;
+          }
+          // Reset Active Child for Selected Echelon of the Treeview
+          if (element.getAddress().slice(0, -1) == previousElement.getAddress().slice(0, -1)) {
+            element.setIsActiveChild(false);
+          }
+        });
+        // Set Current Active Child
+        correspondingElement.setIsActiveChild(true);
+      }
+
+      // Check for Left/Right Arrow KeyUp
+      // Reset Active Child for Selected Echelon of the Treeview
+      // Set Current Active Child for Selected Echelon of the Treeview
+      else if (event.keyCode === 37 || event.keyCode === 39) {
+        tree.getTreeItemArray().forEach(element => {
+          if (element.getAddress().slice(0, -1) == activeElementNode.getAddress().slice(0, -1)) {
+            element.setIsActiveChild(false);
+          }
+        })
+        activeElementNode.setIsActiveChild(true);
+      }
+
+      activeElementStack.push(activeElementNode);
+    }
+    
+    olliContainer.addEventListener('keyup', nestedEventListener);
+  }
+  console.log(vegaLiteSpec);
   OlliAdapters.VegaLiteAdapter(vegaLiteSpec).then((olliVisSpec) => {
+    console.log(olliVisSpec);
+    
     const olliRender = olli(olliVisSpec);
+    console.log(olliRender);
     olliContainer.innerHTML = "";
     // Create the <p> element
     var olliInfo = document.createElement("p");
@@ -67,15 +127,15 @@ const handleVegaLiteSpecChange = async function (event) {
 
     // Append the <strong> element to the <p> element
     olliInfo.appendChild(strongElement);
-    
+
     olliContainer.append(olliInfo);
     olliInfo.focus();
     olliContainer.append(olliRender);
 
-
-
     // Hierarchical Tree Representation of Olli Treeview
     tree = new CondensedOlliRender(document.querySelector('.olli-vis'));
+
+    setUpEventListener(olliContainer, activeElementStack);
   });
 
 };
@@ -84,8 +144,8 @@ const handleVegaLiteSpecChange = async function (event) {
 document.addEventListener('vegaLiteSpecChange', handleVegaLiteSpecChange);
 
 
-
 // STEP 2 -> OpenAPI Question and Answer Integration
+
 
 // Attach the Submit Event Listener Outside of handleVegaLiteSpecChange
 // Handles User QnA
@@ -95,23 +155,19 @@ document.getElementById("ask-question").addEventListener('submit', (event) => {
   // Obtain Hierarchical String Representation of Olli Treeview
   const condensedString = tree.getCondensedString();
 
-  const loadContent = document.getElementById("load-content");
+  // Handle Accessiblity and User Interface Cues
   const loadStatus = document.getElementById("load-status");
   const responseInfo = document.getElementById("response-info");
 
-  // Step 1
   responseInfo.style.display = "none";
 
-  // Step 2
   loadStatus.innerHTML = "Working. Please Wait";
   loadStatus.style.display = "block";
 
-  // Step 3
   const loadingAnnouncement = setInterval(() => {
     loadStatus.innerHTML = "Still Loading";
     loadStatus.style.display = "block";
   }, 3000);
-
 
   // Triggers when User Submits Question; Provides Response through OpenAPI
   handleSubmit(event, condensedString, loadingAnnouncement);
@@ -121,11 +177,9 @@ function handleSubmit(event, hierarchy, loadingAnnouncement) {
   event.preventDefault();
 
   // Initialize Variables
-  const filePath = "gptPrompts/queryClassification.txt";
-
-  const descrPre = "Here's a description of a data set. It is a hierarchy/tree data structure, where each sentence is preceded by its placement within the tree. For instance, 1.1.2 refers to the second child of the first child of the head:\n";
-  const descrPost = "Use this information along with everything else you are given to answer the following question: \n";
-  const supplement = descrPre + hierarchy + descrPost;
+  const descrPre = "\nHere's a description of a data set. It is a hierarchy/tree data structure, where each sentence is preceded by its placement within the tree. For instance, 1.1.2 refers to the second child of the first child of the head:\n";
+  const descrPost = "\nMake sure to format all numerical responses appropriately, using things such as commas, dollar signs, appropriate rounding, and other identifiers when necessary. Your answers should be verbose and must repeat the question. Your answers must include all UNIX timestamps as calendar dates. If the question itself is too ambiguous or references data that you are not given, respond with \"I am sorry but I cannot understand the question\" and nothing more. Use this information along with everything else you are given to answer the following question: \n";
+  const supplement = descrPre + hierarchy + "The current address is: " + (activeElementNodeAddress + " // " + activeElementNodeInnerText) + descrPost;
 
   const question = document.getElementById("user-query");
   console.log("sending the question to the server", supplement + question.value);
@@ -137,7 +191,7 @@ function handleSubmit(event, hierarchy, loadingAnnouncement) {
     let classificationExplanation = "";
     if (queryType.includes("Analytical Query") || queryType.includes("Visual Query")) {
       classificationExplanation = "Your question \"" + question.value + "\" was categorized as being data-driven, and as such, has been answered based on the data in the chart.";
-      sendPromptAgent(supplement, question.value, loadingAnnouncement, classificationExplanation);
+      sendPromptAgent(supplement, question.value, loadingAnnouncement, classificationExplanation, isTest);
       question.removeAttribute("aria-live");
       question.value = '';
     }
@@ -146,48 +200,53 @@ function handleSubmit(event, hierarchy, loadingAnnouncement) {
         classificationExplanation = "Your question \"" + question.value + "\" was categorized as being context-seeking, and as such, has been answered based on information found on the web.";
 
         const loadStatus = document.getElementById("load-status");
-        const loadContent = document.getElementById("load-content");
         const responseInfo = document.getElementById("response-info");
 
         // Clear the loading announcement
         clearInterval(loadingAnnouncement);
 
-        // Step 4
         loadStatus.innerHTML = "Response Generated";
-
-        // Step 5
         responseInfo.style.display = "block";
-        
+
         document.getElementById("prompt").textContent = "Question: " + classificationExplanation;
-        document.getElementById("response").textContent = "Answer: " + response;
+        (response != "Agent stopped due to iteration limit or time limit.") ? document.getElementById("response").textContent = "Answer: " + response : document.getElementById("response").textContent = "Answer: I'm sorry; the process has been terminated because it took too long to arrive at an answer.";
         question.removeAttribute("aria-live");
         question.value = '';
       });
     }
     else if (queryType.includes("Navigation Query")) {
       // Provide Context to OpenAPI about User's Current Position within the Olli Treeview
-      const activeAddress = getActiveAddress(activeElement, hierarchy);
-      const activeElementString = " In case the current position is not stated in the question, it is this: " + activeAddress;
 
       // Packaged Question to be Sent to OpenAPI
-      const navigationQuestion = supplement + question.value + activeElementString;
+      const navigationQuestion = supplement + question.value;
       const classificationExplanation = "Your question \"" + question.value + "\" was categorized as being related to navigating the chart structure, and as such has been answered based on the treeview.";
       const loadStatus = document.getElementById("load-status");
-      const loadContent = document.getElementById("load-content");
       const responseInfo = document.getElementById("response-info");
 
       // Answer Navigation Query
       handleNavigationQuery(navigationQuestion).then(function (response) {
+        // Regular expression to match the starting and ending addresses
+        const startingAddressPattern = /Starting Address: ([\d.]+)/;
+        const endingAddressPattern = /Ending Address: ([\d.]+)/;
+
+        // Extract starting and ending addresses using regular expressions
+        const startingAddressMatch = response.match(startingAddressPattern);
+        const endingAddressMatch = response.match(endingAddressPattern);
+
+        // Extracted addresses
+        const startingAddress = startingAddressMatch[1];
+        const endingAddress = endingAddressMatch[1];
+
+        let endNode = tree.getNodeFromAddress(endingAddress);
+        let startNode = tree.getNodeFromAddress(startingAddress);
+        const navigationResponse = tree.getShortestPath(startNode, endNode);
+
         // Clear the loading announcement
         clearInterval(loadingAnnouncement);
-
-        // Step 4
         loadStatus.innerHTML = "Response Generated";
-
-        // Step 5
         responseInfo.style.display = "block";
         document.getElementById("prompt").textContent = "Question: " + classificationExplanation;
-        document.getElementById("response").textContent = "Answer: " + response;
+        document.getElementById("response").textContent = "Answer: " + navigationResponse;
         question.removeAttribute("aria-live");
         question.value = '';
       });
@@ -202,11 +261,9 @@ function handleSubmit(event, hierarchy, loadingAnnouncement) {
       // Clear the loading announcement
       clearInterval(loadingAnnouncement);
 
-      // Step 4
       loadStatus.innerHTML = "Response Generated";
-
-      // Step 5
       responseInfo.style.display = "block";
+
       document.getElementById("prompt").textContent = classificationExplanation;
       document.getElementById("response").textContent = queryType;
       question.removeAttribute("aria-live");

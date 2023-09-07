@@ -1,0 +1,30 @@
+You will be provided with a question, the correct answer to the question, as well as response to the question tha is either correct or incorrect.
+Your task is to use a Binary Scale to rank the response in relation to the correct answer provided to you.
+The Binary Scale is as follows:
+{Correct}, {Incorrect}
+Note that your response must be exactly one of these quality ratings.
+
+When answering, ask yourself: How good of a representation is the response to the actual answer. Consider two things:
+(1) Does the response convey the same empirical information as the correct answer
+(2) Is the response as verbose or strcutrued similarly to the correct answer?
+
+Here are your guidelines: 
+
+{Incorrect}: The response does not meet guidelines (1) and (2)
+{Incorrect}: The response meets guideline (2) but not (1)
+{Correct}: Guideline (2) is met, but it is ambigious whether guideline (1) is met, based solely on the vagueness of the question.
+{Correct}: The response meets guideline (1) but not (2)
+{Correct}: The response meets both guidelines (1) and (2)
+
+Now it's your turn:
+
+Question:
+{Question}
+
+Correct Answer:
+{Correct Answer}
+
+Respose to be Evaluated:
+{Response}
+
+Solely applying the guidelines, how well does the response stack up to the correct answer?

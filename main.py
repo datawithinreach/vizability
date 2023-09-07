@@ -11,11 +11,16 @@ from langchain.agents.agent_types import AgentType
 from langchain.llms.openai import OpenAI
 
 import json
+import pandas as pd
 
 from starlette.responses import JSONResponse
 from io import BytesIO
 import soundfile as sf
 import openai
+
+import torch
+from sentence_transformers import SentenceTransformer, util
+model = SentenceTransformer('all-MiniLM-L6-v2')
 
 # Helper Function to Delete Data and VegaLite Spec from Previous Rendering
 def clear_data_dir(folder_path):
@@ -153,10 +158,73 @@ async def process_json(request: Request):
 
     return {"message": "CSV file saved successfully!"}
 
+@app.get("/api/get-validation-few-shot-prompting")
+async def get_validation_few_shot_prompting(user_query: str):
+    user_query_processed = [user_query]
+    prompt_file_path = "gptPrompts/queryClassification.txt"
+    validation_set_sample_file_path = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTAinuEfWlGu_1Qam46ZAPQ3oHM3t8aNOIXNWCfZu6sV18SqUh1-I4ehIJmBiBfzOFD9VWbSXL64uPT/pub?gid=289729987&single=true&output=csv"
+    # validation_set_sample_file_path = "test/validationAndTraining/validationSetSample.csv"
+    df = pd.read_csv(validation_set_sample_file_path)
+    validation_set_sample_dict = {
+        "Analytical Query": [],
+        "Visual Query": [],
+        "Contextual Query": [],
+        "Navigation Query": []
+    }
+    substring_to_find = {
+        "Analytical Query": "analysis involving data.",
+        "Visual Query": "graph shape/characteristics.",
+        "Contextual Query": "specific data to be answered.",
+        "Navigation Query": "'How do I get from () to ().'"
+    }
+
+    with open(prompt_file_path, "r") as file_object:
+        contents = file_object.read()
+
+    # Iterate through the DataFrame rows and categorize questions
+    for index, row in df.iterrows():
+        question = row['Questions']
+        ground_truth = row['Ground_Truth']
+        if ground_truth != "I am sorry but I cannot understand the question":
+            validation_set_sample_dict[ground_truth].append(question)
+
+    # Print the resulting categorized questions
+    for ground_truth, questions in validation_set_sample_dict.items():
+        validation_processed_string = ""
+        validation_set_sample_processed = []
+        for question in questions:
+            validation_set_sample_processed.append(question)
+        embeddings_user_query = model.encode(user_query_processed, convert_to_tensor=True)
+        embeddings_validation_set_sample = model.encode(validation_set_sample_processed, convert_to_tensor=True)
+        cosine_scores = util.cos_sim(embeddings_user_query, embeddings_validation_set_sample)
+
+        if (len(questions) >= 4):
+            # Get the top 4 scores and their indices
+            top_scores, top_indices = torch.topk(cosine_scores, k=4, dim=1)
+            for i in range(4):
+                index = top_indices[0][i].item()
+                validation_processed_string += f"{ground_truth} // {questions[index]}\n"
+        else: 
+            top_scores, top_indices = torch.topk(cosine_scores, k=len(questions), dim=1)
+            for i in range(len(questions)):
+                index = top_indices[0][i].item()
+                validation_processed_string += f"{ground_truth} // {questions[index]}\n"
+
+        # Find the index where the substring occurs
+        index = contents.find(substring_to_find[ground_truth])
+
+        # Check if the substring is found, and if so, insert the new string after it
+        if index != -1:
+            contents = contents[:index + len(substring_to_find[ground_truth])] + "\n" + validation_processed_string + contents[index + len(substring_to_find[ground_truth]):]
+            print(contents)
+    return {"contents": contents}
+    
+
 @app.get("/api/get-backend-file")
 async def get_backend_file(file_path: str):
     with open(file_path, "r") as file_object:
         contents = file_object.read()
+    
     return {"contents": contents}
 
 @app.get("/api/apply-agent")
@@ -222,7 +290,7 @@ async def upload_audio(audioFile: UploadFile = File(...)):
 
 
         # response = openai.WhisperApi(api_key=os.environ["OPENAI_API_KEY"]).create_transcription(BytesIO(audio_data), "whisper-1")
-        response = openai.Audio.transcribe("whisper-1", audio_file)
+        response = openai.Audio.transcribe("whisper-1", audio_file, language="en")
         return response
 
     # Save the audio file to a temporary location on the server
