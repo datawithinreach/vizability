@@ -5,6 +5,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="style.css" rel="stylesheet" type="text/css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300&display=swap" rel="stylesheet">
   <title>My Website</title>
   <!-- vega / vega-lite -->
   <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
@@ -24,7 +27,9 @@
   <div class="content" role="main">
     <!-- This is the start of content for our page -->
     <h1 class="title">VizAbility - Data Visualization</h1>
-    <h2>Load in a chart by selecting one of the four options or upload your own file.<br>Explore the structure and components of the chart through a text representation.<br>Supplement your knowledge of the chart by asking questions, either through typing or voice input.</h2>
+    <h2>Load in a chart by selecting one of the four options or upload your own file.<br>Explore the structure and
+      components of the chart through a text representation.<br>Supplement your knowledge of the chart by asking
+      questions, either through typing or voice input.</h2>
     <div id="user-file-select">
       <div class="button-container">
         <button class="dynamic-button method-1" data-value="chart1">Line Chart</button>
@@ -32,23 +37,25 @@
         <button class="dynamic-button method-1" data-value="chart3">Scatter Plot</button>
         <button class="dynamic-button method-1" data-value="chart4">Chloropleth Map</button>
         <button class="dynamic-button" id="fileButton">Upload Local File</button>
-      </div> 
+      </div>
       <input type="file" id="fileInput" class="hidden" accept=".json, .vg">
       <!-- <div class="drop-zone" id="dropZone">Drop Vega Lite Spec File Here</div>
       <label for="fileInput">File Input:</label>
       <input type="file" id="fileInput" class="hidden" accept=".json, .vg"> -->
-    </div>                                  
+    </div>
     <div id="vega-container" aria-hidden="true"></div>
     <div id="aria-info" aria-live="polite">
       <div id="olli-container"></div>
+      <div id="table-container"></div>
       <hr>
       <form class="qna-form" id="ask-question" style="display: none;">
         <label for="user-query">
           <p>Supplement your knowledge of the chart by asking questions, either through typing or voice input.</p>
-          <input id="user-query" name="user-query" type="text" autocomplete="off" aria-label="Text Input"/>
+          <input id="user-query" name="user-query" type="text" autocomplete="off" aria-label="Text Input" />
         </label>
 
-        <button id="recordButton" type="button" aria-label="To begin voice input press enter. To end and submit, press enter again.">Start Recording</button>
+        <button id="recordButton" type="button"
+          aria-label="To begin voice input press enter. To end and submit, press enter again.">Start Recording</button>
         <button id="form-submit" type="submit">Submit</button>
       </form>
     </div>

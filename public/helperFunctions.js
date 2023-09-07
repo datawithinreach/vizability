@@ -3,7 +3,7 @@
 // Functions for main.js
 
 export async function classifyQuery(question) {
-  return fetch("/api/get-backend-file?file_path=gptPrompts/queryClassification.txt", { redirect: 'manual' })
+  return fetch("/api/get-validation-few-shot-prompting?user_query=" + question, { redirect: 'manual' })
     .then(function (response) {
       return response.json();
     })
@@ -51,7 +51,6 @@ export function handleDataUpdate(view, vegaLiteSpec) {
   const payload = {
     content: transformedDataPolished
   }
-  console.log(payload);
 
   fetch("/api/process-json", {
     method: 'POST',
@@ -63,6 +62,7 @@ export function handleDataUpdate(view, vegaLiteSpec) {
     .then(response => {
       if (response.ok) {
         console.log('CSV file sent successfully!');
+        // Add chart here
       } else {
         console.error('Failed to send CSV file.');
       }
@@ -74,7 +74,7 @@ export function handleDataUpdate(view, vegaLiteSpec) {
 
 // Helper Method for handleDataUpdate
 // Converts Hex Code to the Closest Math English Color Name
-function getColorName(hexInput) {
+function getColorName(input) {
   const CSS21_HEX_TO_NAMES = {
     // CSS21 Color Names and Their Hex Values
     "#00ffff": "aqua",
@@ -114,7 +114,18 @@ function getColorName(hexInput) {
     const b = parseInt(hex.slice(5, 7), 16);
     return [r, g, b];
   }
-  const rgbTriplet = hexToRgb(hexInput);
+
+  const rgbRegex = /^rgb\(\s*\d+\s*,\s*\d+\s*,\s*\d+\s*\)$/i;
+  let rgbTriplet = null;
+  if (!rgbRegex.test(input)) {
+    rgbTriplet = hexToRgb(input);
+  } else {
+    rgbTriplet = input
+      .substring(4, input.length - 1)
+      .split(",")
+      .map(value => parseInt(value.trim(), 10));
+  }
+
   const minColours = {};
   for (const key in CSS21_HEX_TO_NAMES) {
     const name = CSS21_HEX_TO_NAMES[key];
@@ -127,6 +138,16 @@ function getColorName(hexInput) {
 
   const minDistance = Math.min(...Object.keys(minColours));
   return minColours[minDistance];
+
+  // for (const key in CSS21_HEX_TO_NAMES) {
+  //   const name = CSS21_HEX_TO_NAMES[key];
+  //   const [rC, gC, bC] = hexToRgb(key);
+  //   const deltaE = calculateDeltaE([rC, gC, bC], rgbTriplet);
+  //   minColours[deltaE] = name;
+  // }
+
+  // const minDeltaE = Math.min(...Object.keys(minColours));
+  // return minColours[minDeltaE];
 }
 
 // Sends Question to OpenAPI and Casts Output Answer to DOM Elements
@@ -145,27 +166,33 @@ export async function sendPromptDefault(question) {
 
 // Sends Question to OpenAPI and Casts Output Answer to DOM Elements
 // LLM Uses a Specific CSV Agent
-export async function sendPromptAgent(supplement, question, loadingAnnouncement, classificationExplanation) {
+export async function sendPromptAgent(supplement, question, loadingAnnouncement, classificationExplanation, isTest) {
   console.log("prompt", supplement + question);
   return fetch("/api/apply-agent?question=" + supplement + question, { redirect: 'manual' })
     .then(function (response) {
       return response.json();
     })
     .then(function (data) {
-      const loadStatus = document.getElementById("load-status");
-      const loadContent = document.getElementById("load-content");
-      const responseInfo = document.getElementById("response-info");
-
-      // Clear the loading announcement
-      clearInterval(loadingAnnouncement);
-
-      // Step 4
-      loadStatus.innerHTML = "Response Generated";
-
-      // Step 5
-      responseInfo.style.display = "block";
-      document.getElementById("prompt").innerText = "Question: " + classificationExplanation;
-      document.getElementById("response").innerText = "Answer: " + data.response;
+      if (!isTest) {
+        const loadStatus = document.getElementById("load-status");
+        const loadContent = document.getElementById("load-content");
+        const responseInfo = document.getElementById("response-info");
+  
+        // Clear the loading announcement
+        clearInterval(loadingAnnouncement);
+  
+        // Step 4
+        loadStatus.innerHTML = "Response Generated";
+  
+        // Step 5
+        responseInfo.style.display = "block";
+        document.getElementById("prompt").innerText = "Question: " + classificationExplanation;
+      }
+      else {
+        document.getElementById("prompt").innerText = "Question: " + question;
+      }
+      
+      (data.response != "Agent stopped due to iteration limit or time limit.") ? document.getElementById("response").textContent = "Answer: " + data.response : document.getElementById("response").textContent = "Answer: I'm sorry; the process has been terminated because it took too long to arrive at an answer.";
 
       return data.response;
     })
