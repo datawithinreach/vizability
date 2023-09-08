@@ -7,7 +7,7 @@ Note that your response must be exactly one of these quality ratings.
 
 When answering, ask yourself: How good of a representation is the response to the actual answer. Consider two things:
 (1) Does the response convey the same empirical information as the correct answer
-(2) Is the response as verbose or strcutrued similarly to the correct answer?
+(2) Is the response as verbose or structured similarly to the correct answer?
 
 Here are your guidelines: 
 
