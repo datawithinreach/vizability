@@ -233,13 +233,30 @@ function handleSubmit(event, hierarchy, loadingAnnouncement) {
         const startingAddressMatch = response.match(startingAddressPattern);
         const endingAddressMatch = response.match(endingAddressPattern);
 
-        // Extracted addresses
-        const startingAddress = startingAddressMatch[1];
-        const endingAddress = endingAddressMatch[1];
+        let navigationResponse = "";
+        let startingAddress = "";
+        let endingAddress = "";
 
-        let endNode = tree.getNodeFromAddress(endingAddress);
-        let startNode = tree.getNodeFromAddress(startingAddress);
-        const navigationResponse = tree.getShortestPath(startNode, endNode);
+        if (endingAddressMatch && startingAddressMatch) {
+          // Extracted addresses
+          startingAddress = startingAddressMatch[1];
+          endingAddress = endingAddressMatch[1];
+
+          let endNode = tree.getNodeFromAddress(endingAddress);
+          let startNode = tree.getNodeFromAddress(startingAddress);
+          navigationResponse = tree.getShortestPath(startNode, endNode);
+        }
+        else {
+          if (startingAddressMatch) {
+            startingAddress = startingAddressMatch[1];
+            const startingNode = tree.getNodeFromAddress(startingAddress);
+            navigationResponse = "Current Position: " + startingNode.getInnerText();
+          }
+          else {
+            navigationResponse = "The question was interpreted as involving navigation but either no starting/ending point was provided or the Treeview was not activated. Please try again.";
+          }          
+        }
+        
 
         // Clear the loading announcement
         clearInterval(loadingAnnouncement);
