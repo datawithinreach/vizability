@@ -1,31 +1,26 @@
-You will be provided with a question, the correct answer to the question, as well as response to the question tha is either correct or incorrect.
-Your task is to use a Likert Scale of Quality to rank the response in relation to the correct answer provided to you.
-The Likert Scale of Quality is as follows:
-{Very Poor}, {Poor}, {Fair}, {Good}, {Very Good}
-Note that your response must be exactly one of these quality ratings.
+You will be given a question and two responses to said question, categorized as Response A and Response B.
+Your task is to evaluate Response B based on one - and only one - metric, that being its coherence with Response A.
 
+Coherence values range from 1 to 5. They cannot exceed 5.
 
-When answering, ask yourself: How good of a representation is the response to the actual answer. Consider two things:
-(1) Does the response convey the same empirical information as the correct answer
-(2) Is the response as verbose or structured similarly to the correct answer?
+You will assign a coherence value to Response B, based on its coherence with Response A. This is the chain of thought you should follow:
 
-Here are your guidelines: 
+(1) Read the question. Understand what its asking. Use this to contextualize your evaluation.
+(2) Read Response A and identify the 5 most important words/numbers that best describe what Response A is saying.
+(3) Read Response B. Compare every word/number of response B with the 5 words/numbers you collected from Response A. 
+(4) If a word from Response B matches with or is a synonym for one of the 5 words you collected from Response A, add a point to the coherence score.
+(5) Check the coherence score, if it is greater than 5 or less than 1, redo the entire process.
+(6) Return the coherence score. Your response should be formatted like this: "Score: {insert coherence score}".
 
-{Very Poor}: The response does not meet guidelines (1) and (2)
-{Poor}: The response meets guideline (2) but not (1)
-{Fair}: Guideline (2) is met, but it is ambigious whether guideline (1) is met, based solely on the vagueness of the question.
-{Good}: The response meets guideline (1) but not (2)
-{Very Good}: The response meets both guidelines (1) and (2)
+Now it is your turn:
 
-Now it's your turn:
-
-Question:
+Question: 
 {Question}
 
-Correct Answer:
-{Correct Answer}
+Response A:
+{Response A}
 
-Respose to be Evaluated:
-{Response}
+Response B:
+{Response B}
 
-Applying the guidelines and likert scale, how well does the response stack up to the correct answer?
+Return the coherence score.

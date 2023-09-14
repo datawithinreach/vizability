@@ -127,7 +127,7 @@ export class CondensedOlliRender {
                 content = content.getInnerText();
             }
 
-            csvString += `${hierarchy} // ${content.replace("Press t to open table.", "")}\n`;
+            csvString += `${hierarchy} // ${content.replace("Press t to open table.", "").replace("1 value.", "").replace(" equals", ":")}\n`;
         }
 
         return csvString;

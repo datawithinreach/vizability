@@ -25,13 +25,91 @@ export async function classifyQuery(question) {
 // Functions for main.js and eval/test.js
 
 export function handleDataUpdate(view, vegaLiteSpec) {
+  const continentsAndCountries = {
+    "Africa": [
+      "Algeria", "Angola", "Benin", "Botswana", "Burkina Faso", "Burundi", "Cabo Verde", "Cameroon",
+      "Central African Republic", "Chad", "Comoros", "Congo", "Democratic Republic of Congo", "Cote d'Ivoire",
+      "Djibouti", "Egypt", "Equatorial Guinea", "Eritrea", "Eswatini", "Ethiopia", "Gabon", "Gambia", "Ghana",
+      "Guinea", "Guinea-Bissau", "Kenya", "Lesotho", "Liberia", "Libya", "Madagascar", "Malawi", "Mali", "Mauritania",
+      "Mauritius", "Morocco", "Mozambique", "Namibia", "Niger", "Nigeria", "Rwanda", "Sao Tome and Principe", "Senegal",
+      "Seychelles", "Sierra Leone", "Somalia", "South Africa", "South Sudan", "Sudan", "Tanzania", "Togo", "Tunisia",
+      "Uganda", "Zambia", "Zimbabwe"
+    ],
+    "Asia": [
+      "Afghanistan", "Armenia", "Azerbaijan", "Bahrain", "Bangladesh", "Bhutan", "Brunei", "Cambodia", "China",
+      "Cyprus", "Georgia", "Hong Kong", "India", "Indonesia", "Iran", "Iraq", "Israel", "Japan", "Jordan", "Kazakhstan", "Kuwait",
+      "Kyrgyzstan", "Laos", "Lebanon", "Malaysia", "Maldives", "Mongolia", "Myanmar", "Nepal", "North Korea",
+      "Oman", "Pakistan", "Palestine", "Philippines", "Qatar", "Saudi Arabia", "Singapore", "South Korea", "Sri Lanka",
+      "Syria", "Taiwan", "Tajikistan", "Thailand", "Timor-Leste", "Turkey", "Turkmenistan", "United Arab Emirates",
+      "Uzbekistan", "Vietnam", "Yemen"
+    ],
+    "Europe": [
+      "Albania", "Andorra", "Austria", "Belarus", "Belgium", "Bosnia and Herzegovina", "Bulgaria", "Croatia", "Cyprus",
+      "Czechia", "Denmark", "Estonia", "Finland", "France", "Germany", "Greece", "Hungary", "Iceland", "Ireland",
+      "Isle of Man", "Italy", "Kosovo", "Latvia", "Liechtenstein", "Lithuania", "Luxembourg", "Malta", "Moldova", "Monaco", "Montenegro",
+      "Netherlands", "North Macedonia", "Norway", "Poland", "Portugal", "Romania", "Russia", "San Marino", "Serbia",
+      "Slovakia", "Slovenia", "Spain", "Sweden", "Switzerland", "Ukraine", "United Kingdom", "Vatican City"
+    ],
+    "North America": [
+      "Anguilla", "Antigua and Barbuda", "Bahamas", "Barbados", "Belize", "Bermuda", "Canada", "Costa Rica", "Cuba", "Dominica", "Dominican Republic",
+      "El Salvador", "Grenada", "Greenland", "Guatemala", "Haiti", "Honduras", "Jamaica", "Mexico", "Montserrat", "Nicaragua", "Panama", "Saint Kitts and Nevis",
+      "Saint Lucia", "Saint Vincent and the Grenadines", "Trinidad and Tobago", "United States"
+    ],
+    "South America": [
+      "Argentina", "Aruba", "Bolivia", "Brazil", "Chile", "Colombia", "Ecuador", "Guyana", "Paraguay", "Peru", "Suriname", "Uruguay", "Venezuela"
+    ],
+    "Australia": [
+      "Australia", "Fiji", "Kiribati", "Marshall Islands", "Micronesia", "Nauru", "New Caledonia", "New Zealand", "Palau", "Papua New Guinea", "Samoa",
+      "Solomon Islands", "Tonga", "Tuvalu", "Vanuatu"
+    ],
+    "Antarctica": ["Antarctica"]
+  };
+  
+  // Function to get values for a given key
+  function getValuesForKey(obj, key) {
+    return obj[key] || []; // Return the array of values for the key or an empty array if the key doesn't exist
+  }
+
+  function findContinentByCountry(countryName) {
+    for (const continent in continentsAndCountries) {
+      if (continentsAndCountries[continent].includes(countryName)) {
+        return continent;
+      }
+    }
+    return "Country not found in the dictionary";
+  }
+
   // Get Transformed Data from Raw Data Set
   const transformedData = view.data("source_0");
   const transformedDataPolished = transformedData.map((item) => {
     const newItem = {};
     for (const key in item) {
       if (key !== "Symbol(vega_id)") {
-        newItem[key] = item[key];
+        if (key == "date") {
+          let tempItem = getValuesForKey(item, key);
+
+          // Create a new Date object using the timestamp
+          const date = new Date(tempItem);
+
+          // Extract the various components of the date
+          const year = date.getUTCFullYear();
+          const month = date.getUTCMonth() + 1; // Months are zero-based
+          const day = date.getUTCDate();
+
+          // Create a human-readable date string
+          const dateString = `${year}-${month}-${day}`;
+          newItem[key] = item[key]
+          newItem["formatted_date"] = dateString;
+        }
+        else if (key == "country"){
+          let tempItem = getValuesForKey(item, key);
+          let continentOfCountry = findContinentByCountry(tempItem);
+          newItem["continent"] = continentOfCountry;
+          newItem[key] = item[key];
+        }
+        else {
+          newItem[key] = item[key];
+        }
       }
     }
 
@@ -177,13 +255,13 @@ export async function sendPromptAgent(supplement, question, loadingAnnouncement,
         const loadStatus = document.getElementById("load-status");
         const loadContent = document.getElementById("load-content");
         const responseInfo = document.getElementById("response-info");
-  
+
         // Clear the loading announcement
         clearInterval(loadingAnnouncement);
-  
+
         // Step 4
         loadStatus.innerHTML = "Response Generated";
-  
+
         // Step 5
         responseInfo.style.display = "block";
         document.getElementById("prompt").innerText = "Question: " + classificationExplanation;
@@ -191,8 +269,8 @@ export async function sendPromptAgent(supplement, question, loadingAnnouncement,
       else {
         document.getElementById("prompt").innerText = "Question: " + question;
       }
-      
-      (data.response != "Agent stopped due to iteration limit or time limit.") ? document.getElementById("response").textContent = "Answer: " + data.response : document.getElementById("response").textContent = "Answer: I'm sorry; the process has been terminated because it took too long to arrive at an answer.";
+
+      (data.response != "Agent stopped due to iteration limit or time limit.") ? document.getElementById("response").textContent = "Answer: " + data.response : document.getElementById("response").textContent = "Answer: I'm sorry; the process has been terminated because it either took too long to arrive at an answer or your question was too long.";
 
       return data.response;
     })
@@ -217,7 +295,7 @@ export async function handleNavigationQuery(question) {
 }
 
 export function getActiveAddress(activeElement, hierarchy) {
-  activeElement = activeElement.replace("Press t to open table.", "");
+  activeElement = activeElement.replace("Press t to open table.", "").replace("1 value.", "").replace(" equals", ":");
   let firstPeriodIndex = activeElement.indexOf(".");
   let ofIndex = activeElement.indexOf(" of ");
 

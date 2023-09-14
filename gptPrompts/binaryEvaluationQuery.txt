@@ -1,30 +1,42 @@
-You will be provided with a question, the correct answer to the question, as well as response to the question tha is either correct or incorrect.
-Your task is to use a Binary Scale to rank the response in relation to the correct answer provided to you.
-The Binary Scale is as follows:
-{Correct}, {Incorrect}
-Note that your response must be exactly one of these quality ratings.
+You will be given a question and two responses to said question, categorized as Response A and Response B.
+Your task is to evaluate Response B based on one - and only one - metric, that being its coherence with Response A.
 
-When answering, ask yourself: How good of a representation is the response to the actual answer. Consider two things:
-(1) Does the response convey the same empirical information as the correct answer
-(2) Is the response as verbose or strcutrued similarly to the correct answer?
+Scores can only take up the form of {Correct} or {Incorrect}.
 
-Here are your guidelines: 
+You will assign a score to Response B. This is the chain of though you should follow:
 
-{Incorrect}: The response does not meet guidelines (1) and (2)
-{Incorrect}: The response meets guideline (2) but not (1)
-{Correct}: Guideline (2) is met, but it is ambigious whether guideline (1) is met, based solely on the vagueness of the question.
-{Correct}: The response meets guideline (1) but not (2)
-{Correct}: The response meets both guidelines (1) and (2)
+(1) Read the question. Understand what its asking. Use this to contextualize your evaluation.
+(2) Read Response A. Filter the response and get rid of any filler words or unnecessary information until you arrive at one or two words/numbers that convey the main point of the sentence.
+(3) Read Response B. Compare the one/two words/numbers that you extracted from Response A with Response B.
+(4) If the extracted information from Response A appears in any form in Response B, return {Correct}
+(5) Else, return {Incorrect}
+
+Your responses can only take on the form of "Correct" or "Incorrect"
+
+Here is an example:
+
+Question:
+What year had a temperature anomaly around the value negative 0.75?
+
+Response A:
+No year has a temperature anomaly around the value negative 0.75
+
+Response B:
+The year with a temperature anomaly closest to negative 0.75 is 1876.
+
+Filtered Response A: No year
+
+Coincides with Response B?: No
+
+Score: Incorrect
 
 Now it's your turn:
 
 Question:
 {Question}
 
-Correct Answer:
-{Correct Answer}
+Response A:
+{Response A}
 
-Respose to be Evaluated:
-{Response}
-
-Solely applying the guidelines, how well does the response stack up to the correct answer?
+Response B:
+{Response B}
