@@ -242,8 +242,11 @@ async def apply_agent(question: str):
     except ValueError as e:
         response = str(e)
         if not response.startswith("Could not parse LLM output: `"):
-            raise e
+            raise e 
         response = response.removeprefix("Could not parse LLM output: `").removesuffix("`")
+    except openai.InvalidRequestError as e:
+        response = "Agent stopped due to iteration limit or time limit."
+        print(e)
 
     # Return the CSV data as a response
     return {"response": response}

@@ -5,7 +5,7 @@ import { handleDataUpdate, sendPromptDefault, sendPromptAgent, getActiveAddress,
 // Initialize Global Variables
 const isTest = true;
 const descrPre = "\nHere's a description of a data set. It is a hierarchy/tree data structure, where each sentence is preceded by its placement within the tree. For instance, 1.1.2 refers to the second child of the first child of the head:\n";
-const descrPost = "\nMake sure to format all numerical responses appropriately, using things such as commas, dollar signs, appropriate rounding, and other identifiers when necessary. Your answers should be verbose and must repeat the question. Your answers must include all UNIX timestamps as calendar dates. If the question itself is too ambiguous or references data that you are not given, respond with \"I am sorry but I cannot understand the question\" and nothing more. Use this information along with everything else you are given to answer the following question: \n";
+const descrPost = "\nBefore you output the answer check for the following:\nMake sure to format all numerical responses appropriately, using things such as commas, dollar signs, appropriate rounding, and other identifiers when necessary.\nYour answers should be verbose and must repeat the question.\nYour answers must include all UNIX timestamps as calendar dates.\nIf the question refers to data or variables that are not explicitly mentioned in the dataset, respond with \"The variables you mentioned are not provided in the dataset.\" and nothing more.\nUse this information along with everything else you are given to answer the following question: \n";
   
 // MAIN FUNCTION; Runs Evaluation
 async function clickHandler(isEvaluate) {
@@ -26,7 +26,7 @@ async function clickHandler(isEvaluate) {
 
     for (const key in testingSet) {
         if (testingSet.hasOwnProperty(key)) {
-            testingSetSample[key] = testingSet[key].slice(0, 3);
+            testingSetSample[key] = testingSet[key].slice(225, 250);
         }
     }
 
@@ -206,7 +206,7 @@ async function classifyQuestions(value) {
     for (const classificationObj of value) {
         const question = classificationObj.question;
         const groundTruth = classificationObj.ground_truth;
-        let classificationAssessment = "Incorrect";
+        let classificationAssessment = "Incorrect Classification";
 
         const classificationTemplate = await fetch("/api/get-validation-few-shot-prompting?user_query=" + question, { redirect: 'manual' });
         const classificationQuery = await classificationTemplate.json();
@@ -220,7 +220,7 @@ async function classifyQuestions(value) {
         document.getElementById("response").innerText = "Response: " + classificationObj.classification;
 
         if (classificationObj.classification == groundTruth) {
-            classificationAssessment = "Correct";
+            classificationAssessment = "Correct Classification";
         }
         classificationObj.classification_assessment = classificationAssessment;
     }
@@ -274,30 +274,31 @@ async function answerQuestions(value, supplement) {
 
         assessmentQuestionTemplate = assessmentQuestionTemplate
             .replace("{Question}", question)
-            .replace("{Correct Answer}", groundTruth)
-            .replace("{Response}", questionObj.answer);
+            .replace("{Response A}", groundTruth)
+            .replace("{Response B}", questionObj.answer);
 
         const assessmentRaw = await sendPromptDefault(assessmentQuestionTemplate);
         let assessment = "";
 
         switch (true) {
-            case assessmentRaw.includes("Very Poor"):
+            case assessmentRaw.includes("1"):
                 assessment = "Very Poor";
                 break;
-            case assessmentRaw.includes("Poor"):
+            case assessmentRaw.includes("2"):
                 assessment = "Poor";
                 break;
-            case assessmentRaw.includes("Fair"):
+            case assessmentRaw.includes("3"):
                 assessment = "Fair";
                 break;
-            case assessmentRaw.includes("Very Good"):
-                assessment = "Very Good";
+            case assessmentRaw.includes("4"):
+                assessment = "Good";
                 break;
-            case assessmentRaw.includes("Good"):
-                assessment = "Good"
+            case assessmentRaw.includes("5"):
+                assessment = "Very Good";
                 break;
             default:
                 assessment = "Could Not Be Assessed";
+                console.log(assessmentRaw);
         }
 
         questionObj.assessment = assessment;
@@ -309,16 +310,18 @@ async function answerQuestions(value, supplement) {
 
         binaryAssessmentQuestionTemplate = binaryAssessmentQuestionTemplate
             .replace("{Question}", question)
-            .replace("{Correct Answer}", groundTruth)
-            .replace("{Response}", questionObj.answer);
+            .replace("{Response A}", groundTruth)
+            .replace("{Response B}", questionObj.answer);
 
+        const binaryAssessmentRaw = await sendPromptDefault(binaryAssessmentQuestionTemplate);
         let binaryAssessment = "";
         switch (true) {
-            case binaryAssessmentQuestionTemplate.includes("Incorrect"):
-                binaryAssessment = "Incorrect";
+            case binaryAssessmentRaw.includes("Incorrect"):
+                console.log(binaryAssessmentRaw);
+                binaryAssessment = "Incorrect Answer";
                 break;
-            case binaryAssessmentQuestionTemplate.includes("Correct"):
-                binaryAssessment = "Correct";
+            case binaryAssessmentRaw.includes("Correct"):
+                binaryAssessment = "Correct Answer";
                 break;
         }
 
