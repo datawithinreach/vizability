@@ -11,6 +11,7 @@ from langchain.agents.agent_types import AgentType
 from langchain.llms.openai import OpenAI
 
 import json
+import csv
 import pandas as pd
 
 from starlette.responses import JSONResponse
@@ -312,6 +313,29 @@ async def upload_audio(audioFile: UploadFile = File(...)):
     # os.remove(file_location)
 
     return JSONResponse(content={"transcription": transcription})
+
+@app.get("/sort_csv")
+async def sort_csv(field: str, order: str):
+    csv_file = "data/file.csv"
+
+    with open(csv_file, mode='r') as file:
+        csv_reader = csv.DictReader(file)
+        def is_numeric(value):
+            try:
+                int(value)
+                return True
+            except ValueError:
+                return False
+
+        sorted_rows = sorted(csv_reader, key=lambda x: (int(x[field]) if is_numeric(x[field]) else x[field]), reverse=(order == 'desc'))
+
+
+    with open(csv_file, mode='w', newline='') as file:
+        writer = csv.DictWriter(file, fieldnames=csv_reader.fieldnames)
+        writer.writeheader()
+        writer.writerows(sorted_rows)
+
+    return {"message": f"CSV sorted by {field} in {order} order"}
 
 
 # Mount the "public" directory as a static file directory

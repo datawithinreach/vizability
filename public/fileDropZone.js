@@ -17,6 +17,8 @@ const buttons = document.querySelectorAll(".method-1");
 buttons.forEach(function (button) {
     button.addEventListener("click", async function () {
         console.log("Button clicked: " + button.textContent);
+        document.getElementById("toggle-olli").classList.remove("hidden");
+        document.getElementById("toggle-table").classList.remove("hidden");
         document.getElementById("response-info").style.display = "none";
         // Render VegaLite Spec Corresponding to the Query being Asked
         const response = await fetch("/api/get-backend-file?file_path=./test/testVegaLiteSpecs/" + button.dataset.value + ".vg");
