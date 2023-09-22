@@ -45,8 +45,17 @@
     </div>
     <div id="vega-container" aria-hidden="true"></div>
     <div id="aria-info" aria-live="polite">
-      <div id="olli-container"></div>
-      <div id="table-container"></div>
+      <div id="first-container">
+        <button id="toggle-olli" class="hidden">Toggle Olli</button>
+        <button id="toggle-table" class="hidden">Toggle Table</button>
+        <div id="olli-container" class="hidden"></div>
+        <div id="table-container" class="hidden">
+          <h1>CSV Table</h1>
+          <table id="csv-table">
+              <!-- Table content will be populated here -->
+          </table>
+        </div>
+      </div>
       <hr>
       <form class="qna-form" id="ask-question" style="display: none;">
         <label for="user-query">

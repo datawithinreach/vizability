@@ -64,7 +64,7 @@ export function handleDataUpdate(view, vegaLiteSpec) {
     ],
     "Antarctica": ["Antarctica"]
   };
-  
+
   // Function to get values for a given key
   function getValuesForKey(obj, key) {
     return obj[key] || []; // Return the array of values for the key or an empty array if the key doesn't exist
@@ -101,7 +101,7 @@ export function handleDataUpdate(view, vegaLiteSpec) {
           newItem[key] = item[key]
           newItem["formatted_date"] = dateString;
         }
-        else if (key == "country"){
+        else if (key == "country") {
           let tempItem = getValuesForKey(item, key);
           let continentOfCountry = findContinentByCountry(tempItem);
           newItem["continent"] = continentOfCountry;
@@ -140,7 +140,98 @@ export function handleDataUpdate(view, vegaLiteSpec) {
     .then(response => {
       if (response.ok) {
         console.log('CSV file sent successfully!');
-        // Add chart here
+        // Add Table Functionality Here
+        async function fetchCSVData() {
+          const response = await fetch('/api/get-backend-file?file_path=data/file.csv');
+          // const responseParsed = await response["contents"];
+          const text = await response.json();
+          const textFormatted = await text["contents"];
+          console.log(typeof textFormatted);
+          return textFormatted;
+        }
+
+        async function populateTable() {
+          const csvData = await fetchCSVData();
+          const rows = csvData.trim().split('\n');
+          const headers = rows.shift().split(',');
+
+          const table = document.getElementById('csv-table');
+          // const sortMenu = document.getElementById('sort-menu');
+
+          table.innerHTML = '';
+          // sortMenu.innerHTML = '';
+
+          const dataType = []; // To store the data type of each column
+
+          // Add table headers
+          const headerRow = document.createElement('tr');
+          for (const header of headers) {
+            const th = document.createElement('th');
+            th.textContent = header;
+
+            // Add click event listener to sort by the clicked header
+            th.addEventListener('click', async () => {
+              order = order === 'asc' ? 'desc' : 'asc'; // Toggle order
+              await sortTable(header, order);
+              populateTable(); // Refresh the table after sorting
+            });
+            headerRow.appendChild(th);
+
+            // // Create sorting buttons in the sorting menu
+            // const sortButton = document.createElement('button');
+            // sortButton.textContent = `Sort ${header}`;
+            // sortButton.addEventListener('click', async () => {
+            //   order = order === 'asc' ? 'desc' : 'asc';
+            //   await sortTable(header, order, dataType[headers.indexOf(header)]);
+            // });
+            // sortMenu.appendChild(sortButton);
+
+            // Initialize the data type of each column as "string" by default
+            dataType.push('string');
+          }
+          table.appendChild(headerRow);
+
+          // Determine the data type of each column
+          for (const row of rows) {
+            const rowData = row.split(',');
+            for (let i = 0; i < rowData.length; i++) {
+              if (!isNaN(rowData[i])) {
+                dataType[i] = 'number';
+              }
+            }
+          }
+
+          // Add table rows
+          for (const row of rows) {
+            const rowData = row.split(',');
+            const tr = document.createElement('tr');
+            for (let i = 0; i < rowData.length; i++) {
+              const td = document.createElement('td');
+              if (dataType[i] === 'number') {
+                // Convert to number for numerical sorting
+                td.textContent = parseFloat(rowData[i]);
+              } else {
+                td.textContent = rowData[i];
+              }
+              tr.appendChild(td);
+            }
+            table.appendChild(tr);
+          }
+        }
+
+        let order = 'asc';
+
+        async function sortTable(field, order, dataType) {
+          const response = await fetch(`/sort_csv?field=${field}&order=${order}&dataType=${dataType}`);
+          const result = await response.json();
+          if (result.message) {
+            populateTable();
+          }
+        }
+
+        populateTable();
+
+
       } else {
         console.error('Failed to send CSV file.');
       }

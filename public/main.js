@@ -13,6 +13,14 @@ const isTest = false;
 
 
 // STEP 1 -> Load VegaLite Spec and Olli Treeview
+document.getElementById("toggle-olli").addEventListener("click", (event) => {
+  document.getElementById("olli-container").classList.remove("hidden");
+  document.getElementById("table-container").classList.add("hidden");
+});
+document.getElementById("toggle-table").addEventListener("click", (event) => {
+  document.getElementById("table-container").classList.remove("hidden");
+  document.getElementById("olli-container").classList.add("hidden");
+});
 
 
 // Function to Handle Loading in VegaLite Spec
