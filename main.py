@@ -326,7 +326,6 @@ async def sort_csv(field: str, order: str):
                 return True
             except ValueError:
                 return False
-            
         sorted_rows = sorted(csv_reader, key=lambda x: (float(x[field]) if is_numeric(x[field]) else x[field]), reverse=(order == 'desc'))
 
 
