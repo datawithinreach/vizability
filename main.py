@@ -322,12 +322,12 @@ async def sort_csv(field: str, order: str):
         csv_reader = csv.DictReader(file)
         def is_numeric(value):
             try:
-                int(value)
+                float(value)
                 return True
             except ValueError:
                 return False
 
-        sorted_rows = sorted(csv_reader, key=lambda x: (int(x[field]) if is_numeric(x[field]) else x[field]), reverse=(order == 'desc'))
+        sorted_rows = sorted(csv_reader, key=lambda x: (float(x[field]) if is_numeric(x[field]) else x[field]), reverse=(order == 'desc'))
 
 
     with open(csv_file, mode='w', newline='') as file:
