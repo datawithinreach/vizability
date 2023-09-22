@@ -317,7 +317,6 @@ async def upload_audio(audioFile: UploadFile = File(...)):
 @app.get("/sort_csv")
 async def sort_csv(field: str, order: str):
     csv_file = "data/file.csv"
-    print(csv_file)
 
     with open(csv_file, mode='r') as file:
         csv_reader = csv.DictReader(file)
