@@ -250,6 +250,7 @@ function handleSubmit(event, hierarchy, loadingAnnouncement) {
           let startNode = tree.getNodeFromAddress(startingAddress);
           console.log("Start Node: ", startingAddress);
           navigationResponse = tree.getShortestPath(startNode, endNode);
+          // To Be Implemented
           // navigationResponse = processInstructions(tree.getShortestPath(startNode, endNode)).final_string;
         }
         else {
