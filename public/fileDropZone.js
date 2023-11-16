@@ -1,5 +1,4 @@
 // Code for loading the initial VegaLite Spec
-// Both Drag and Drop and Click operations are supported for loading in Spec from local machine
 
 import { loadVGandSendToBackend } from "./vgLoader.js";
 
@@ -24,7 +23,6 @@ buttons.forEach(function (button) {
         const response = await fetch("/api/get-backend-file?file_path=./test/testVegaLiteSpecs/" + button.dataset.value + ".vg");
         const data = await response.json();
         const vLSpec = await JSON.parse(data.contents);
-        // console.log(JSON.stringify(vLSpec));
 
         const vLData = {
             "contents": vLSpec

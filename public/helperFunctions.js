@@ -25,58 +25,10 @@ export async function classifyQuery(question) {
 // Functions for main.js and eval/test.js
 
 export function handleDataUpdate(view, vegaLiteSpec) {
-  const continentsAndCountries = {
-    "Africa": [
-      "Algeria", "Angola", "Benin", "Botswana", "Burkina Faso", "Burundi", "Cabo Verde", "Cameroon",
-      "Central African Republic", "Chad", "Comoros", "Congo", "Democratic Republic of Congo", "Cote d'Ivoire",
-      "Djibouti", "Egypt", "Equatorial Guinea", "Eritrea", "Eswatini", "Ethiopia", "Gabon", "Gambia", "Ghana",
-      "Guinea", "Guinea-Bissau", "Kenya", "Lesotho", "Liberia", "Libya", "Madagascar", "Malawi", "Mali", "Mauritania",
-      "Mauritius", "Morocco", "Mozambique", "Namibia", "Niger", "Nigeria", "Rwanda", "Sao Tome and Principe", "Senegal",
-      "Seychelles", "Sierra Leone", "Somalia", "South Africa", "South Sudan", "Sudan", "Tanzania", "Togo", "Tunisia",
-      "Uganda", "Zambia", "Zimbabwe"
-    ],
-    "Asia": [
-      "Afghanistan", "Armenia", "Azerbaijan", "Bahrain", "Bangladesh", "Bhutan", "Brunei", "Cambodia", "China",
-      "Cyprus", "Georgia", "Hong Kong", "India", "Indonesia", "Iran", "Iraq", "Israel", "Japan", "Jordan", "Kazakhstan", "Kuwait",
-      "Kyrgyzstan", "Laos", "Lebanon", "Malaysia", "Maldives", "Mongolia", "Myanmar", "Nepal", "North Korea",
-      "Oman", "Pakistan", "Palestine", "Philippines", "Qatar", "Saudi Arabia", "Singapore", "South Korea", "Sri Lanka",
-      "Syria", "Taiwan", "Tajikistan", "Thailand", "Timor-Leste", "Turkey", "Turkmenistan", "United Arab Emirates",
-      "Uzbekistan", "Vietnam", "Yemen"
-    ],
-    "Europe": [
-      "Albania", "Andorra", "Austria", "Belarus", "Belgium", "Bosnia and Herzegovina", "Bulgaria", "Croatia", "Cyprus",
-      "Czechia", "Denmark", "Estonia", "Finland", "France", "Germany", "Greece", "Hungary", "Iceland", "Ireland",
-      "Isle of Man", "Italy", "Kosovo", "Latvia", "Liechtenstein", "Lithuania", "Luxembourg", "Malta", "Moldova", "Monaco", "Montenegro",
-      "Netherlands", "North Macedonia", "Norway", "Poland", "Portugal", "Romania", "Russia", "San Marino", "Serbia",
-      "Slovakia", "Slovenia", "Spain", "Sweden", "Switzerland", "Ukraine", "United Kingdom", "Vatican City"
-    ],
-    "North America": [
-      "Anguilla", "Antigua and Barbuda", "Bahamas", "Barbados", "Belize", "Bermuda", "Canada", "Costa Rica", "Cuba", "Dominica", "Dominican Republic",
-      "El Salvador", "Grenada", "Greenland", "Guatemala", "Haiti", "Honduras", "Jamaica", "Mexico", "Montserrat", "Nicaragua", "Panama", "Saint Kitts and Nevis",
-      "Saint Lucia", "Saint Vincent and the Grenadines", "Trinidad and Tobago", "United States"
-    ],
-    "South America": [
-      "Argentina", "Aruba", "Bolivia", "Brazil", "Chile", "Colombia", "Ecuador", "Guyana", "Paraguay", "Peru", "Suriname", "Uruguay", "Venezuela"
-    ],
-    "Australia": [
-      "Australia", "Fiji", "Kiribati", "Marshall Islands", "Micronesia", "Nauru", "New Caledonia", "New Zealand", "Palau", "Papua New Guinea", "Samoa",
-      "Solomon Islands", "Tonga", "Tuvalu", "Vanuatu"
-    ],
-    "Antarctica": ["Antarctica"]
-  };
 
   // Function to get values for a given key
   function getValuesForKey(obj, key) {
     return obj[key] || []; // Return the array of values for the key or an empty array if the key doesn't exist
-  }
-
-  function findContinentByCountry(countryName) {
-    for (const continent in continentsAndCountries) {
-      if (continentsAndCountries[continent].includes(countryName)) {
-        return continent;
-      }
-    }
-    return "Country not found in the dictionary";
   }
 
   // Get Transformed Data from Raw Data Set
@@ -100,12 +52,6 @@ export function handleDataUpdate(view, vegaLiteSpec) {
           const dateString = `${year}-${month}-${day}`;
           newItem[key] = item[key]
           newItem["formatted_date"] = dateString;
-        }
-        else if (key == "country") {
-          let tempItem = getValuesForKey(item, key);
-          let continentOfCountry = findContinentByCountry(tempItem);
-          newItem["continent"] = continentOfCountry;
-          newItem[key] = item[key];
         }
         else {
           newItem[key] = item[key];
@@ -140,10 +86,9 @@ export function handleDataUpdate(view, vegaLiteSpec) {
     .then(response => {
       if (response.ok) {
         console.log('CSV file sent successfully!');
-        // Add Table Functionality Here
+        // Add Table Functionality 
         async function fetchCSVData() {
           const response = await fetch('/api/get-backend-file?file_path=data/file.csv');
-          // const responseParsed = await response["contents"];
           const text = await response.json();
           const textFormatted = await text["contents"];
           console.log(typeof textFormatted);
@@ -156,10 +101,8 @@ export function handleDataUpdate(view, vegaLiteSpec) {
           const headers = rows.shift().split(',');
 
           const table = document.getElementById('csv-table');
-          // const sortMenu = document.getElementById('sort-menu');
 
           table.innerHTML = '';
-          // sortMenu.innerHTML = '';
 
           const dataType = []; // To store the data type of each column
 
@@ -176,15 +119,6 @@ export function handleDataUpdate(view, vegaLiteSpec) {
               populateTable(); // Refresh the table after sorting
             });
             headerRow.appendChild(th);
-
-            // // Create sorting buttons in the sorting menu
-            // const sortButton = document.createElement('button');
-            // sortButton.textContent = `Sort ${header}`;
-            // sortButton.addEventListener('click', async () => {
-            //   order = order === 'asc' ? 'desc' : 'asc';
-            //   await sortTable(header, order, dataType[headers.indexOf(header)]);
-            // });
-            // sortMenu.appendChild(sortButton);
 
             // Initialize the data type of each column as "string" by default
             dataType.push('string');
@@ -307,16 +241,6 @@ function getColorName(input) {
 
   const minDistance = Math.min(...Object.keys(minColours));
   return minColours[minDistance];
-
-  // for (const key in CSS21_HEX_TO_NAMES) {
-  //   const name = CSS21_HEX_TO_NAMES[key];
-  //   const [rC, gC, bC] = hexToRgb(key);
-  //   const deltaE = calculateDeltaE([rC, gC, bC], rgbTriplet);
-  //   minColours[deltaE] = name;
-  // }
-
-  // const minDeltaE = Math.min(...Object.keys(minColours));
-  // return minColours[minDeltaE];
 }
 
 // Sends Question to OpenAPI and Casts Output Answer to DOM Elements
@@ -403,4 +327,34 @@ export function getActiveAddress(activeElement, hierarchy) {
     }
   }
   return null;
+}
+
+export function processInstructions(inputString) {
+  const instructions = inputString.split('.');
+  const processedInstructions = [];
+  let currentInstruction = instructions[0];
+  let iterationCount = 1;
+
+  for (let i = 1; i < instructions.length; i++) {
+    if (instructions[i] === currentInstruction) {
+      iterationCount++;
+    } else {
+      processedInstructions.push(
+        `Press the ${currentInstruction} arrow key ${iterationCount} times`
+      );
+      currentInstruction = instructions[i];
+      iterationCount = 1;
+    }
+  }
+
+  processedInstructions.push(
+    `Press the ${currentInstruction} arrow key ${iterationCount} times`
+  );
+
+  const final_string = processedInstructions.join('. ');
+
+  return {
+    final_string,
+    iterationCount: processedInstructions.length,
+  };
 }

@@ -350,20 +350,6 @@ export class CondensedOlliRender {
             stringOutput += "Press the " + path[i][1] + " arrow key. ";
         }
         return stringOutput;
-        // let currentNodeInVisited = endingNodeInVisited;
-        // while (Object.values(currentNodeInVisited)[0] != startNode.getAddress()) {
-
-        // }
-
-        // Reconstruct path
-        // const path = [endNode.address];
-        // let parentAddress = visited[endNode.address];
-        // while (parentAddress) {
-        //     path.unshift(parentAddress);
-        //     parentAddress = visited[parentAddress];
-        // }
-        
-        // return path;
     }
 
 }
