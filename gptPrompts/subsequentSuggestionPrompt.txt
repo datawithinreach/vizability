@@ -1,0 +1,16 @@
+Here's a description of a data set. It is a hierarchy/tree data structure, where each sentence is preceded by its placement within the tree. 
+For instance, 1.1.2 refers to the second child of the first child of the head:
+
+
+
+Using this text representation, a blind user asked the question: 
+
+However, my application could not answer this question because it required information that was not explicitly provided in the chart to answer the question. 
+More specifically, my application responded: 
+
+Using the text representation of the chart as a guide and seeing what is wrong with the current blind user question, suggest two new questions that the blind user can ask. 
+These two new questions must be changed so that they do not reference information not present in the chart, whilst still retaining the essence of the blind user's initial question.
+
+Output your answer like this:
+Question 1: {Insert Question here}
+Question 2: {Insert Question here}

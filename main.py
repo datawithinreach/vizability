@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 import os
 
 from langchain.llms import OpenAI
+from langchain.chat_models import ChatOpenAI
 from langchain.agents import create_csv_agent
 from langchain.agents.agent_types import AgentType
 from langchain.llms.openai import OpenAI
@@ -176,7 +177,7 @@ async def get_validation_few_shot_prompting(user_query: str):
         "Analytical Query": "analysis involving data.",
         "Visual Query": "graph shape/characteristics.",
         "Contextual Query": "specific data to be answered.",
-        "Navigation Query": "'How do I get from () to ().'"
+        "Navigation Query": "What is my current position?"
     }
 
     with open(prompt_file_path, "r") as file_object:
@@ -236,18 +237,31 @@ async def apply_agent(question: str):
     file_path = os.path.join(directory, file_name)
 
     # Call the create_csv_agent function and obtain the CSV data
-    agent = create_csv_agent(OpenAI(temperature=0), file_path, verbose=True, agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION)
+    # agent = create_pandas_dataframe_agent(
+    #     ChatOpenAI(temperature=0, model="gpt-3.5-turbo-0613"),
+    #     df,
+    #     verbose=True,
+    #     agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
+    # )
+    agent = create_csv_agent(ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo-1106"), file_path, verbose=True, agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION, handle_parsing_errors="Check your output and make sure it conforms!")
     # response = agent.run(question)
+    # agent = create_csv_agent(OpenAI(temperature=0.3), file_path, verbose=True, agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION)
     try:
         response = agent.run(question)
-    except ValueError as e:
-        response = str(e)
-        if not response.startswith("Could not parse LLM output: `"):
-            raise e 
-        response = response.removeprefix("Could not parse LLM output: `").removesuffix("`")
+    # except ValueError as e:
+    #     response = str(e)
+    #     if not response.startswith("Could not parse LLM output: `"):
+    #         raise e 
+    #     response = response.removeprefix("Could not parse LLM output: `").removesuffix("`")
+    #     print(response)
     except openai.InvalidRequestError as e:
         response = "Agent stopped due to iteration limit or time limit."
         print(e)
+    except Exception as e:
+         response = str(e)
+         if response.startswith("Could not parse LLM output: `"):
+             response = response.removeprefix("Could not parse LLM output: `").removesuffix("`")
+             print(response)
 
     # Return the CSV data as a response
     return {"response": response}
@@ -259,10 +273,18 @@ async def root():
     
 
 # Create a route to the /api/prompt endpoint with a query param called prompt
+# @app.get("/api/prompt")
+# async def prompt(question: str):
+#     response = llm(question)
+#     return {"prompt": question, "response": response}
+
 @app.get("/api/prompt")
-async def prompt(question: str):
-    response = llm(question)
-    return {"prompt": question, "response": response}
+async def prompt_gpt4(question: str, gpt_model: str):
+    response = openai.ChatCompletion.create(
+        model=gpt_model, messages=[{"role": "user", "content": question}]
+    )
+    print(response)
+    return {"prompt": question, "response": response["choices"][0]["message"]["content"]}
 
 
 @app.get("/api/check_folder")

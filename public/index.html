@@ -8,6 +8,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300&display=swap" rel="stylesheet">
+  <!-- Add Font Awesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
   <title>My Website</title>
   <!-- vega / vega-lite -->
   <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
@@ -57,15 +60,33 @@
         </div>
       </div>
       <hr>
-      <form class="qna-form" id="ask-question" style="display: none;">
+      <p id="QnA-header" style="display: none;">Supplement your knowledge of the chart by asking questions, either through typing or voice input.</p>
+      <div id="suggestion-container" style="display: none;">
+        <!-- Buttons -->
+        <button class="suggestion-button" id="suggestion-button-1">Button 1</button>
+        <button class="suggestion-button" id="suggestion-button-2">Button 2</button>
+        <button class="suggestion-button" id="suggestion-button-3">Button 3</button>
+        <button class="suggestion-button" id="suggestion-button-4">Button 4</button>
+      </div>
+      <!-- <form class="qna-form" id="ask-question" style="display: none;">
         <label for="user-query">
-          <p>Supplement your knowledge of the chart by asking questions, either through typing or voice input.</p>
           <input id="user-query" name="user-query" type="text" autocomplete="off" aria-label="Text Input" />
         </label>
 
         <button id="recordButton" type="button"
           aria-label="To begin voice input press enter. To end and submit, press enter again.">Start Recording</button>
         <button id="form-submit" type="submit">Submit</button>
+      </form> -->
+      <!-- Hidden iframe to handle form submission -->
+      <form class="qna-form" id="ask-question" style="display: none;">
+        <div class="input-container" style="height: 50px;">
+          <input id="user-query" name="user-query" type="text" autocomplete="off" aria-label="Text Input" />
+          <button id="recordButton" type="button" aria-label="To begin voice input press enter. To end and submit, press enter again">
+            <i id="record-button-i" class="fas fa-microphone"></i>
+            <p id="record-button-p" style="display: none;">Stop</p>
+          </button>
+          <button id="ask-question-button" type="submit" style="display: none;"></button>
+        </div>
       </form>
     </div>
     <!-- <div id="load-content" role="status" aria-live="polite" aria-busy="false">
@@ -83,6 +104,22 @@
         <p> <strong>Response received: </strong> <span id="response"></span> </p> -->
         <p id="prompt"></p>
         <p id="response"></p>
+      </div>
+    </div>
+
+    <div id="subsequentSuggestionsContainer" style="display: none;">
+      <div class="first-row">
+        <div>
+          <p>Try one of these questions instead.</p>
+        </div>
+      </div>
+      <div class="two-columns">
+        <div class="column">
+          <button class="subsequentSuggestionButton">Button 1</button>
+        </div>
+        <div class="column">
+          <button class="subsequentSuggestionButton">Button 2</button>
+        </div>
       </div>
     </div>
 

@@ -3,7 +3,10 @@ Analytical Queries involve any possible lookup operations, computations, or anal
 Visual Queries involve references to visual cues such as color or graph shape/characteristics. 
 
 Navigation Queries involve questions relating to location within the Olli navigation table. They usually take up the form: 'How do I get from () to ().'
+Navigation Query // Take me to the y-axis.
+Navigation Query // How do I navigate to the year 2015?
+Navigation Query // What is my current position?
 
-Contextual Queries involve broad questions that do not necessarily need the graph's specific data to be answered. 
+Contextual Queries involve broad questions that do not necessarily need the graph's specific data to be answered and often involve questions like: "Why?". 
 
 Your objective is to classify the following question into one of these 4 categories: ["Analytical Query", "Visual Query", "Navigation Query", "Contextual Query"]. If you do not know how to classify the question, return "I am sorry but I cannot understand the question" and nothing more. If you can classify it, your answer should only be two words: {Type of Query} Query. Refer back to the examples above to help classify the question:

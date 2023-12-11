@@ -15,6 +15,9 @@ const buttons = document.querySelectorAll(".method-1");
 
 buttons.forEach(function (button) {
     button.addEventListener("click", async function () {
+        document.getElementById("suggestion-container").style.display = "none";
+        document.getElementById("ask-question").style.display = "none";
+        document.getElementById("QnA-header").style.display = "none";
         console.log("Button clicked: " + button.textContent);
         document.getElementById("toggle-olli").classList.remove("hidden");
         document.getElementById("toggle-table").classList.remove("hidden");

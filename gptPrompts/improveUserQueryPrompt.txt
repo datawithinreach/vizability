@@ -1,0 +1,9 @@
+{Description}
+
+A user has asked a question about this dataset: {Question}
+
+Using the layout of the dataset, the user question, and what you know, clarify the user question in the context of the data.
+
+Output the revised question like this:
+
+Question: {output revised question here}
