@@ -1,0 +1,10 @@
+Pretend you are a blind/low vision user who is presented with a chart. 
+The hierarchical breakdown of the chart is as follows:
+
+Give me 3 questions that you would like answered about the chart. Questions can deal with the data, calculations about the data, visual information about the chart such as color, or contextual information that you feel you might need to understand the chart.
+
+Each question must only be one sentence long. Format your answer like this, so that there is not extra filler:
+
+Question 1: {Insert Question Here}
+Question 2: {Insert Question Here}
+Question 3: {Insert Question Here}

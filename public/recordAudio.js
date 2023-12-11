@@ -3,6 +3,8 @@ let mediaRecorder;
 let isRecording = false;
 
 const recordButton = document.getElementById("recordButton");
+const recordButtonI = document.getElementById("record-button-i");
+const recordButtonP = document.getElementById("record-button-p");
 recordButton.addEventListener("click", toggleRecording);
 
 async function toggleRecording() {
@@ -31,14 +33,17 @@ async function toggleRecording() {
       mediaRecorder.start();
       console.log("Recording...");
       isRecording = true;
-      recordButton.textContent = "Stop Recording";
+      recordButtonI.style.display = "none";
+      recordButtonP.style.display = "block";
     } else {
       if (mediaRecorder && mediaRecorder.state !== "inactive") {
         mediaRecorder.stop();
         console.log("Stop button clicked. Stopping recording...");
       }
       isRecording = false;
-      recordButton.textContent = "Start Recording";
+      // recordButton.textContent = "Start Recording";
+      recordButtonI.style.display = "block";
+      recordButtonP.style.display = "none";
     }
   } catch (err) {
     console.error("Error accessing microphone:", err);
@@ -61,7 +66,7 @@ async function sendAudioData(audioBlob) {
         const userQuery = document.getElementById("user-query");
         userQuery.value = transcription["transcription"]["text"];
         userQuery.setAttribute("aria-live", "assertive");
-        const formSubmit = document.getElementById("form-submit");
+        const formSubmit = document.getElementById('ask-question-button');
         formSubmit.click();
       } else {
         console.error("Failed to upload audio. Status:", response.status);

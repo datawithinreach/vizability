@@ -1,0 +1,73 @@
+You will be provided a question about a dataset and two accompanying responses, titled Response A and Response B. 
+
+Using the provided question for context, your task is to evaluate Response B's coherence to Response A.
+
+Evaluate Response B by this metric according to this scale:
+
+1 - The content of Response B is irrelevant to that of Response A and bears no similarities
+2 - The content of Response B is somewhat irrelevant to that of Response A; the core information in Response B does not match that of Response A
+3 - It is unclear whether there are any similarities between Response A and Response B due to the ambiguity of one or two of the Responses
+4 - Response B is mostly similar to Response A but may lack some of the more specific key details such as labels
+5 - Response B is not only similar but also faithful to Response A
+
+Provide one sentence of reasoning behind your answer.
+Format your answer like this:
+Reasoning: {Insert Reasoning}
+Score: {Insert Score Integer}
+
+Here are some examples:
+
+Question: What was the average amount of houses sold in 2015?
+Response A: On average, 1327792.6346153845 homes were for sale in 2015?
+Response B: The average inventory in 2015 was approximately 1,327,793.
+Reasoning: The key information (average number of houses sold) is identical for both Responses; in addition, Response B is equally as explanatory as Response A.
+Score: 5
+
+Question: What was the average amount of houses sold in 2015?
+Response A: On average, 1327792.6346153845 homes were for sale in 2015?
+Response B: 1,327,793.
+Reasoning: Although the core information conveyed by Response B is identical to that of Response A, Response B lacks the explanatory wording of Response A.
+Score: 4
+
+Question: What country in Africa has the lowest vaccination rate?
+Response A: Burundi has the lowest vaccination rate
+Response B: The country in Africa with the lowest vaccination rate is Malawi.
+Reasoning: The core information for Response B (Malawi) does not match Response A (Burundi); however, Response B is worded similarly to Response A.
+Score: 2
+
+Question: Is Africa the country that needs the vaccine the most?
+Response A: Africa is not a country, however it is the continent with the lowest average vaccination rate.
+Response B: No, Africa is not the country that needs the vaccine the most because Africa is a continent, not a country. The country with the lowest percentage of fully vaccinated people in the provided dataset has a vaccination rate of 0.3%. However, this does not necessarily mean that this country needs the vaccine the most, as there are many other factors to consider.
+Reasoning: Response B is more explanatory than Response A and conveys the same core information
+Score: 5
+
+Question: What is the second highest GDP per capita?
+Response A: The second highest GDP per capita is $45,675.
+Response B: Malawi has the second highest GDP per capita.
+Reasoning: Responses B and A convey two completely different variables. However, it is unclear whether there is a connection between the two. If Malawi were to have a GDP per capita of $45,675 then Response B would receive a high score. If this were not the case Response B would receive a low score. The situation is ambiguous.
+Score: 3
+
+Question: What is the average number of houses for sale for the year 2015?
+Response A: On average, 1,460,000 houses were for sale throughout 2015.
+Response B: The average number of houses for sale is not defined in the data.
+Reasoning: Response B is irrelevant to Response A.
+Score: 1
+
+Question: What day had the third highest number of homes for sale?
+Response A: The third highest number of homes were on sale on 2021-02-05.
+Response B: February 5, 2021 had the third highest number of homes for sale.
+Reasoning: Although the dates are expressed in a different format, they are nonetheless the same date; response B is equally as explanatory as Response A.
+Score: 1
+
+Now it is your turn. 
+
+Question: 
+{Question}
+
+Response A:
+{Response A}
+
+Response B:
+{Response B}
+
+Return the Reasoning and Score.
