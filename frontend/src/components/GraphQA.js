@@ -10,11 +10,11 @@ import { VegaLite } from 'react-vega'
 
 const GraphQA = ({graphType}) => {
 
-    const [graphSpec, setGraphSpec] = useState({})
+    const [graphSpec, setGraphSpec] = useState(false)
 
 
     async function getGraphData(graphType) {
-        const response = await fetch("https://multimodal-accvis-6lvi554ivq-uc.a.run.app/api/get-backend-file?file_path=./test/testVegaLiteSpecs/" + graphType + ".vg");
+        const response = await fetch(process.env.REACT_APP_BACKEND_URL + "/api/get-backend-file?file_path=./test/testVegaLiteSpecs/" + graphType + ".vg");
         const data = await response.json();
         setGraphSpec(JSON.parse(data.contents));
     }
