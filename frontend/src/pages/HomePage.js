@@ -12,6 +12,7 @@ import Container from 'react-bootstrap/Container';
 
 const HomePage = () => {
   const [graphType, setGraphType] = useState('');
+  
   return (
     <div className="content">
       <h1 className="title">VizAbility - Data Visualization</h1>

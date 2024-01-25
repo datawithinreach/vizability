@@ -1,9 +1,4 @@
 import React, {useEffect, useState} from "react";
-
-// import { Vega } from 'react-vega'
-
-// import { createClassFromSpec } from "react-vega";
-// import { VegaGragh } from "./VegaGragh";
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import "../styles/GraphQAStyle.css"
@@ -14,7 +9,6 @@ const GraphQA = ({graphType}) => {
 
     const [graphSpec, setGraphSpec] = useState(false)
     const [showOlli, setShowOlli] = useState(false)
-
     const [graphDescription, setGraphDescription] = useState('')
 
     const typeDescriptions = {
@@ -25,11 +19,16 @@ const GraphQA = ({graphType}) => {
     }
 
     async function getGraphData(graphType) {
+        /**
+         * Fetch the data from the backend based on what type of graph was selected and updates the states accordingly.
+         * @param graphType A string that can only be "chart1", "chart2", "chart3", or "chart4"
+         */
         const response = await fetch(process.env.REACT_APP_BACKEND_URL + "/api/get-backend-file?file_path=./test/testVegaLiteSpecs/" + graphType + ".vg");
-        const data = await response.json();
-        const dataObj = JSON.parse(data.contents);
+        const data = await response.json(); // this is a string
+        const dataObj = JSON.parse(data.contents); // convert to json obj
         setGraphSpec(dataObj);
 
+        // structure the olli description based on the graph type
         if (graphType === "chart4") { //choropleth is special (color and detail instead of xy)
             setGraphDescription(`${dataObj.description ? dataObj.description + '.': ''} ${typeDescriptions[graphType]}: ${dataObj.encoding.color.field} and ${dataObj.encoding.detail.field}.`)
         } else {
