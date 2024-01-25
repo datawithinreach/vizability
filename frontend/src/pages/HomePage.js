@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import "../styles/HomePageStyle.css"
 import GraphQA from "../components/GraphQA";
 
@@ -12,7 +12,44 @@ import Container from 'react-bootstrap/Container';
 
 const HomePage = () => {
   const [graphType, setGraphType] = useState('');
-  
+  const [graphSpec, setGraphSpec] = useState(false)
+  const [graphDescription, setGraphDescription] = useState("")
+  const [axesInfo, setAxesInfo] = useState("Axes info")
+
+  const typeDescriptions = {
+    chart1: "A line chart",
+    chart2: "A bar chart",
+    chart3: "A scatter plot",
+    chart4: "A geographic map",
+}
+
+  async function getGraphData() {
+    /**
+     * Fetch the data from the backend based on what type of graph was selected and updates the states accordingly.
+     * @param graphType A string that can only be "chart1", "chart2", "chart3", or "chart4"
+     */
+    const response = await fetch(process.env.REACT_APP_BACKEND_URL + "/api/get-backend-file?file_path=./test/testVegaLiteSpecs/" + graphType + ".vg");
+    const data = await response.json(); // this is a string
+    const dataObj = JSON.parse(data.contents); // convert to json obj
+    setGraphSpec(dataObj);
+    console.log(dataObj)
+
+    // structure the olli description based on the graph type
+    if (graphType === "chart4") { //choropleth is special (color and detail instead of xy)
+        setGraphDescription(`${dataObj.description ? dataObj.description + '.': ''} ${typeDescriptions[graphType]}: ${dataObj.encoding.color.field} and ${dataObj.encoding.detail.field}.`)
+    } else {
+        setGraphDescription(`${dataObj.description ? dataObj.description + '.': ''} ${typeDescriptions[graphType]} with axes: ${dataObj.encoding.x.title ? dataObj.encoding.x.title : dataObj.encoding.x.field } and ${dataObj.encoding.y.title ? dataObj.encoding.y.title : dataObj.encoding.y.field}.`)
+
+        // setAxesInfo(`X-axes titled ${dataObj.encoding.x.field} for a ${dataObj.encoding.x.type} scale with  `)
+    }
+  }
+
+  // grab new data every time a new chart is selected
+  useEffect(()=> {
+    if (graphType) {
+      getGraphData(); }
+  }, [graphType])
+
   return (
     <div className="content">
       <h1 className="title">VizAbility - Data Visualization</h1>
@@ -31,7 +68,7 @@ const HomePage = () => {
       </Container>
 
       
-      {graphType && <GraphQA graphType = {graphType} />}
+      {graphType && <GraphQA graphSpec = {graphSpec} axesInfo={axesInfo} graphDescription = {graphDescription}/>}
 
   </div>
   );
