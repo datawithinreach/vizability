@@ -9,7 +9,12 @@ const GraphQA = ({graphType}) => {
 
     const [graphSpec, setGraphSpec] = useState(false)
     const [showOlli, setShowOlli] = useState(false)
-    const [graphDescription, setGraphDescription] = useState('')
+    const [graphDescription, setGraphDescription] = useState("")
+
+    const [showAxesInfo, setShowAxesInfo] = useState(false)
+    const [axesInfo, setAxesInfo] = useState("Axes info")
+
+
 
     const typeDescriptions = {
         chart1: "A line chart",
@@ -27,12 +32,15 @@ const GraphQA = ({graphType}) => {
         const data = await response.json(); // this is a string
         const dataObj = JSON.parse(data.contents); // convert to json obj
         setGraphSpec(dataObj);
+        console.log(dataObj)
 
         // structure the olli description based on the graph type
         if (graphType === "chart4") { //choropleth is special (color and detail instead of xy)
             setGraphDescription(`${dataObj.description ? dataObj.description + '.': ''} ${typeDescriptions[graphType]}: ${dataObj.encoding.color.field} and ${dataObj.encoding.detail.field}.`)
         } else {
             setGraphDescription(`${dataObj.description ? dataObj.description + '.': ''} ${typeDescriptions[graphType]} with axes: ${dataObj.encoding.x.title ? dataObj.encoding.x.title : dataObj.encoding.x.field } and ${dataObj.encoding.y.title ? dataObj.encoding.y.title : dataObj.encoding.y.field}.`)
+
+            // setAxesInfo(`X-axes titled ${dataObj.encoding.x.field} for a ${dataObj.encoding.x.type} scale with  `)
         }
     }
 
@@ -44,8 +52,6 @@ const GraphQA = ({graphType}) => {
 
     return (
         <div>
-            <p>{graphType} </p>
-
             <Row>{graphSpec && <VegaLite spec={graphSpec} />}</Row>
 
             {/* <Row>  */}
@@ -58,7 +64,9 @@ const GraphQA = ({graphType}) => {
 
             {showOlli && <div> 
                 <b>Explore the structure and components of the chart through a text representation. Instructions: Press enter on the treeview to explore the contents of the chart. Navigate using the arrows keys. To exit, press escape.</b> 
-                <p className= "olli-description" onClick={() => {console.log("here")}}>{graphDescription}</p>
+                <p className= "olli-description" onClick={() => {setShowAxesInfo(!showAxesInfo)}}>{graphDescription}</p>
+
+                {showAxesInfo && <p>{axesInfo}</p>}
             </div>}
 
         </div>
