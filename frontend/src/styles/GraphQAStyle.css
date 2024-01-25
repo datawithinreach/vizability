@@ -1,0 +1,7 @@
+.olli-description {
+    cursor: pointer;
+}
+
+.olli-description:hover {
+    background-color: lightgrey;
+}

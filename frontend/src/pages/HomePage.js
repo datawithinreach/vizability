@@ -20,11 +20,6 @@ const HomePage = () => {
       questions, either through typing or voice input. </h2>
 
 
-      {/* <button onClick={() => {setGraphType("chart1")}}> Line Chart </button>
-      <button onClick={() => {setGraphType("chart2")}}> Bar Chart </button>
-      <button onClick={() => {setGraphType("chart3")}}> Scatter Plot </button>
-      <button onClick={() => {setGraphType("chart4")}}> Choropleth Map </button> */}
-
       <Container>
       <Row className="justify-content-md-center">
         <Col> <Button size="lg" onClick={() => {setGraphType("chart1")}}> Line Chart </Button> </Col>
@@ -33,7 +28,6 @@ const HomePage = () => {
         <Col> <Button size="lg" onClick={() => {setGraphType("chart4")}}> Choropleth Map </Button> </Col>
       </Row>
       </Container>
-
 
       
       {graphType && <GraphQA graphType = {graphType} />}

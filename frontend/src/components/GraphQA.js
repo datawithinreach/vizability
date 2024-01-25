@@ -6,7 +6,7 @@ import React, {useEffect, useState} from "react";
 // import { VegaGragh } from "./VegaGragh";
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
-
+import "../styles/GraphQAStyle.css"
 
 import { VegaLite } from 'react-vega'
 
@@ -29,12 +29,12 @@ const GraphQA = ({graphType}) => {
         const data = await response.json();
         const dataObj = JSON.parse(data.contents);
         setGraphSpec(dataObj);
+
         if (graphType === "chart4") { //choropleth is special (color and detail instead of xy)
             setGraphDescription(`${dataObj.description ? dataObj.description + '.': ''} ${typeDescriptions[graphType]}: ${dataObj.encoding.color.field} and ${dataObj.encoding.detail.field}.`)
         } else {
             setGraphDescription(`${dataObj.description ? dataObj.description + '.': ''} ${typeDescriptions[graphType]} with axes: ${dataObj.encoding.x.title ? dataObj.encoding.x.title : dataObj.encoding.x.field } and ${dataObj.encoding.y.title ? dataObj.encoding.y.title : dataObj.encoding.y.field}.`)
         }
-
     }
 
     // graph new data whenever graphType changes
@@ -59,7 +59,7 @@ const GraphQA = ({graphType}) => {
 
             {showOlli && <div> 
                 <b>Explore the structure and components of the chart through a text representation. Instructions: Press enter on the treeview to explore the contents of the chart. Navigate using the arrows keys. To exit, press escape.</b> 
-                <p>{graphDescription}</p>
+                <p className= "olli-description" onClick={() => {console.log("here")}}>{graphDescription}</p>
             </div>}
 
         </div>
