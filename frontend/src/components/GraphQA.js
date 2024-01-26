@@ -16,10 +16,19 @@ const GraphQA = ({graphSpec, axesInfo, graphDescription}) => {
     //     getGraphData(graphType);
     // }, [graphType])
 
+    // https://vega.github.io/vega/docs/api/view/#data-and-scales
+    const handleNewView = view => {
+        console.log(
+            'here'
+        );
+        // console.log(view.data);
+        console.log(view.data("source0"));
+    };
+
 
     return (
         <div>
-            <Row>{graphSpec && <VegaLite spec={graphSpec} />}</Row>
+            <Row>{graphSpec && <VegaLite spec={graphSpec} onNewView={handleNewView}/>}</Row>
 
             {/* <Row>  */}
             <Button variant="outline-secondary" onClick={() => {
