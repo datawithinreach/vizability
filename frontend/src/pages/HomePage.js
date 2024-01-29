@@ -13,15 +13,6 @@ import Container from 'react-bootstrap/Container';
 const HomePage = () => {
   const [graphType, setGraphType] = useState('');
   const [graphSpec, setGraphSpec] = useState(false)
-  const [graphDescription, setGraphDescription] = useState("")
-  const [axesInfo, setAxesInfo] = useState("Axes info")
-
-  const typeDescriptions = {
-    chart1: "A line chart",
-    chart2: "A bar chart",
-    chart3: "A scatter plot",
-    chart4: "A geographic map",
-}
 
   async function getGraphData() {
     /**
@@ -32,22 +23,15 @@ const HomePage = () => {
     const data = await response.json(); // this is a string
     const dataObj = JSON.parse(data.contents); // convert to json obj
     setGraphSpec(dataObj);
-    console.log(dataObj)
+    // console.log(dataObj)
 
-    // structure the olli description based on the graph type
-    if (graphType === "chart4") { //choropleth is special (color and detail instead of xy)
-        setGraphDescription(`${dataObj.description ? dataObj.description + '.': ''} ${typeDescriptions[graphType]}: ${dataObj.encoding.color.field} and ${dataObj.encoding.detail.field}.`)
-    } else {
-        setGraphDescription(`${dataObj.description ? dataObj.description + '.': ''} ${typeDescriptions[graphType]} with axes: ${dataObj.encoding.x.title ? dataObj.encoding.x.title : dataObj.encoding.x.field } and ${dataObj.encoding.y.title ? dataObj.encoding.y.title : dataObj.encoding.y.field}.`)
-
-        // setAxesInfo(`X-axes titled ${dataObj.encoding.x.field} for a ${dataObj.encoding.x.type} scale with  `)
-    }
   }
 
   // grab new data every time a new chart is selected
   useEffect(()=> {
     if (graphType) {
-      getGraphData(); }
+      getGraphData(); 
+    }
   }, [graphType])
 
   return (
@@ -68,7 +52,7 @@ const HomePage = () => {
       </Container>
 
       
-      {graphType && <GraphQA graphSpec = {graphSpec} axesInfo={axesInfo} graphDescription = {graphDescription}/>}
+      {graphType && <GraphQA graphSpec = {graphSpec} graphType = {graphType}/>}
 
   </div>
   );
