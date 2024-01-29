@@ -2,7 +2,7 @@
 import React, {useEffect, useState} from "react";
 
 
-const Olli = ({graphSpec, graphType}) => {
+const Olli = ({graphSpec, graphType, transformedData}) => {
     const [showAxesInfo, setShowAxesInfo] = useState(false)
 
     const [graphDescription, setGraphDescription] = useState("")
@@ -23,7 +23,11 @@ const Olli = ({graphSpec, graphType}) => {
             setGraphDescription(`${graphSpec.description ? graphSpec.description + '.': ''} ${typeDescriptions[graphType]} with axes: ${graphSpec.encoding.x.title ? graphSpec.encoding.x.title : graphSpec.encoding.x.field } and ${graphSpec.encoding.y.title ? graphSpec.encoding.y.title : graphSpec.encoding.y.field}.`)
 
             // setAxesInfo(`X-axes titled ${dataObj.encoding.x.field} for a ${dataObj.encoding.x.type} scale with  `)
+            console.log(graphSpec.encoding)
         }
+
+        // get the axes info
+        console.log(transformedData)
     }, [graphSpec])
 
     return (

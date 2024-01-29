@@ -37,7 +37,7 @@ const GraphQA = ({graphSpec, graphType}) => {
                   // Create a human-readable date string
                   const dateString = `${year}-${month}-${day}`;
                   newItem[key] = item[key]
-                  newItem["Formatted_date (Y-M-D)"] = dateString;
+                  newItem["formatted_date(Y-M-D)"] = dateString;
                 }
                 else if (key == "country") {
                   let tempItem = getValuesForKey(item, key);
@@ -65,9 +65,7 @@ const GraphQA = ({graphSpec, graphType}) => {
             }
             return newItem;
           });
-
         setTransformedData(transformedDataPolished)
-
          // Send Transformed Data JSON to Backend
         const payload = {
             content: transformedDataPolished
