@@ -1,6 +1,7 @@
 
 import React, {useEffect, useState} from "react";
 
+
 const Olli = ({graphSpec, graphType}) => {
     const [showAxesInfo, setShowAxesInfo] = useState(false)
 
@@ -27,10 +28,10 @@ const Olli = ({graphSpec, graphType}) => {
 
     return (
         <div> 
-                <b>Explore the structure and components of the chart through a text representation. Instructions: Press enter on the treeview to explore the contents of the chart. Navigate using the arrows keys. To exit, press escape.</b> 
-                <p className= "olli-description" onClick={() => {setShowAxesInfo(!showAxesInfo)}}>{graphDescription}</p>
+            <b>(For Screen Readers) Explore the structure and components of the chart through a text representation. Instructions: Press enter on the treeview to explore the contents of the chart. Navigate using the arrows keys. To exit, press escape.</b> 
+            <p className= "olli-description" onClick={() => {setShowAxesInfo(!showAxesInfo)}}>{graphDescription}</p>
 
-                {showAxesInfo && <p>{axesInfo}</p>}
+            {showAxesInfo && <p>{axesInfo}</p>}
         </div>
     )
 }
