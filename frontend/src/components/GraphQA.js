@@ -7,12 +7,14 @@ import Olli from "./Olli";
 import { getValuesForKey, findContinentByCountry, getColorName } from "../helperFuncs";
 
 import { VegaLite } from 'react-vega'
+import GraphTable from "./GraphTable";
 
 
 const GraphQA = ({graphSpec, graphType}) => {
 
     const [showOlli, setShowOlli] = useState(false)
-    const [transformedData, setTransformedData] = useState({})
+    const [showTable, setShowTable] = useState(false)
+    const [transformedData, setTransformedData] = useState([])
 
     // https://vega.github.io/vega/docs/api/view/#data-and-scales
     // get the transformed data every time there is new data, transform it then send it to the backend
@@ -66,6 +68,8 @@ const GraphQA = ({graphSpec, graphType}) => {
             }
             return newItem;
           });
+        // console.log("hssere", transformedDataPolished)
+        // a list of objects
         setTransformedData(transformedDataPolished)
          // Send Transformed Data JSON to Backend
         const payload = {
@@ -96,12 +100,23 @@ const GraphQA = ({graphSpec, graphType}) => {
             {graphSpec && <span>
                   <Button variant="outline-secondary" onClick={() => {
                     setShowOlli(!showOlli);
+                    if (!showOlli) { // olli should be true now
+                      setShowTable(false)
+                    }
                 }}>Toggle Olli</Button>
-                <Button variant="outline-success">Toggle Table</Button>
+                <Button variant="outline-success"  onClick={() => {
+                    setShowTable(!showTable);
+                    if (!showTable) { // table should be true now
+                      setShowOlli(false)
+                    }
+                }}>Toggle Table</Button>
                 </span>}
 
 
             {showOlli && <Olli transformedData = {transformedData} graphSpec = {graphSpec} graphType={graphType}/> }
+
+            {showTable &&  <GraphTable transformedData={transformedData} />}
+          
 
         </div>
     );
