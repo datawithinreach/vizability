@@ -93,10 +93,13 @@ const GraphQA = ({graphSpec, graphType}) => {
         <div>
             <Row>{graphSpec && <VegaLite spec={graphSpec} onNewView={handleNewView}/>}</Row>
 
-            <Button variant="outline-secondary" onClick={() => {
-                setShowOlli(!showOlli);
-            }}>Toggle Olli</Button>
-            <Button variant="outline-success">Toggle Table</Button>
+            {graphSpec && <span>
+                  <Button variant="outline-secondary" onClick={() => {
+                    setShowOlli(!showOlli);
+                }}>Toggle Olli</Button>
+                <Button variant="outline-success">Toggle Table</Button>
+                </span>}
+
 
             {showOlli && <Olli transformedData = {transformedData} graphSpec = {graphSpec} graphType={graphType}/> }
 
