@@ -8,6 +8,7 @@ import { getValuesForKey, findContinentByCountry, getColorName } from "../helper
 
 import { VegaLite } from 'react-vega'
 
+
 const GraphQA = ({graphSpec, graphType}) => {
 
     const [showOlli, setShowOlli] = useState(false)
@@ -92,13 +93,10 @@ const GraphQA = ({graphSpec, graphType}) => {
         <div>
             <Row>{graphSpec && <VegaLite spec={graphSpec} onNewView={handleNewView}/>}</Row>
 
-            {/* <Row>  */}
             <Button variant="outline-secondary" onClick={() => {
                 setShowOlli(!showOlli);
             }}>Toggle Olli</Button>
             <Button variant="outline-success">Toggle Table</Button>
-
-            {/* </Row> */}
 
             {showOlli && <Olli transformedData = {transformedData} graphSpec = {graphSpec} graphType={graphType}/> }
 
