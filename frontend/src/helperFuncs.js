@@ -395,4 +395,60 @@ function getColorName(colorCode) {
     return closestColor;
   }
 
-export { getValuesForKey, findContinentByCountry, getColorName }
+// Processes raw .vg file
+async function processFile(files) {
+  return new Promise((resolve, reject) => {
+      if (files.length > 0) {
+          var file = files[0]; // Get the first file from the list
+          if (file.name.endsWith('.json') || file.name.endsWith('.vg')) {
+              var reader = new FileReader();
+              reader.onload = function (e) {
+                  var contents = e.target.result; // Get the file contents as text
+                  resolve({
+                      "contents": contents,
+                  })
+              };
+              reader.onerror = function (error) {
+                  console.error('Error occurred while reading the file.', error);
+                  reject(error);
+              };
+              reader.readAsText(file); // Read the file as text
+          } else {
+              alert('Please select a JSON or VG file.');
+              resolve(null);
+          }
+      } else {
+          resolve(null);
+      }
+  });
+}
+
+// Load VegaLite Spec File and Send to Backend
+function loadVGandSendToBackend(vegaLiteInfo) {
+  if (vegaLiteInfo) {
+      const vegaLiteSpec = vegaLiteInfo["contents"];
+      const dataToSend = {
+          vgSpec: vegaLiteSpec
+      }
+
+      fetch(process.env.REACT_APP_BACKEND_URL + "/api/process-vega-lite-spec", {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(dataToSend)
+      })
+          .then(response => {
+              if (response.ok) {
+                  console.log('VG Spec sent successfully!');
+              } else {
+                  console.error('Failed to send VG Spec.');
+              }
+          })
+          .catch(error => {
+              console.error('Error:', error);
+          });
+  }
+}
+
+export { getValuesForKey, findContinentByCountry, getColorName, processFile, loadVGandSendToBackend }

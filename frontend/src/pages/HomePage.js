@@ -8,7 +8,9 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
 import Container from 'react-bootstrap/Container';
+import Form from 'react-bootstrap/Form';
 
+import { processFile, loadVGandSendToBackend } from "../helperFuncs";
 
 const HomePage = () => {
   const [graphType, setGraphType] = useState('');
@@ -34,6 +36,13 @@ const HomePage = () => {
     }
   }, [graphType])
 
+  async function handleFileSubmit (event) {
+    const vegaLiteInfo = await processFile(event.target.files);
+    loadVGandSendToBackend(vegaLiteInfo);
+
+    setGraphSpec(vegaLiteInfo["contents"])
+  }
+
   return (
     <div className="content">
       <h1 className="title">VizAbility - Data Visualization</h1>
@@ -43,12 +52,20 @@ const HomePage = () => {
 
 
       <Container>
+      <Row>
+        <Form.Group onChange= {handleFileSubmit} controlId="formFile" className="mb-3">
+          <Form.Label>Upload Local File</Form.Label>
+          <Form.Control type="file" accept=".json, .vg"/>
+        </Form.Group>
+      </Row>
       <Row className="justify-content-md-center">
         <Col> <Button size="lg" onClick={() => {setGraphType("chart1")}}> Line Chart </Button> </Col>
         <Col> <Button size="lg" onClick={() => {setGraphType("chart2")}}> Bar Chart </Button> </Col>
         <Col> <Button size="lg" onClick={() => {setGraphType("chart3")}}> Scatter Plot </Button> </Col>
         <Col> <Button size="lg" onClick={() => {setGraphType("chart4")}}> Choropleth Map </Button> </Col>
       </Row>
+
+      
       </Container>
 
       
