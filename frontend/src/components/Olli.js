@@ -37,7 +37,7 @@ const Olli = ({graphSpec, graphType, transformedData}) => {
         if (graphSpec) {
             VegaLiteAdapter(graphSpec).then((olliVisSpec) => {
             const olliRender = olli(olliVisSpec);
-            console.log("spec", olliVisSpec)
+            // console.log("spec", olliVisSpec)
             document.getElementById("olli-container").replaceChildren(olliRender);
         }).catch((e) => {
             console.log('error', e)

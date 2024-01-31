@@ -16,9 +16,13 @@ const GraphQA = ({graphSpec, graphType}) => {
     const [showTable, setShowTable] = useState(false)
     const [transformedData, setTransformedData] = useState([])
 
+    const [isViewShowing, setIsViewShowing] = useState(false)
+
     // https://vega.github.io/vega/docs/api/view/#data-and-scales
     // get the transformed data every time there is new data, transform it then send it to the backend
     const handleNewView = view => {
+
+      setIsViewShowing(true)
         // a list of objects
         const data = view.data("source_0");
         // polish the data
@@ -68,7 +72,7 @@ const GraphQA = ({graphSpec, graphType}) => {
             }
             return newItem;
           });
-        // console.log("hssere", transformedDataPolished)
+
         // a list of objects
         setTransformedData(transformedDataPolished)
          // Send Transformed Data JSON to Backend
@@ -91,26 +95,36 @@ const GraphQA = ({graphSpec, graphType}) => {
         }).catch((error) => {
             console.error('Error:', error);
         })
+
+        // reset for next new
+        setIsViewShowing(false)
+
     };
 
     return (
         <div>
             <Row>{graphSpec && <VegaLite spec={graphSpec} onNewView={handleNewView}/>}</Row>
+            
+            {graphType && !graphSpec && !isViewShowing && <p> Loading... </p>}
 
             {graphSpec && <span>
+
                   <Button variant="outline-secondary" onClick={() => {
                     setShowOlli(!showOlli);
                     if (!showOlli) { // olli should be true now
                       setShowTable(false)
                     }
                 }}>Toggle Olli</Button>
+
                 <Button variant="outline-success"  onClick={() => {
                     setShowTable(!showTable);
                     if (!showTable) { // table should be true now
                       setShowOlli(false)
                     }
                 }}>Toggle Table</Button>
+
                 </span>}
+
 
 
             {showOlli && <Olli transformedData = {transformedData} graphSpec = {graphSpec} graphType={graphType}/> }
