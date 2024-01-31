@@ -3,7 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import "../styles/GraphQAStyle.css"
 import Olli from "./Olli";
-
+import loadingLogo from "../images/loadingLogo1.gif"
 import { getValuesForKey, findContinentByCountry, getColorName } from "../helperFuncs";
 
 import { VegaLite } from 'react-vega'
@@ -138,7 +138,11 @@ const GraphQA = ({graphSpec, graphType}) => {
         <div>
             <Row>{graphSpec && <VegaLite spec={graphSpec} onNewView={handleNewView}/>}</Row>
             
-            {graphType && !graphSpec && !isViewShowing && <p> Loading... </p>}
+            {graphType && !graphSpec && !isViewShowing && 
+            <div>
+              <img src={loadingLogo} alt="loading..." />
+            </div>
+            }
 
             {graphSpec && <span>
 
