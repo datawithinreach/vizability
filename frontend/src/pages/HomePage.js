@@ -69,7 +69,7 @@ const HomePage = () => {
       </Container>
 
       
-      {graphType && <GraphQA graphSpec = {graphSpec} graphType = {graphType}/>}
+      {graphType && <GraphQA graphSpec = {graphSpec} graphType = {graphType} setGraphSpec = {setGraphSpec} />}
 
   </div>
   );

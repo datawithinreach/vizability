@@ -10,7 +10,7 @@ import { VegaLite } from 'react-vega'
 import GraphTable from "./GraphTable";
 
 
-const GraphQA = ({graphSpec, graphType}) => {
+const GraphQA = ({graphSpec, graphType, setGraphSpec}) => {
 
     const [showOlli, setShowOlli] = useState(false)
     const [showTable, setShowTable] = useState(false)
@@ -108,7 +108,6 @@ const GraphQA = ({graphSpec, graphType}) => {
 
 
     // https://vega.github.io/vega/docs/api/view/#data-and-scales
-    
     const handleNewView = view => {
     /**
      * Get the transformed data every time there is a view update,
@@ -125,7 +124,16 @@ const GraphQA = ({graphSpec, graphType}) => {
       if (sliderInput) {
         const parameterName = sliderInput.getAttribute("name");
         sliderInput.addEventListener("input", () => {
-          view.signal(parameterName, parseInt(sliderInput.value, 10)).runAsync();
+          const valueChanged = parseInt(sliderInput.value, 10);
+          view.signal(parameterName, valueChanged).runAsync();
+          // find which param got updated to update the spec to rerender the olli
+          const newSpec = {...graphSpec};
+          for (let i = 0; i < newSpec.params.length; i++) { 
+            if (newSpec.params[i].name === parameterName) {
+              newSpec.params[i].value = valueChanged;
+            }
+          }
+          setGraphSpec(newSpec);
           handleViewUpdates(view);
         });
       }
