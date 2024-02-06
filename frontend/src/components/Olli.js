@@ -6,7 +6,7 @@ import { olli } from "olli";
 import { VegaLiteAdapter } from "olli-adapters"; // Or VegaAdapter, or ObservableAdapter
 
 
-const Olli = ({graphSpec, graphType, transformedData}) => {
+const Olli = ({graphSpec, transformedData}) => {
     // const [showAxesInfo, setShowAxesInfo] = useState(false)
 
     // const [graphDescription, setGraphDescription] = useState("")
@@ -37,7 +37,7 @@ const Olli = ({graphSpec, graphType, transformedData}) => {
         if (graphSpec) {
             VegaLiteAdapter(graphSpec).then((olliVisSpec) => {
             const olliRender = olli(olliVisSpec);
-            // console.log("spec", olliVisSpec)
+            // console.log("olli spec", olliVisSpec)
             if (document.getElementById("olli-container")) {
                 document.getElementById("olli-container").replaceChildren(olliRender);
             }

@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import "../styles/GraphQAStyle.css"
@@ -16,7 +16,17 @@ const GraphQA = ({graphSpec, graphType, setGraphSpec}) => {
     const [showTable, setShowTable] = useState(false)
     const [transformedData, setTransformedData] = useState([])
 
-    const [isViewShowing, setIsViewShowing] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
+
+    useEffect(()=> {
+      const chart = document.getElementsByClassName("vega-chart");
+      // logic for loading in loading picture while waiting for vega to render
+      if (graphSpec && chart.length !== 1) {
+        setIsLoading(true);
+      } else {
+        setIsLoading(false);
+      }
+    }, [graphSpec])
 
     function polishData (data, view) {
     /**
@@ -80,9 +90,15 @@ const GraphQA = ({graphSpec, graphType, setGraphSpec}) => {
        * @param view Vega view.
        */
       const data = view.data("source_0");
+      // check if data exist
+      // if (data.length === 0) {
+      //   console.log('no data'); // make a modal later
+      //   setGraphSpec({})
+      //   return;
+      // }
       const transformedDataPolished = polishData(data, view);
       setTransformedData(transformedDataPolished)
-
+      
       // Send Transformed Data JSON to Backend
       const payload = {
         content: transformedDataPolished
@@ -114,9 +130,6 @@ const GraphQA = ({graphSpec, graphType, setGraphSpec}) => {
      * transform it then send it to the backend.
      * @param view Vega view
      */
-      // logic for loading in loading picture while waiting for vega to render
-      setIsViewShowing(true)
-
       handleViewUpdates(view);
 
       // Updates Transformed Data, add event listener
@@ -137,16 +150,17 @@ const GraphQA = ({graphSpec, graphType, setGraphSpec}) => {
           handleViewUpdates(view);
         });
       }
-
-      // reset for next new
-      setIsViewShowing(false)
     };
 
+    // function handleVegaError(error) {
+    //   // setGraphSpec({})
+    //   console.log("ehre", error)
+    // }
     return (
         <div>
-            <Row>{graphSpec && <VegaLite spec={graphSpec} onNewView={handleNewView}/>}</Row>
+            <Row>{graphSpec && <VegaLite className="vega-chart" spec={graphSpec} onNewView={handleNewView}/>}</Row>
             
-            {graphType && !graphSpec && !isViewShowing && 
+            {isLoading && 
             <div>
               <img src={loadingLogo} alt="loading..." />
             </div>
@@ -171,7 +185,7 @@ const GraphQA = ({graphSpec, graphType, setGraphSpec}) => {
                 </span>}
 
 
-            {showOlli && <Olli transformedData = {transformedData} graphSpec = {graphSpec} graphType={graphType}/> }
+            {showOlli && <Olli transformedData = {transformedData} graphSpec = {graphSpec}/> }
 
             {showTable &&  <GraphTable transformedData={transformedData} />}
         </div>

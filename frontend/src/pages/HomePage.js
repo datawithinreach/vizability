@@ -38,9 +38,16 @@ const HomePage = () => {
 
   async function handleFileSubmit (event) {
     const vegaLiteInfo = await processFile(event.target.files);
-    loadVGandSendToBackend(vegaLiteInfo);
-
-    setGraphSpec(vegaLiteInfo["contents"])
+    try {
+      if (vegaLiteInfo) {
+        console.log('in submit')
+        loadVGandSendToBackend(vegaLiteInfo);
+        setGraphSpec(JSON.parse(vegaLiteInfo["contents"]))
+     }
+    } catch (error) {
+      console.log('error', error)
+    }
+   
   }
 
   return (
@@ -69,7 +76,7 @@ const HomePage = () => {
       </Container>
 
       
-      {graphType && <GraphQA graphSpec = {graphSpec} graphType = {graphType} setGraphSpec = {setGraphSpec} />}
+      {graphSpec && <GraphQA graphSpec = {graphSpec} graphType = {graphType} setGraphSpec = {setGraphSpec} />}
 
   </div>
   );

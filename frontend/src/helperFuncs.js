@@ -446,7 +446,7 @@ function loadVGandSendToBackend(vegaLiteInfo) {
               }
           })
           .catch(error => {
-              console.error('Error:', error);
+              console.error('Error in sending spec:', error);
           });
   }
 }
