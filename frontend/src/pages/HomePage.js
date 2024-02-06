@@ -25,8 +25,6 @@ const HomePage = () => {
     const data = await response.json(); // this is a string
     const dataObj = JSON.parse(data.contents); // convert to json obj
     setGraphSpec(dataObj);
-    // console.log(dataObj)
-
   }
 
   // grab new data every time a new chart is selected
@@ -42,7 +40,8 @@ const HomePage = () => {
       if (vegaLiteInfo) {
         console.log('in submit')
         loadVGandSendToBackend(vegaLiteInfo);
-        setGraphSpec(JSON.parse(vegaLiteInfo["contents"]))
+        setGraphSpec(JSON.parse(vegaLiteInfo["contents"]));
+        setGraphType('');
      }
     } catch (error) {
       console.log('error', error)
