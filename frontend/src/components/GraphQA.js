@@ -9,7 +9,15 @@ import { getValuesForKey, findContinentByCountry, getColorName } from "../utils/
 import { VegaLite } from 'react-vega'
 import GraphTable from "./GraphTable";
 import QAModule from "./QAModule";
+import { Stack } from "../utils/stack";
+import { CondensedOlliRender } from "../utils/condenseOlliRender";
 
+// Initialize All Global Variables
+let activeElement = '';
+let activeElementNode = null;
+let activeElementNodeAddress = null;
+let activeElementNodeInnerText = null;
+let tree;
 
 const GraphQA = ({graphSpec, graphType, setGraphSpec}) => {
 
@@ -152,7 +160,65 @@ const GraphQA = ({graphSpec, graphType, setGraphSpec}) => {
         });
       }
 
-      
+      const olliContainer = document.getElementById("olli-container");
+
+      console.log('starting to get condensed olli', olliContainer)
+      // Stack used to Track Active Elements within Treeview
+      const activeElementStack = new Stack();
+
+      function setUpEventListener(olliContainer, activeElementStack) {
+        function nestedEventListener(event) {
+          event.stopImmediatePropagation(); // necessary to prevent the creation of subsequent nested event listeners
+          activeElement = event.srcElement.firstChild.innerText;
+    
+          // Retrieve Active Element Node Object from activeElement Variable
+          const index = tree.getTreeItemArray().findIndex(obj => obj.getInnerText() === activeElement);
+          activeElementNode = tree.getTreeItemArray()[index];
+          activeElementNodeAddress = activeElementNode.getAddress();
+          activeElementNodeInnerText = activeElementNode.getInnerText();
+    
+          // Check for Up Arrow KeyUp
+          if (event.keyCode === 38) {
+            const previousElement = activeElementStack.peek(); // returns only the text of previous element
+            let correspondingElement = null;
+    
+            // Get Previous Element Node Object
+            tree.getTreeItemArray().forEach(element => {
+              if (element.getInnerText() == previousElement.getInnerText()) {
+                correspondingElement = element;
+              }
+              // Reset Active Child for Selected Echelon of the Treeview
+              if (element.getAddress().slice(0, -1) == previousElement.getAddress().slice(0, -1)) {
+                element.setIsActiveChild(false);
+              }
+            });
+            // Set Current Active Child
+            correspondingElement.setIsActiveChild(true);
+          }
+    
+          // Check for Left/Right Arrow KeyUp
+          // Reset Active Child for Selected Echelon of the Treeview
+          // Set Current Active Child for Selected Echelon of the Treeview
+          else if (event.keyCode === 37 || event.keyCode === 39) {
+            tree.getTreeItemArray().forEach(element => {
+              if (element.getAddress().slice(0, -1) == activeElementNode.getAddress().slice(0, -1)) {
+                element.setIsActiveChild(false);
+              }
+            })
+            activeElementNode.setIsActiveChild(true);
+          }
+    
+          activeElementStack.push(activeElementNode);
+        }
+    
+        olliContainer.addEventListener('keyup', nestedEventListener);
+      }
+      // Hierarchical Tree Representation of Olli Treeview
+      tree = new CondensedOlliRender(document.querySelector('.olli-vis'));
+      const condensedString = tree.getCondensedString();
+      console.log("string", condensedString);
+
+      setUpEventListener(olliContainer, activeElementStack);
     };
 
     // function handleVegaError(error) {
@@ -188,7 +254,7 @@ const GraphQA = ({graphSpec, graphType, setGraphSpec}) => {
                 </span>}
 
 
-            {showOlli && <Olli transformedData = {transformedData} graphSpec = {graphSpec}/> }
+            <Olli showOlli = {showOlli} transformedData = {transformedData} graphSpec = {graphSpec}/>
 
             {showTable &&  <GraphTable transformedData={transformedData} />}
 

@@ -16,6 +16,7 @@ const HomePage = () => {
   const [graphType, setGraphType] = useState('');
   const [graphSpec, setGraphSpec] = useState(false)
 
+
   async function getGraphData() {
     /**
      * Fetch the data from the backend based on what type of graph was selected and updates the states accordingly.
