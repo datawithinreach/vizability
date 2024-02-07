@@ -489,4 +489,217 @@ async function getSuggestedQuestions(condensedString) {
     })
 }
 
-export { getSuggestedQuestions, getValuesForKey, findContinentByCountry, getColorName, processFile, loadVGandSendToBackend }
+async function classifyQuery(question) {
+  return fetch(process.env.REACT_APP_BACKEND_URL + "/api/get-validation-few-shot-prompting?user_query=" + question, { redirect: 'manual' })
+    .then(function (response) {
+      return response.json();
+    })
+    .then(async function (classificationQuery) {
+      var classificationQueryContents = classificationQuery["contents"];
+
+      return sendPromptDefault(classificationQueryContents + question, "gpt-3.5-turbo-1106")
+        .then(function (output) {
+          return output; // Return the output value if needed for further processing
+        })
+        .catch(function (error) {
+          console.error(error);
+        });
+    });
+}
+
+function getAnswer(question, hierarchy, activeElementNodeAddress, activeElementNodeInnerText) {
+  // Initialize Variables
+  const descrPre = "\nHere's a structural layout of a data set. It is a hierarchy/tree data structure, where each sentence is preceded by its placement within the tree. For instance, 1.1.2 refers to the second child of the first child of the head:\n";
+
+  const descrPostFilePath = "gptPrompts/descrPost.txt";
+
+  let supplement = descrPre + hierarchy + "Active Element: " + (activeElementNodeAddress + " // " + activeElementNodeInnerText + "\n");
+
+  console.log("sending the question to the server", supplement + question);
+
+  // Classify User Question
+  // Classification Categories Include: Analytical Query; Visual Query; Contextual Query; Navigation Query
+  // const queryType = await classifyQuery(question);
+  // classifyQuery(question).then((res) => {
+  //   console.log('res', res)
+  // })
+  // console.log("type", queryType);
+  // classifyQuery(question).then(function (queryType) {
+  //   // Apply Answering Pipeline Based on Classification Response
+  //   document.getElementById("user-query").value = "";
+  //   let classificationExplanation = "";
+
+  //   const improveUserQueryPromptFilePath = "gptPrompts/improveUserQueryPrompt.txt";
+  //   fetch(("/api/get-backend-file?file_path=" + improveUserQueryPromptFilePath), { redirect: 'manual' })
+  //     .then(function (improveUserQueryPromptRaw) {
+  //       return improveUserQueryPromptRaw.json();
+  //     })
+  //     .then(async function (improveUserQueryPromptJSON) {
+  //       console.log(improveUserQueryPromptJSON);
+  //       let improveUserQueryPrompt = improveUserQueryPromptJSON["contents"];
+
+  //       improveUserQueryPrompt = improveUserQueryPrompt
+  //         .replace("{Description}", supplement)
+  //         .replace("{Question}", question);
+
+  //       sendPromptDefault(improveUserQueryPrompt, "gpt-4")
+  //         .then(function (questionRevised) {
+  //           if (questionRevised.startsWith("Question:")) {
+  //             questionRevised = questionRevised.slice("Question:".length).trim();
+  //           }
+  //           console.log("REVISED QUESTION", questionRevised);
+  //           if (queryType.includes("Analytical Query") || queryType.includes("Visual Query")) {
+  //             fetch("/api/get-backend-file?file_path=" + descrPostFilePath)
+  //               .then((descrPostRaw) => descrPostRaw.json())
+  //               .then((descrPostJSON) => {
+  //                 const descrPost = descrPostJSON["contents"];
+  //                 classificationExplanation = "Your question \"" + question + "\" was categorized as being data-driven, and as such, has been answered based on the data in the chart.";
+  //                 sendPromptAgent(supplement + descrPost, questionRevised, loadingAnnouncement, classificationExplanation, isTest);
+  //                 // Use descrPost variable or perform actions with its value here
+  //               })
+  //               .catch((error) => {
+  //                 // Handle any errors that occur during the fetch or processing
+  //                 console.error('Error:', error);
+  //               });
+  //           }
+  //           else if (queryType.includes("Contextual Query")) {
+  //             sendPromptDefault("Here is a description of a dataset:" + hierarchy + "Use this description of the dataset along with outside knowledge to answer the following question:\nQuestion: " + questionRevised, "gpt-3.5-turbo-1106").then(function (response) {
+  //               classificationExplanation = "Your question \"" + question + "\" was categorized as being context-seeking, and as such, has been answered based on information found on the web.";
+        
+  //               const loadStatus = document.getElementById("load-status");
+  //               const responseInfo = document.getElementById("response-info");
+        
+  //               // Clear the loading announcement
+  //               clearInterval(loadingAnnouncement);
+        
+  //               loadStatus.innerHTML = "Response Generated";
+  //               responseInfo.style.display = "block";
+        
+  //               document.getElementById("prompt").textContent = "Question: " + classificationExplanation;
+  //               (response != "Agent stopped due to iteration limit or time limit.") ? document.getElementById("response").textContent = "Answer: " + response : document.getElementById("response").textContent = "Answer: I'm sorry; the process has been terminated because it took too long to arrive at an answer.";
+        
+  //               if (response.startsWith("The variables you mentioned") || response.includes("I am sorry but I cannot understand the question") || response.includes("Agent stopped due to iteration limit or time limit")) {
+  //                 document.getElementById("subsequentSuggestionsContainer").style.display = "flex";
+  //                 generateSubsequentSuggestions(supplement, questionRevised, response)
+  //                   .then(function (output) {
+  //                     console.log(output);
+  //                     const subsequentSuggestionButtons = document.getElementsByClassName("subsequentSuggestionButton");
+  //                     const questions = output.split(/Question [1-3]: /).slice(1);
+  //                     for (var i = 0; i < subsequentSuggestionButtons.length; ++i) {
+  //                       subsequentSuggestionButtons[i].innerText = questions[i];
+  //                     }
+  //                   });
+  //               }
+  //             });
+  //           }
+  //           else if (queryType.includes("Navigation Query")) {
+  //             // Provide Context to OpenAPI about User's Current Position within the Olli Treeview
+        
+  //             // Packaged Question to be Sent to OpenAPI
+  //             const navigationQuestion = supplement + "\nUse all of this to answer the following question:\n" + questionRevised;
+  //             const classificationExplanation = "Your question \"" + question + "\" was categorized as being related to navigating the chart structure, and as such has been answered based on the treeview.";
+  //             const loadStatus = document.getElementById("load-status");
+  //             const responseInfo = document.getElementById("response-info");
+        
+  //             // Answer Navigation Query
+  //             handleNavigationQuery(navigationQuestion).then(function (response) {
+  //               // Regular expression to match the starting and ending addresses
+  //               const startingAddressPattern = /Starting Address: ([\d.]+)/;
+  //               const endingAddressPattern = /Ending Address: ([\d.]+)/;
+        
+  //               // Extract starting and ending addresses using regular expressions
+  //               console.log("Response: ", response);
+  //               const startingAddressMatch = response.match(startingAddressPattern);
+  //               const endingAddressMatch = response.match(endingAddressPattern);
+        
+  //               let navigationResponse = "";
+  //               let startingAddress = "";
+  //               let endingAddress = "";
+        
+  //               if (endingAddressMatch && startingAddressMatch) {
+  //                 // Extracted addresses
+  //                 startingAddress = startingAddressMatch[1];
+  //                 endingAddress = endingAddressMatch[1];
+        
+  //                 let endNode = tree.getNodeFromAddress(endingAddress);
+  //                 console.log("End Node: ", endingAddress);
+  //                 let startNode = tree.getNodeFromAddress(startingAddress);
+  //                 console.log("Start Node: ", startingAddress);
+  //                 navigationResponse = tree.getShortestPath(startNode, endNode);
+  //                 // To Be Implemented
+  //                 // navigationResponse = processInstructions(tree.getShortestPath(startNode, endNode)).final_string;
+  //               }
+  //               else {
+  //                 if (startingAddressMatch) {
+  //                   startingAddress = startingAddressMatch[1];
+  //                   const startingNode = tree.getNodeFromAddress(startingAddress);
+  //                   navigationResponse = "Current Position: " + startingNode.getInnerText();
+  //                 }
+  //                 else {
+  //                   navigationResponse = "The question was interpreted as involving navigation but either no starting/ending point was provided or the Treeview was not activated. Please try again.";
+  //                 }
+  //               }
+        
+        
+  //               // Clear the loading announcement
+  //               clearInterval(loadingAnnouncement);
+  //               loadStatus.innerHTML = "Response Generated";
+  //               responseInfo.style.display = "block";
+  //               document.getElementById("prompt").textContent = "Question: " + classificationExplanation;
+  //               document.getElementById("response").textContent = "Answer: " + navigationResponse;
+  //             });
+  //           }
+  //           // Query Cannot be Classified by LLM
+  //           else {
+  //             fetch("/api/get-backend-file?file_path=" + descrPostFilePath)
+  //               .then((descrPostRaw) => descrPostRaw.json())
+  //               .then((descrPostJSON) => {
+  //                 const descrPost = descrPostJSON["contents"];
+  //                 classificationExplanation = "Your question \"" + question + "\" was categorized as being data-driven, and as such, has been answered based on the data in the chart.";
+  //                 sendPromptAgent(supplement + descrPost, questionRevised, loadingAnnouncement, classificationExplanation, isTest);
+  //                 // Use descrPost variable or perform actions with its value here
+  //               })
+  //               .catch((error) => {
+  //                 // Handle any errors that occur during the fetch or processing
+  //                 console.error('Error:', error);
+  //               });
+  //             // classificationExplanation = "Your question \"" + question + "\" could not be properly categorized.";
+  //             // sendPromptAgent(supplement + descrPost, question, loadingAnnouncement, classificationExplanation, isTest);
+  //             // const loadStatus = document.getElementById("load-status");
+  //             // const responseInfo = document.getElementById("response-info");
+        
+  //             // // Clear the loading announcement
+  //             // clearInterval(loadingAnnouncement);
+        
+  //             // loadStatus.innerHTML = "Response Generated";
+  //             // responseInfo.style.display = "block";
+        
+  //             // document.getElementById("prompt").textContent = classificationExplanation;
+  //             // document.getElementById("response").textContent = queryType;
+        
+  //             document.getElementById("subsequentSuggestionsContainer").style.display = "flex";
+  //             generateSubsequentSuggestions(supplement, questionRevised, classificationExplanation)
+  //               .then(function (output) {
+  //                 console.log(output);
+  //                 const subsequentSuggestionButtons = document.getElementsByClassName("subsequentSuggestionButton");
+  //                 const questions = output.split(/Question [1-3]: /).slice(1);
+  //                 for (var i = 0; i < subsequentSuggestionButtons.length; ++i) {
+  //                   subsequentSuggestionButtons[i].innerText = questions[i];
+  //                 }
+  //               });
+  //             // question.removeAttribute("aria-live");
+  //             // question.value = '';
+  //           }
+  //         })
+  //         .catch(function (error) {
+  //           console.error(error);
+  //         });
+  //     });
+  // })
+  //   .catch(function (error) {
+  //     console.error(error); // Handle any errors that occurred during the promise
+  //   });
+}
+
+
+export {getAnswer, getSuggestedQuestions, getValuesForKey, findContinentByCountry, getColorName, processFile, loadVGandSendToBackend }
