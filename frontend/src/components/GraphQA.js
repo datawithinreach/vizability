@@ -4,10 +4,11 @@ import Row from 'react-bootstrap/Row';
 import "../styles/GraphQAStyle.css"
 import Olli from "./Olli";
 import loadingLogo from "../images/loadingLogo1.gif"
-import { getValuesForKey, findContinentByCountry, getColorName } from "../helperFuncs";
+import { getValuesForKey, findContinentByCountry, getColorName } from "../utils/helperFuncs";
 
 import { VegaLite } from 'react-vega'
 import GraphTable from "./GraphTable";
+import QAModule from "./QAModule";
 
 
 const GraphQA = ({graphSpec, graphType, setGraphSpec}) => {
@@ -21,12 +22,12 @@ const GraphQA = ({graphSpec, graphType, setGraphSpec}) => {
     useEffect(()=> {
       const chart = document.getElementsByClassName("vega-chart");
       // logic for loading in loading picture while waiting for vega to render
-      if (graphSpec && chart.length !== 1) {
+      if (graphType && chart.length !== 1) {
         setIsLoading(true);
       } else {
         setIsLoading(false);
       }
-    }, [graphSpec])
+    }, [graphSpec, graphType])
 
     function polishData (data, view) {
     /**
@@ -126,7 +127,7 @@ const GraphQA = ({graphSpec, graphType, setGraphSpec}) => {
     // https://vega.github.io/vega/docs/api/view/#data-and-scales
     const handleNewView = view => {
     /**
-     * Get the transformed data every time there is a view update,
+     * Get the transformed data every time there is a view update (spec changes),
      * transform it then send it to the backend.
      * @param view Vega view
      */
@@ -150,6 +151,8 @@ const GraphQA = ({graphSpec, graphType, setGraphSpec}) => {
           handleViewUpdates(view);
         });
       }
+
+      
     };
 
     // function handleVegaError(error) {
@@ -188,6 +191,8 @@ const GraphQA = ({graphSpec, graphType, setGraphSpec}) => {
             {showOlli && <Olli transformedData = {transformedData} graphSpec = {graphSpec}/> }
 
             {showTable &&  <GraphTable transformedData={transformedData} />}
+
+            <QAModule />
         </div>
     );
 };

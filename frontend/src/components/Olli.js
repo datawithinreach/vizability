@@ -36,13 +36,16 @@ const Olli = ({graphSpec, transformedData}) => {
         // code to render the olli treeview
         if (graphSpec) {
             VegaLiteAdapter(graphSpec).then((olliVisSpec) => {
-            const olliRender = olli(olliVisSpec);
+                console.log("graph ", graphSpec)
+                // console.log(olliVisSpec.axes[0].field )
+                // olliVisSpec.axes[0].field = 'year';
+                console.log("olli spec", olliVisSpec)
 
-            console.log("olli spec", olliVisSpec)
+                const olliRender = olli(olliVisSpec);
 
-            if (document.getElementById("olli-container")) {
-                document.getElementById("olli-container").replaceChildren(olliRender);
-            }
+                if (document.getElementById("olli-container")) {
+                    document.getElementById("olli-container").replaceChildren(olliRender);
+                }
         }).catch((e) => {
             console.log('error', e)
         })};

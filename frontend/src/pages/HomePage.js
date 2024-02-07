@@ -10,7 +10,7 @@ import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 
-import { processFile, loadVGandSendToBackend } from "../helperFuncs";
+import { processFile, loadVGandSendToBackend } from "../utils/helperFuncs";
 
 const HomePage = () => {
   const [graphType, setGraphType] = useState('');
@@ -24,6 +24,7 @@ const HomePage = () => {
     const response = await fetch(process.env.REACT_APP_BACKEND_URL + "/api/get-backend-file?file_path=./test/testVegaLiteSpecs/" + graphType + ".vg");
     const data = await response.json(); // this is a string
     const dataObj = JSON.parse(data.contents); // convert to json obj
+    console.log(dataObj)
     setGraphSpec(dataObj);
   }
 
