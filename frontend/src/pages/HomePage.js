@@ -25,13 +25,12 @@ const HomePage = () => {
     const response = await fetch(process.env.REACT_APP_BACKEND_URL + "/api/get-backend-file?file_path=./test/testVegaLiteSpecs/" + graphType + ".vg");
     const data = await response.json(); // this is a string
     const dataObj = JSON.parse(data.contents); // convert to json obj
-    console.log(dataObj)
     setGraphSpec(dataObj);
   }
 
   // grab new data every time a new chart is selected
   useEffect(()=> {
-    if (graphType) {
+    if (graphType && graphType !== "custom") {
       getGraphData(); 
     }
   }, [graphType])
@@ -43,7 +42,7 @@ const HomePage = () => {
         console.log('in submit')
         loadVGandSendToBackend(vegaLiteInfo);
         setGraphSpec(JSON.parse(vegaLiteInfo["contents"]));
-        setGraphType('');
+        setGraphType('custom');
      }
     } catch (error) {
       console.log('error', error)

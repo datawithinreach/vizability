@@ -4,7 +4,7 @@ import Row from 'react-bootstrap/Row';
 import "../styles/GraphQAStyle.css"
 import Olli from "./Olli";
 import loadingLogo from "../images/loadingLogo1.gif"
-import { getValuesForKey, findContinentByCountry, getColorName } from "../utils/helperFuncs";
+import { getValuesForKey, findContinentByCountry, getColorName, getSuggestedQuestions } from "../utils/helperFuncs";
 
 import { VegaLite } from 'react-vega'
 import GraphTable from "./GraphTable";
@@ -26,16 +26,17 @@ const GraphQA = ({graphSpec, graphType, setGraphSpec}) => {
     const [transformedData, setTransformedData] = useState([])
 
     const [isLoading, setIsLoading] = useState(false)
+    const [suggestedQuestions, setSuggestedQuestions] = useState([])
 
     useEffect(()=> {
-      const chart = document.getElementsByClassName("vega-chart");
       // logic for loading in loading picture while waiting for vega to render
-      if (graphType && chart.length !== 1) {
+      const chart = document.getElementsByClassName("chart-wrapper"); // ! might need to change if vega lite change their classname
+      if (graphType && chart.length < 1) {
         setIsLoading(true);
       } else {
         setIsLoading(false);
       }
-    }, [graphSpec, graphType])
+    }, [graphType])
 
     function polishData (data, view) {
     /**
@@ -99,12 +100,6 @@ const GraphQA = ({graphSpec, graphType, setGraphSpec}) => {
        * @param view Vega view.
        */
       const data = view.data("source_0");
-      // check if data exist
-      // if (data.length === 0) {
-      //   console.log('no data'); // make a modal later
-      //   setGraphSpec({})
-      //   return;
-      // }
       const transformedDataPolished = polishData(data, view);
       setTransformedData(transformedDataPolished)
       
@@ -162,7 +157,6 @@ const GraphQA = ({graphSpec, graphType, setGraphSpec}) => {
 
       const olliContainer = document.getElementById("olli-container");
 
-      console.log('starting to get condensed olli', olliContainer)
       // Stack used to Track Active Elements within Treeview
       const activeElementStack = new Stack();
 
@@ -216,7 +210,17 @@ const GraphQA = ({graphSpec, graphType, setGraphSpec}) => {
       // Hierarchical Tree Representation of Olli Treeview
       tree = new CondensedOlliRender(document.querySelector('.olli-vis'));
       const condensedString = tree.getCondensedString();
-      console.log("string", condensedString);
+      // console.log("string", condensedString);
+
+      getSuggestedQuestions(condensedString)
+      .then(function (suggestionQuestionsRawOutput) {
+        // console.log(suggestionQuestionsRawOutput);
+        const questions = suggestionQuestionsRawOutput.split(/Question [1-3]: /).slice(1);
+        questions.push("What is my current position within the Olli Treeview?")
+        setSuggestedQuestions(questions)
+      }).catch((error)=>{
+        console.log("Error in getting suggestion:", error)
+      });
 
       setUpEventListener(olliContainer, activeElementStack);
     };
@@ -258,7 +262,7 @@ const GraphQA = ({graphSpec, graphType, setGraphSpec}) => {
 
             {showTable &&  <GraphTable transformedData={transformedData} />}
 
-            <QAModule />
+            <QAModule suggestedQuestions = {suggestedQuestions}/>
         </div>
     );
 };

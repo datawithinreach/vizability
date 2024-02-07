@@ -185,6 +185,9 @@ export class CondensedOlliRender {
     }
 
     populateTreeItemArray() {
+        if (this.olliVis === null) {
+            return;
+        }
         const tree = this.olliVis.querySelectorAll('[role="tree"]');
         const treeItems = tree[0].querySelectorAll('[role="treeitem"]');
         for (var n = 0; n < treeItems.length; n++) {

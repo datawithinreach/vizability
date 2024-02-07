@@ -450,5 +450,43 @@ function loadVGandSendToBackend(vegaLiteInfo) {
           });
   }
 }
+// Sends Question to OpenAPI and Casts Output Answer to DOM Elements
+// No Specific Agent is Used
+async function sendPromptDefault(question, gpt_model) {
+  // console.log("prompt", question);
+  return fetch(process.env.REACT_APP_BACKEND_URL + "/api/prompt?question=" + question + "&gpt_model=" + gpt_model, { redirect: 'manual' })
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+      // console.log("response", data["response"]);
+      return data["response"];
+    });
+}
 
-export { getValuesForKey, findContinentByCountry, getColorName, processFile, loadVGandSendToBackend }
+async function getSuggestedQuestions(condensedString) {
+  return fetch(process.env.REACT_APP_BACKEND_URL + "/api/get-backend-file?file_path=gptPrompts/initialSuggestionPrompt.txt", { redirect: 'manual' })
+    .then(function (response) {
+      return response.json();
+    })
+    .then(async function (initialSuggestionsRaw) {
+      var modifiedString;
+      var initialSuggestions = initialSuggestionsRaw["contents"];
+      var searchString = "follows:";
+      var index = initialSuggestions.indexOf(searchString);
+      if (index !== -1) {
+        modifiedString = initialSuggestions.substring(0, index + searchString.length) + "\n" + condensedString + initialSuggestions.substring(index + searchString.length);
+      } else {
+        console.log("Substring 'follows:' not found in the initialSuggestions string.");
+      }
+      return sendPromptDefault(modifiedString, "gpt-3.5-turbo-1106")
+        .then(function (output) {
+          return output; // Return the output value if needed for further processing
+        })
+        .catch(function (error) {
+          console.error(error);
+        });
+    })
+}
+
+export { getSuggestedQuestions, getValuesForKey, findContinentByCountry, getColorName, processFile, loadVGandSendToBackend }
