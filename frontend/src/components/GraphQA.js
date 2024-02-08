@@ -3,7 +3,6 @@ import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import "../styles/GraphQAStyle.css"
 import Olli from "./Olli";
-import loadingLogo from "../images/loadingLogo1.gif"
 import { getAnswer, getValuesForKey, findContinentByCountry, getColorName, getSuggestedQuestions } from "../utils/helperFuncs";
 
 import { VegaLite } from 'react-vega'
@@ -25,20 +24,7 @@ const GraphQA = ({graphSpec, graphType, setGraphSpec}) => {
     const [showTable, setShowTable] = useState(false)
     const [transformedData, setTransformedData] = useState([])
 
-    // const [isLoading, setIsLoading] = useState(false)
     const [suggestedQuestions, setSuggestedQuestions] = useState([])
-
-    // useEffect(()=> {
-    //   // logic for loading in loading picture while waiting for vega to render
-    //   console.log('here')
-    //   const chart = document.getElementsByClassName("chart-wrapper"); // ! might need to change if vega lite change their classname
-    //   console.log('afetr', chart)
-    //   if (graphType && chart.length < 1) {
-    //     setIsLoading(true);
-    //   } else {
-    //     setIsLoading(false);
-    //   }
-    // }, [graphType])
 
     function polishData (data, view) {
     /**
@@ -173,7 +159,7 @@ const GraphQA = ({graphSpec, graphType, setGraphSpec}) => {
           if (index === -1) {
             return;
           }
-          
+
           activeElementNode = tree.getTreeItemArray()[index];
           activeElementNodeAddress = activeElementNode.getAddress();
           activeElementNodeInnerText = activeElementNode.getInnerText();
@@ -244,14 +230,8 @@ const GraphQA = ({graphSpec, graphType, setGraphSpec}) => {
 
     return (
         <div>
-            {graphType && <p>Graph selected.</p>}
             <Row>{graphSpec && <VegaLite spec={graphSpec} onNewView={handleNewView}/>}</Row>
             
-            {/* {isLoading && 
-            <div>
-              <img src={loadingLogo} alt="loading..." />
-            </div>
-            } */}
 
             {graphSpec && <span>
 

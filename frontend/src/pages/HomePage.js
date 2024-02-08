@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from "react";
 import "../styles/HomePageStyle.css"
 import GraphQA from "../components/GraphQA";
+// import loadingLogo from "../images/loadingLogo1.gif"
 
 
 import Row from 'react-bootstrap/Row';
@@ -15,6 +16,7 @@ import { processFile, loadVGandSendToBackend } from "../utils/helperFuncs";
 const HomePage = () => {
   const [graphType, setGraphType] = useState('');
   const [graphSpec, setGraphSpec] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
 
   async function getGraphData() {
@@ -35,6 +37,15 @@ const HomePage = () => {
     }
   }, [graphType])
 
+  // useEffect(()=> {
+  //   const chart = document.getElementsByClassName("chart-wrapper"); // ! might need to change if vega lite change their classname
+  //   if (graphType && chart.length < 1) {
+  //     setIsLoading(true);
+  //   } else {
+  //     setIsLoading(false);
+  //   }
+  // }, [graphSpec])
+
   async function handleFileSubmit (event) {
     const vegaLiteInfo = await processFile(event.target.files);
     try {
@@ -49,6 +60,7 @@ const HomePage = () => {
     }
    
   }
+
 
   return (
     <div className="content">
@@ -75,7 +87,12 @@ const HomePage = () => {
       
       </Container>
 
-      
+      {graphType && <p>Graph selected.</p>}
+      {/* {isLoading && 
+        <div>
+          <img src={loadingLogo} alt="loading..." />
+        </div>
+        } */}
       {graphSpec && <GraphQA graphSpec = {graphSpec} graphType = {graphType} setGraphSpec = {setGraphSpec} />}
 
   </div>
