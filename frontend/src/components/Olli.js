@@ -47,7 +47,7 @@ const Olli = ({graphSpec, transformedData, showOlli}) => {
                     document.getElementById("olli-container").replaceChildren(olliRender);
                 }
         }).catch((e) => {
-            console.log('error', e)
+            console.log('Error in olliSpec:', e)
         })};
     }, [graphSpec])
 

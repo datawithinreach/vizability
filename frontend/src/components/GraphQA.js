@@ -165,10 +165,15 @@ const GraphQA = ({graphSpec, graphType, setGraphSpec}) => {
       function setUpEventListener(olliContainer, activeElementStack) {
         function nestedEventListener(event) {
           event.stopImmediatePropagation(); // necessary to prevent the creation of subsequent nested event listeners
-          activeElement = event.srcElement.firstChild.innerText;
     
+          activeElement = event.srcElement.firstChild.innerText;
           // Retrieve Active Element Node Object from activeElement Variable
           const index = tree.getTreeItemArray().findIndex(obj => obj.getInnerText() === activeElement);
+          // nothing was found, eg. user select something from the pop up table
+          if (index === -1) {
+            return;
+          }
+          
           activeElementNode = tree.getTreeItemArray()[index];
           activeElementNodeAddress = activeElementNode.getAddress();
           activeElementNodeInnerText = activeElementNode.getInnerText();
@@ -227,10 +232,10 @@ const GraphQA = ({graphSpec, graphType, setGraphSpec}) => {
       setUpEventListener(olliContainer, activeElementStack);
     };
 
-    // function handleVegaError(error) {
-    //   // setGraphSpec({})
-    //   console.log("ehre", error)
-    // }
+    function handleVegaError(error) {
+      // setGraphSpec({})
+      console.log("ehre", error)
+    }
 
 
     const handleQuestionSubmit = (question) => {
@@ -240,7 +245,7 @@ const GraphQA = ({graphSpec, graphType, setGraphSpec}) => {
     return (
         <div>
             {graphType && <p>Graph selected.</p>}
-            <Row>{graphSpec && <VegaLite className="vega-chart" spec={graphSpec} onNewView={handleNewView}/>}</Row>
+            <Row>{graphSpec && <VegaLite spec={graphSpec} onNewView={handleNewView}/>}</Row>
             
             {/* {isLoading && 
             <div>
