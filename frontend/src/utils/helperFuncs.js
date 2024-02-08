@@ -507,7 +507,7 @@ async function classifyQuery(question) {
     });
 }
 
-function getAnswer(question, hierarchy, activeElementNodeAddress, activeElementNodeInnerText) {
+async function getAnswer(question, hierarchy, activeElementNodeAddress, activeElementNodeInnerText) {
   // Initialize Variables
   const descrPre = "\nHere's a structural layout of a data set. It is a hierarchy/tree data structure, where each sentence is preceded by its placement within the tree. For instance, 1.1.2 refers to the second child of the first child of the head:\n";
 
@@ -515,8 +515,8 @@ function getAnswer(question, hierarchy, activeElementNodeAddress, activeElementN
 
   let supplement = descrPre + hierarchy + "Active Element: " + (activeElementNodeAddress + " // " + activeElementNodeInnerText + "\n");
 
-  console.log("sending the question to the server", supplement + question);
-
+  // console.log("sending the question to the server", supplement + question);
+  console.log("get answer", question)
   // Classify User Question
   // Classification Categories Include: Analytical Query; Visual Query; Contextual Query; Navigation Query
   // const queryType = await classifyQuery(question);

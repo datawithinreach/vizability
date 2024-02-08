@@ -1,27 +1,31 @@
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import Row from 'react-bootstrap/Row';
+import InputGroup from 'react-bootstrap/InputGroup';
 
 const QAModule = ({suggestedQuestions, handleQuestionSubmit}) => {
 
     return (
         <div>
-            {suggestedQuestions.map((question, i) => {
-                return <Button onClick={()=> handleQuestionSubmit(question)} key={"question" + i}>{question}</Button>
-            })}
+            <Row>
+                {suggestedQuestions.map((question, i) => {
+                    return <Button variant="outline-secondary" onClick={()=> handleQuestionSubmit(question)} key={"question" + i}>{question}</Button>
+                })}
+            </Row>
             <Form onSubmit={(event) => {
                 event.preventDefault()
                 handleQuestionSubmit(event.target.question.value)
             } }>
-                <Form.Group className="mb-3">
-                    <Form.Control name= "question" type="text" placeholder="Enter question here" />
-                    <Form.Text className="text-muted">
-                    later
-                    </Form.Text>
-                </Form.Group>
-                <Button variant="primary" type="submit">
-                    Submit
-                </Button>
+                <InputGroup>
+                    <Form.Control
+                    name= "question" 
+                    placeholder="Type your question here."
+                    />
+                    <Button type = "submit" variant="outline-secondary">Submit</Button>
+                    <Button variant="outline-secondary">Record</Button>
+                </InputGroup>
             </Form>
+    
         </div>
     )
 }
