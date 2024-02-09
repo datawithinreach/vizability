@@ -16,7 +16,7 @@ import { processFile, loadVGandSendToBackend } from "../utils/helperFuncs";
 const HomePage = () => {
   const [graphType, setGraphType] = useState('');
   const [graphSpec, setGraphSpec] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+  // const [isLoading, setIsLoading] = useState(false)
 
 
   async function getGraphData() {
@@ -34,6 +34,7 @@ const HomePage = () => {
   useEffect(()=> {
     if (graphType && graphType !== "custom") {
       getGraphData(); 
+      console.log('done')
     }
   }, [graphType])
 

@@ -15,6 +15,8 @@ const QAModule = ({suggestedQuestions, handleQuestionSubmit}) => {
             <Form onSubmit={(event) => {
                 event.preventDefault()
                 handleQuestionSubmit(event.target.question.value)
+                // reset value
+                event.target.question.value = '';
             } }>
                 <InputGroup>
                     <Form.Control

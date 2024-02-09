@@ -123,7 +123,7 @@ const GraphQA = ({graphSpec, graphType, setGraphSpec}) => {
      * @param view Vega view
      */
       handleViewUpdates(view);
-
+      console.log('new view')
       // Updates Transformed Data, add event listener
       const sliderInput = document.querySelector('input[type="range"]');
       if (sliderInput) {
@@ -224,8 +224,9 @@ const GraphQA = ({graphSpec, graphType, setGraphSpec}) => {
     }
 
 
-    const handleQuestionSubmit = (question) => {
-      getAnswer(question, tree.getCondensedString(), activeElementNodeAddress,activeElementNodeInnerText);
+    async function handleQuestionSubmit (question) {
+      console.log("tree", tree)
+      console.log("answerrrr", await getAnswer(question, tree.getCondensedString(), activeElementNodeAddress,activeElementNodeInnerText, tree));
     }
 
     return (
