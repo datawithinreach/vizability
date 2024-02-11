@@ -18,7 +18,7 @@ let activeElementNodeAddress = null;
 let activeElementNodeInnerText = null;
 let tree;
 
-const GraphQA = ({graphSpec, graphType, setGraphSpec}) => {
+const GraphQA = ({graphSpec, setGraphSpec}) => {
 
     const [showOlli, setShowOlli] = useState(false)
     const [showTable, setShowTable] = useState(false)
