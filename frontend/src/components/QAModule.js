@@ -3,11 +3,13 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import InputGroup from 'react-bootstrap/InputGroup';
 
-const QAModule = ({suggestedQuestions, handleQuestionSubmit}) => {
+const QAModule = ({answerToQuestion, classificationExplanation, 
+    isLoadingAnswer, suggestedQuestions, handleQuestionSubmit, revisedQuestion}) => {
 
     return (
         <div>
             <Row>
+                {/* <Button onClick=></Row>>Generate New Questions</Button> */}
                 {suggestedQuestions.map((question, i) => {
                     return <Button variant="outline-secondary" onClick={()=> handleQuestionSubmit(question)} key={"question" + i}>{question}</Button>
                 })}
@@ -27,6 +29,19 @@ const QAModule = ({suggestedQuestions, handleQuestionSubmit}) => {
                     <Button variant="outline-secondary">Record</Button>
                 </InputGroup>
             </Form>
+            <Row>
+                {isLoadingAnswer && <p>Working, please wait!</p>}
+            </Row>
+            {!isLoadingAnswer && classificationExplanation && answerToQuestion &&
+            <Row>  
+                <h4>Response: </h4>
+                <p>Question: {classificationExplanation}</p>
+                <p>Revised Question: {revisedQuestion}</p>
+                <p>Answer: {answerToQuestion}</p>
+            </Row>
+            }
+
+           
     
         </div>
     )

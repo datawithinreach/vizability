@@ -16,7 +16,6 @@ import { processFile, loadVGandSendToBackend } from "../utils/helperFuncs";
 const HomePage = () => {
   const [graphType, setGraphType] = useState('');
   const [graphSpec, setGraphSpec] = useState(false)
-  // const [isLoading, setIsLoading] = useState(false)
 
 
   async function getGraphData() {
@@ -84,15 +83,9 @@ const HomePage = () => {
         <Col> <Button size="lg" onClick={() => {setGraphType("chart4")}}> Choropleth Map </Button> </Col>
       </Row>
 
-      
       </Container>
 
       {graphType && <p>Graph selected.</p>}
-      {/* {isLoading && 
-        <div>
-          <img src={loadingLogo} alt="loading..." />
-        </div>
-        } */}
       {graphSpec && <GraphQA graphSpec = {graphSpec} graphType = {graphType} setGraphSpec = {setGraphSpec} />}
 
   </div>

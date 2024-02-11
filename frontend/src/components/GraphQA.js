@@ -24,15 +24,20 @@ const GraphQA = ({graphSpec, graphType, setGraphSpec}) => {
     const [showTable, setShowTable] = useState(false)
     const [transformedData, setTransformedData] = useState([])
 
+    const [isLoading, setIsLoading] = useState(false)
+
+
     // QA module states
     const [suggestedQuestions, setSuggestedQuestions] = useState([])
     const [isLoadingAnswer, setIsLoadingAnswer] = useState(false)
     const [classificationExplanation, setClassificationExplanation] = useState('')
     const [answerToQuestion, setAnswerToQuestion] = useState('')
+    const [revisedQuestion, setRevisedQuestion] = useState('')
 
     function resetQAStates() {
       // prepare for new question or new specs
-      setSuggestedQuestions([])
+      // setSuggestedQuestions([])
+      setRevisedQuestion('')
       setClassificationExplanation('')
       setAnswerToQuestion('')
     }
@@ -130,8 +135,10 @@ const GraphQA = ({graphSpec, graphType, setGraphSpec}) => {
      * transform it then send it to the backend.
      * @param view Vega view
      */
+      setIsLoading(true);
+
+      resetQAStates();
       handleViewUpdates(view);
-      console.log('new view')
       // Updates Transformed Data, add event listener
       const sliderInput = document.querySelector('input[type="range"]');
       if (sliderInput) {
@@ -211,8 +218,19 @@ const GraphQA = ({graphSpec, graphType, setGraphSpec}) => {
       // Hierarchical Tree Representation of Olli Treeview
       tree = new CondensedOlliRender(document.querySelector('.olli-vis'));
       const condensedString = tree.getCondensedString();
-      // console.log("string", condensedString);
 
+      // generate questions
+      handleGetNewSuggestedQuestions(condensedString);
+
+      setIsLoading(false);
+      setUpEventListener(olliContainer, activeElementStack);
+    };
+
+    function handleGetNewSuggestedQuestions(condensedString) {
+      /**
+       * Populate new suggested questions/
+       * @param condensedString textual information about the olli tree
+       */
       getSuggestedQuestions(condensedString)
       .then(function (suggestionQuestionsRawOutput) {
         // console.log(suggestionQuestionsRawOutput);
@@ -222,16 +240,16 @@ const GraphQA = ({graphSpec, graphType, setGraphSpec}) => {
       }).catch((error)=>{
         console.log("Error in getting suggestion:", error)
       });
-
-      setUpEventListener(olliContainer, activeElementStack);
-    };
-
-    function handleVegaError(error) {
-      // setGraphSpec({})
-      console.log("ehre", error)
     }
 
-    async function updateNewSuggestedQuestion (supplement, question, response, always = false) {
+    // function handleVegaError(error) {
+    //   // setGraphSpec({})
+    //   console.log("ehre", error)
+    // }
+
+    
+
+    async function updateSubsequentQuestions (supplement, question, response, always = false) {
       /**
        * Updates suggested questions if conditions are met.
        * @param supplement Structural layout of the dataset in text.
@@ -239,7 +257,6 @@ const GraphQA = ({graphSpec, graphType, setGraphSpec}) => {
        * @param response a string holding the response to the question
        * @param always If true, then will generate new questions no matter what. 
        */
-      console.log(supplement)
       if (always || response.startsWith("The variables you mentioned") || response.includes("I am sorry but I cannot understand the question") || response.includes("Agent stopped due to iteration limit or time limit")) {
 
         const output = await generateSubsequentSuggestions(supplement, question, response);
@@ -254,19 +271,26 @@ const GraphQA = ({graphSpec, graphType, setGraphSpec}) => {
        * Get the answer based on the question and updates all neccessary states.
        * @param question a string holding the user question
        */
+
+      if (isLoadingAnswer) { // already true, that means previous question has not fned loading
+        console.log("STILL WAITING for previous question!")
+        return;
+      }
+      resetQAStates();
       setIsLoadingAnswer(true);
       const answerObj =  await getAnswer(question, tree.getCondensedString(), activeElementNodeAddress, activeElementNodeInnerText, tree);
       const queryType = answerObj.queryType;
       const questionRevised = answerObj.questionRevised;
       const answer = answerObj.answer;
       const supplement = answerObj.supplement;
+      setRevisedQuestion(questionRevised);
 
       if (queryType.includes("Analytical Query") || queryType.includes("Visual Query")) {
         const classificationExpl = "Your question \"" + question + "\" was categorized as being data-driven, and as such, has been answered based on the data in the chart.";
         setClassificationExplanation(classificationExpl);
 
         // check if need to generate subsequentsuggestionquestions
-        await updateNewSuggestedQuestion(supplement, question, answer);
+        await updateSubsequentQuestions(supplement, question, answer);
 
         if (answer !== "Agent stopped due to iteration limit or time limit.") {
           setAnswerToQuestion(answer);
@@ -279,7 +303,7 @@ const GraphQA = ({graphSpec, graphType, setGraphSpec}) => {
         setClassificationExplanation(classificationExpl);
 
         // check if need to generate subsequentsuggestionquestions, context uses the revisedQuestion
-        await updateNewSuggestedQuestion(supplement, questionRevised, answer);
+        await updateSubsequentQuestions(supplement, questionRevised, answer);
 
         if (answer !== "Agent stopped due to iteration limit or time limit.") {
           setAnswerToQuestion(answer);
@@ -297,7 +321,7 @@ const GraphQA = ({graphSpec, graphType, setGraphSpec}) => {
         setClassificationExplanation(classificationExpl)
         
         // check if need to generate subsequentsuggestionquestions, context uses the revisedQuestion
-        await updateNewSuggestedQuestion(supplement, questionRevised, answer, true);
+        await updateSubsequentQuestions(supplement, questionRevised, answer, true);
         if (answer !== "Agent stopped due to iteration limit or time limit.") {
           setAnswerToQuestion(answer);
         } else {
@@ -310,7 +334,7 @@ const GraphQA = ({graphSpec, graphType, setGraphSpec}) => {
     return (
         <div>
             <Row>{graphSpec && <VegaLite spec={graphSpec} onNewView={handleNewView}/>}</Row>
-            
+            {isLoading && <h3>LOADING</h3>}
 
             {graphSpec && <span>
 
@@ -331,15 +355,17 @@ const GraphQA = ({graphSpec, graphType, setGraphSpec}) => {
                 </span>}
 
 
-            <Olli showOlli = {showOlli} transformedData = {transformedData} graphSpec = {graphSpec}/>
+            <Olli showOlli = {showOlli} graphSpec = {graphSpec}/>
 
             {showTable &&  <GraphTable transformedData={transformedData} />}
 
-            <QAModule handleQuestionSubmit = {handleQuestionSubmit} suggestedQuestions = {suggestedQuestions}/>
-
-            {isLoadingAnswer && <p>loading rn</p>}
-            <p>Question: {classificationExplanation}</p>
-            <p>Answer: {answerToQuestion}</p>
+            <QAModule classificationExplanation = {classificationExplanation}
+            answerToQuestion = {answerToQuestion}
+            isLoadingAnswer = {isLoadingAnswer}
+             handleQuestionSubmit = {handleQuestionSubmit}
+              suggestedQuestions = {suggestedQuestions}
+              revisedQuestion = {revisedQuestion}
+              />
         </div>
     );
 };
