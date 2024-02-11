@@ -3,7 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import "../styles/GraphQAStyle.css"
 import Olli from "./Olli";
-import { getAnswer, getValuesForKey, findContinentByCountry, getColorName, getSuggestedQuestions } from "../utils/helperFuncs";
+import { getAnswer, getValuesForKey, findContinentByCountry, getColorName, getSuggestedQuestions, generateSubsequentSuggestions} from "../utils/helperFuncs";
 
 import { VegaLite } from 'react-vega'
 import GraphTable from "./GraphTable";
@@ -24,7 +24,18 @@ const GraphQA = ({graphSpec, graphType, setGraphSpec}) => {
     const [showTable, setShowTable] = useState(false)
     const [transformedData, setTransformedData] = useState([])
 
+    // QA module states
     const [suggestedQuestions, setSuggestedQuestions] = useState([])
+    const [isLoadingAnswer, setIsLoadingAnswer] = useState(false)
+    const [classificationExplanation, setClassificationExplanation] = useState('')
+    const [answerToQuestion, setAnswerToQuestion] = useState('')
+
+    function resetQAStates() {
+      // prepare for new question or new specs
+      setSuggestedQuestions([])
+      setClassificationExplanation('')
+      setAnswerToQuestion('')
+    }
 
     function polishData (data, view) {
     /**
@@ -80,7 +91,6 @@ const GraphQA = ({graphSpec, graphType, setGraphSpec}) => {
     });
     }
 
-  
     function handleViewUpdates (view) {
       /**
        * Transforms the unpolished data from view to send to the backend
@@ -112,8 +122,6 @@ const GraphQA = ({graphSpec, graphType, setGraphSpec}) => {
           console.error('Error:', error);
       })
     };
-
-
 
     // https://vega.github.io/vega/docs/api/view/#data-and-scales
     const handleNewView = view => {
@@ -223,10 +231,80 @@ const GraphQA = ({graphSpec, graphType, setGraphSpec}) => {
       console.log("ehre", error)
     }
 
+    async function updateNewSuggestedQuestion (supplement, question, response, always = false) {
+      /**
+       * Updates suggested questions if conditions are met.
+       * @param supplement Structural layout of the dataset in text.
+       * @param question a string holding the user question
+       * @param response a string holding the response to the question
+       * @param always If true, then will generate new questions no matter what. 
+       */
+      console.log(supplement)
+      if (always || response.startsWith("The variables you mentioned") || response.includes("I am sorry but I cannot understand the question") || response.includes("Agent stopped due to iteration limit or time limit")) {
+
+        const output = await generateSubsequentSuggestions(supplement, question, response);
+        const newSuggestedQuestions = output.split(/Question [1-3]: /).slice(1);
+        setSuggestedQuestions(newSuggestedQuestions);
+
+      }
+    }
 
     async function handleQuestionSubmit (question) {
-      console.log("tree", tree)
-      console.log("answerrrr", await getAnswer(question, tree.getCondensedString(), activeElementNodeAddress,activeElementNodeInnerText, tree));
+      /**
+       * Get the answer based on the question and updates all neccessary states.
+       * @param question a string holding the user question
+       */
+      setIsLoadingAnswer(true);
+      const answerObj =  await getAnswer(question, tree.getCondensedString(), activeElementNodeAddress, activeElementNodeInnerText, tree);
+      const queryType = answerObj.queryType;
+      const questionRevised = answerObj.questionRevised;
+      const answer = answerObj.answer;
+      const supplement = answerObj.supplement;
+
+      if (queryType.includes("Analytical Query") || queryType.includes("Visual Query")) {
+        const classificationExpl = "Your question \"" + question + "\" was categorized as being data-driven, and as such, has been answered based on the data in the chart.";
+        setClassificationExplanation(classificationExpl);
+
+        // check if need to generate subsequentsuggestionquestions
+        await updateNewSuggestedQuestion(supplement, question, answer);
+
+        if (answer !== "Agent stopped due to iteration limit or time limit.") {
+          setAnswerToQuestion(answer);
+        } else {
+          setAnswerToQuestion("I'm sorry; the process has been terminated because it either took too long to arrive at an answer or your question was too long.");
+        }
+
+      } else if (queryType.includes("Contextual Query")) {
+        const classificationExpl = "Your question \"" + question + "\" was categorized as being context-seeking, and as such, has been answered based on information found on the web.";
+        setClassificationExplanation(classificationExpl);
+
+        // check if need to generate subsequentsuggestionquestions, context uses the revisedQuestion
+        await updateNewSuggestedQuestion(supplement, questionRevised, answer);
+
+        if (answer !== "Agent stopped due to iteration limit or time limit.") {
+          setAnswerToQuestion(answer);
+        } else {
+          setAnswerToQuestion("I'm sorry; the process has been terminated because it either took too long to arrive at an answer or your question was too long.");
+        }
+
+      }  else if (queryType.includes("Navigation Query")) {
+        const classificationExpl = "Your question \"" + question + "\" was categorized as being related to navigating the chart structure, and as such has been answered based on the treeview.";
+        setClassificationExplanation(classificationExpl);
+        setAnswerToQuestion(answer);
+
+      } else {
+        const classificationExpl = "Your question \"" + question + "\" was categorized as being data-driven, and as such, has been answered based on the data in the chart.";
+        setClassificationExplanation(classificationExpl)
+        
+        // check if need to generate subsequentsuggestionquestions, context uses the revisedQuestion
+        await updateNewSuggestedQuestion(supplement, questionRevised, answer, true);
+        if (answer !== "Agent stopped due to iteration limit or time limit.") {
+          setAnswerToQuestion(answer);
+        } else {
+          setAnswerToQuestion("I'm sorry; the process has been terminated because it either took too long to arrive at an answer or your question was too long.");
+        }
+      }
+      setIsLoadingAnswer(false)
     }
 
     return (
@@ -258,6 +336,10 @@ const GraphQA = ({graphSpec, graphType, setGraphSpec}) => {
             {showTable &&  <GraphTable transformedData={transformedData} />}
 
             <QAModule handleQuestionSubmit = {handleQuestionSubmit} suggestedQuestions = {suggestedQuestions}/>
+
+            {isLoadingAnswer && <p>loading rn</p>}
+            <p>Question: {classificationExplanation}</p>
+            <p>Answer: {answerToQuestion}</p>
         </div>
     );
 };

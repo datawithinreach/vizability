@@ -509,7 +509,7 @@ async function classifyQuery(question) {
 
 // Sends Question to OpenAPI
 // LLM Uses a Specific CSV Agent
-export async function sendPromptAgent(supplement, question) {
+async function sendPromptAgent(supplement, question) {
   return fetch(process.env.REACT_APP_BACKEND_URL + "/api/apply-agent?question=" + supplement + question, { redirect: 'manual' })
     .then(function (response) {
       return response.json();
@@ -518,8 +518,47 @@ export async function sendPromptAgent(supplement, question) {
       return data.response;
     })
 }
+function insertString(mainString, substringToInsert, indexOfSubstring, mainStringAnchor) {
+  if (indexOfSubstring !== -1 && indexOfSubstring < mainString.length) {
+    let modifiedString =
+      mainString.substring(0, indexOfSubstring + mainStringAnchor.length) +
+      substringToInsert +
+      mainString.substring(indexOfSubstring + mainStringAnchor.length);
 
-export async function handleNavigationQuery(question) {
+    return modifiedString;
+  } else {
+    return "Invalid index or substring not found.";
+  }
+}
+
+async function generateSubsequentSuggestions(supplement, question, response) {
+  return fetch(process.env.REACT_APP_BACKEND_URL + "/api/get-backend-file?file_path=gptPrompts/subsequentSuggestionPrompt.txt", { redirect: 'manual' })
+    .then(function (response) {
+      return response.json();
+    })
+    .then(async function (subsequentSuggestionsPromptRaw) {
+      let extractedString = supplement.match(/first child of the head:(.*?)(?=Active Element)/s)[1];
+      console.log("EXTRACTED", extractedString);
+
+      var subsequentSuggestionsPrompt = subsequentSuggestionsPromptRaw["contents"];
+      let indexOfHead = subsequentSuggestionsPrompt.indexOf("first child of the head:");
+      subsequentSuggestionsPrompt = insertString(subsequentSuggestionsPrompt, extractedString, indexOfHead, "first child of the head:");
+      let indexOfQuestion = subsequentSuggestionsPrompt.indexOf("a blind user asked the question:");
+      subsequentSuggestionsPrompt = insertString(subsequentSuggestionsPrompt, question, indexOfQuestion, "a blind user asked the question:")
+      let indexOfResponse = subsequentSuggestionsPrompt.indexOf("my application responded:");
+      subsequentSuggestionsPrompt = insertString(subsequentSuggestionsPrompt, response, indexOfResponse, "my application responded:");
+      // console.log(subsequentSuggestionsPrompt);
+      return sendPromptDefault(subsequentSuggestionsPrompt, "gpt-3.5-turbo-1106")
+        .then(function (output) {
+          return output; // Return the output value if needed for further processing
+        })
+        .catch(function (error) {
+          console.error(error);
+        });
+    })
+}
+
+async function handleNavigationQuery(question) {
   return fetch(process.env.REACT_APP_BACKEND_URL + "/api/get-backend-file?file_path=gptPrompts/navigationQuery.txt", { redirect: 'manual' })
     .then(function (response) {
       return response.json();
@@ -550,7 +589,6 @@ async function getAnswer(question, hierarchy, activeElementNodeAddress, activeEl
 
   // Classify User Question
   // Classification Categories Include: Analytical Query; Visual Query; Contextual Query; Navigation Query
-  console.log('getting answer', question)
   try {
     const queryType = await classifyQuery(question);
     console.log("type", queryType);
@@ -571,6 +609,7 @@ async function getAnswer(question, hierarchy, activeElementNodeAddress, activeEl
       questionRevised = questionRevised.slice("Question:".length).trim();
     }
 
+    console.log("question rev", questionRevised)
     if (queryType.includes("Analytical Query") || queryType.includes("Visual Query")) {
       const descrPostRawRes = await fetch(process.env.REACT_APP_BACKEND_URL + "/api/get-backend-file?file_path=" + descrPostFilePath);
       const descrPostJSON = await descrPostRawRes.json();
@@ -579,19 +618,26 @@ async function getAnswer(question, hierarchy, activeElementNodeAddress, activeEl
 
       const answer = await sendPromptAgent(supplement + descrPost, questionRevised);
 
-      return answer
+      return {answer: answer,
+              questionRevised: questionRevised,
+              queryType: queryType,
+              supplement: supplement}
 
     } else if (queryType.includes("Contextual Query")) {
-      const answer = sendPromptDefault("Here is a description of a dataset:" + hierarchy + "Use this description of the dataset along with outside knowledge to answer the following question:\nQuestion: " + questionRevised, "gpt-3.5-turbo-1106");
-      return answer
+      const answer = await sendPromptDefault("Here is a description of a dataset:" + hierarchy + "Use this description of the dataset along with outside knowledge to answer the following question:\nQuestion: " + questionRevised, "gpt-3.5-turbo-1106");
+
+      return {answer: answer,
+        questionRevised: questionRevised,
+        queryType: queryType,
+        supplement: supplement}
 
     } else if (queryType.includes("Navigation Query")) {
       // Provide Context to OpenAPI about User's Current Position within the Olli Treeview
 
       // Packaged Question to be Sent to OpenAPI
       const navigationQuestion = supplement + "\nUse all of this to answer the following question:\n" + questionRevised;
-      const classificationExplanation = "Your question \"" + question + "\" was categorized as being related to navigating the chart structure, and as such has been answered based on the treeview.";
       // Answer Navigation Query
+      
       const response = await handleNavigationQuery(navigationQuestion);
       // Regular expression to match the starting and ending addresses
       const startingAddressPattern = /Starting Address: ([\d.]+)/;
@@ -614,23 +660,29 @@ async function getAnswer(question, hierarchy, activeElementNodeAddress, activeEl
         let startNode = tree.getNodeFromAddress(startingAddress);
         console.log("Start Node: ", startingAddress);
         navigationResponse = tree.getShortestPath(startNode, endNode); 
-      } else {
+      } else { 
         if (startingAddressMatch) {
           startingAddress = startingAddressMatch[1];
           const startingNode = tree.getNodeFromAddress(startingAddress);
           navigationResponse = "Current Position: " + startingNode.getInnerText();
+
         }
         else {
           navigationResponse = "The question was interpreted as involving navigation but either no starting/ending point was provided or the Treeview was not activated. Please try again.";
         }
       }
     
-      return navigationResponse;
+      return {answer: navigationResponse,
+          questionRevised: questionRevised,
+          queryType: queryType,
+          supplement: supplement
+        };
+      
     } else {   // Query Cannot be Classified by LLM
       const descrPostRawRes = await fetch(process.env.REACT_APP_BACKEND_URL + "/api/get-backend-file?file_path=" + descrPostFilePath);
       const descrPostJSON = await descrPostRawRes.json();
       const descrPost = descrPostJSON["contents"];
-      classificationExplanation = "Your question \"" + question + "\" was categorized as being data-driven, and as such, has been answered based on the data in the chart.";
+      // classificationExplanation = "Your question \"" + question + "\" was categorized as being data-driven, and as such, has been answered based on the data in the chart.";
       const answer = await sendPromptAgent(supplement + descrPost, questionRevised);
 
       return answer
@@ -642,4 +694,4 @@ async function getAnswer(question, hierarchy, activeElementNodeAddress, activeEl
 }
 
 
-export {getAnswer, getSuggestedQuestions, getValuesForKey, findContinentByCountry, getColorName, processFile, loadVGandSendToBackend }
+export {getAnswer, getSuggestedQuestions, getValuesForKey, findContinentByCountry, getColorName, processFile, loadVGandSendToBackend, generateSubsequentSuggestions }

@@ -34,7 +34,6 @@ const HomePage = () => {
   useEffect(()=> {
     if (graphType && graphType !== "custom") {
       getGraphData(); 
-      console.log('done')
     }
   }, [graphType])
 
