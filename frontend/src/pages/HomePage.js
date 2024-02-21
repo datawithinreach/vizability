@@ -62,7 +62,7 @@ const HomePage = () => {
 
 
   return (
-    <div className="content">
+    <div className="qa-page">
       <h1 className="title">VizAbility - Data Visualization</h1>
       <h2>Load in a chart by selecting one of the four options or upload your own file.<br/> Explore the structure and
       components of the chart through a text representation. <br/>Supplement your knowledge of the chart by asking
