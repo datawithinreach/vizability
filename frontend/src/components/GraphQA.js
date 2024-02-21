@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useRef} from "react";
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import "../styles/GraphQAStyle.css"
@@ -11,12 +11,7 @@ import QAModule from "./QAModule";
 import { Stack } from "../utils/stack";
 import { CondensedOlliRender } from "../utils/condenseOlliRender";
 
-// Initialize All Global Variables
-let activeElement = '';
-let activeElementNode = null;
-let activeElementNodeAddress = null;
-let activeElementNodeInnerText = null;
-let tree;
+
 
 const GraphQA = ({graphSpec, setGraphSpec}) => {
 
@@ -25,6 +20,20 @@ const GraphQA = ({graphSpec, setGraphSpec}) => {
     const [transformedData, setTransformedData] = useState([])
 
     const [isLoading, setIsLoading] = useState(false)
+
+    // Initialize All Global Variables as ref
+    const activeElement = useRef('');
+    const activeElementNode = useRef(null);
+    const activeElementNodeAddress = useRef(null);
+    const activeElementNodeInnerText = useRef(null);
+    const tree = useRef(null);
+
+
+    // let activeElement = '';
+    // let activeElementNode = null;
+    // let activeElementNodeAddress = null;
+    // let activeElementNodeInnerText = null;
+    // let tree;
 
 
     // QA module states
@@ -168,17 +177,17 @@ const GraphQA = ({graphSpec, setGraphSpec}) => {
         function nestedEventListener(event) {
           event.stopImmediatePropagation(); // necessary to prevent the creation of subsequent nested event listeners
     
-          activeElement = event.srcElement.firstChild.innerText;
+          activeElement.current = event.srcElement.firstChild.innerText;
           // Retrieve Active Element Node Object from activeElement Variable
-          const index = tree.getTreeItemArray().findIndex(obj => obj.getInnerText() === activeElement);
+          const index = tree.current.getTreeItemArray().findIndex(obj => obj.getInnerText() === activeElement);
           // nothing was found, eg. user select something from the pop up table
           if (index === -1) {
             return;
           }
 
-          activeElementNode = tree.getTreeItemArray()[index];
-          activeElementNodeAddress = activeElementNode.getAddress();
-          activeElementNodeInnerText = activeElementNode.getInnerText();
+          activeElementNode.current = tree.current.getTreeItemArray()[index];
+          activeElementNodeAddress.current = activeElementNode.current.getAddress();
+          activeElementNodeInnerText.current = activeElementNode.current.getInnerText();
     
           // Check for Up Arrow KeyUp
           if (event.keyCode === 38) {
@@ -186,7 +195,7 @@ const GraphQA = ({graphSpec, setGraphSpec}) => {
             let correspondingElement = null;
     
             // Get Previous Element Node Object
-            tree.getTreeItemArray().forEach(element => {
+            tree.current.getTreeItemArray().forEach(element => {
               if (element.getInnerText() == previousElement.getInnerText()) {
                 correspondingElement = element;
               }
@@ -203,22 +212,22 @@ const GraphQA = ({graphSpec, setGraphSpec}) => {
           // Reset Active Child for Selected Echelon of the Treeview
           // Set Current Active Child for Selected Echelon of the Treeview
           else if (event.keyCode === 37 || event.keyCode === 39) {
-            tree.getTreeItemArray().forEach(element => {
-              if (element.getAddress().slice(0, -1) == activeElementNode.getAddress().slice(0, -1)) {
+            tree.current.getTreeItemArray().forEach(element => {
+              if (element.getAddress().slice(0, -1) == activeElementNode.current.getAddress().slice(0, -1)) {
                 element.setIsActiveChild(false);
               }
             })
-            activeElementNode.setIsActiveChild(true);
+            activeElementNode.current.setIsActiveChild(true);
           }
     
-          activeElementStack.push(activeElementNode);
+          activeElementStack.push(activeElementNode.current);
         }
     
         olliContainer.addEventListener('keyup', nestedEventListener);
       }
       // Hierarchical Tree Representation of Olli Treeview
-      tree = new CondensedOlliRender(document.querySelector('.olli-vis'));
-      const condensedString = tree.getCondensedString();
+      tree.current = new CondensedOlliRender(document.querySelector('.olli-vis'));
+      const condensedString = tree.current.getCondensedString();
 
       // generate questions
       handleGetNewSuggestedQuestions(condensedString);
@@ -280,7 +289,7 @@ const GraphQA = ({graphSpec, setGraphSpec}) => {
       resetQAStates();
       setIsLoadingAnswer(true);
       setUserQuestion(question);
-      const answerObj =  await getAnswer(question, tree.getCondensedString(), activeElementNodeAddress, activeElementNodeInnerText, tree);
+      const answerObj =  await getAnswer(question, tree.current.getCondensedString(), activeElementNodeAddress.current, activeElementNodeInnerText.current, tree.current);
       const queryType = answerObj.queryType;
       const questionRevised = answerObj.questionRevised;
       const answer = answerObj.answer;
