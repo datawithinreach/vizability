@@ -693,5 +693,21 @@ async function getAnswer(question, hierarchy, activeElementNodeAddress, activeEl
   }
 }
 
+async function sendAudioData(audioBlob) {
+  const formData = new FormData();
+  formData.append("audioFile", audioBlob, "recorded_audio.wav");
+  try {
+    const response = await fetch("/api/upload-audio", {
+      method: "POST",
+      body: formData,
+    });
 
-export {getAnswer, getSuggestedQuestions, getValuesForKey, findContinentByCountry, getColorName, processFile, loadVGandSendToBackend, generateSubsequentSuggestions }
+    return response;
+
+  } catch (error) {
+    console.error("Error uploading audio:", error);
+  }
+}
+
+
+export {sendAudioData, getAnswer, getSuggestedQuestions, getValuesForKey, findContinentByCountry, getColorName, processFile, loadVGandSendToBackend, generateSubsequentSuggestions }
