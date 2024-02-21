@@ -591,7 +591,7 @@ async function getAnswer(question, hierarchy, activeElementNodeAddress, activeEl
   // Classification Categories Include: Analytical Query; Visual Query; Contextual Query; Navigation Query
   try {
     const queryType = await classifyQuery(question);
-    console.log("type", queryType);
+    console.log("type here", queryType, typeof queryType);
     // Apply Answering Pipeline Based on Classification Response
     let classificationExplanation = "";
     const improveUserQueryPromptFilePath = "gptPrompts/improveUserQueryPrompt.txt";
@@ -614,7 +614,7 @@ async function getAnswer(question, hierarchy, activeElementNodeAddress, activeEl
       const descrPostRawRes = await fetch(process.env.REACT_APP_BACKEND_URL + "/api/get-backend-file?file_path=" + descrPostFilePath);
       const descrPostJSON = await descrPostRawRes.json();
       const descrPost = descrPostJSON["contents"];
-      classificationExplanation = "Your question \"" + question + "\" was categorized as being data-driven, and as such, has been answered based on the data in the chart.";
+      // classificationExplanation = "Your question \"" + question + "\" was categorized as being data-driven, and as such, has been answered based on the data in the chart.";
 
       const answer = await sendPromptAgent(supplement + descrPost, questionRevised);
 
@@ -682,10 +682,12 @@ async function getAnswer(question, hierarchy, activeElementNodeAddress, activeEl
       const descrPostRawRes = await fetch(process.env.REACT_APP_BACKEND_URL + "/api/get-backend-file?file_path=" + descrPostFilePath);
       const descrPostJSON = await descrPostRawRes.json();
       const descrPost = descrPostJSON["contents"];
-      // classificationExplanation = "Your question \"" + question + "\" was categorized as being data-driven, and as such, has been answered based on the data in the chart.";
       const answer = await sendPromptAgent(supplement + descrPost, questionRevised);
 
-      return answer
+      return  {answer: answer,
+        questionRevised: questionRevised,
+        queryType: queryType,
+        supplement: supplement}
     }
 
   } catch (error) {
@@ -697,11 +699,10 @@ async function sendAudioData(audioBlob) {
   const formData = new FormData();
   formData.append("audioFile", audioBlob, "recorded_audio.wav");
   try {
-    const response = await fetch("/api/upload-audio", {
+    const response = await fetch(process.env.REACT_APP_BACKEND_URL + "/api/upload-audio", {
       method: "POST",
       body: formData,
     });
-
     return response;
 
   } catch (error) {

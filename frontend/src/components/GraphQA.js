@@ -33,6 +33,7 @@ const GraphQA = ({graphSpec, setGraphSpec}) => {
     const [classificationExplanation, setClassificationExplanation] = useState('')
     const [answerToQuestion, setAnswerToQuestion] = useState('')
     const [revisedQuestion, setRevisedQuestion] = useState('')
+    const [userQuestion, setUserQuestion] = useState('') 
 
     function resetQAStates() {
       // prepare for new question or new specs
@@ -273,11 +274,12 @@ const GraphQA = ({graphSpec, setGraphSpec}) => {
        */
 
       if (isLoadingAnswer) { // already true, that means previous question has not fned loading
-        console.log("STILL WAITING for previous question!")
+        alert("STILL WAITING for previous question!")
         return;
       }
       resetQAStates();
       setIsLoadingAnswer(true);
+      setUserQuestion(question);
       const answerObj =  await getAnswer(question, tree.getCondensedString(), activeElementNodeAddress, activeElementNodeInnerText, tree);
       const queryType = answerObj.queryType;
       const questionRevised = answerObj.questionRevised;
@@ -316,8 +318,9 @@ const GraphQA = ({graphSpec, setGraphSpec}) => {
         setClassificationExplanation(classificationExpl);
         setAnswerToQuestion(answer);
 
-      } else {
-        const classificationExpl = "Your question \"" + question + "\" was categorized as being data-driven, and as such, has been answered based on the data in the chart.";
+      } else { // cannot be classibled
+        // const classificationExpl = "Your question \"" + question + "\" was categorized as being data-driven, and as such, has been answered based on the data in the chart.";
+        const classificationExpl = "Your question \"" + question + "\" was uncategorizable.";
         setClassificationExplanation(classificationExpl)
         
         // check if need to generate subsequentsuggestionquestions, context uses the revisedQuestion
@@ -365,6 +368,7 @@ const GraphQA = ({graphSpec, setGraphSpec}) => {
              handleQuestionSubmit = {handleQuestionSubmit}
               suggestedQuestions = {suggestedQuestions}
               revisedQuestion = {revisedQuestion}
+              userQuestion={userQuestion}
               />
         </div>
     );

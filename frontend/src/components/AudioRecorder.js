@@ -1,66 +1,71 @@
 import { useState, useRef } from "react";
 import { sendAudioData } from "../utils/helperFuncs";
+import Button from 'react-bootstrap/Button';
 
-const AudioRecorder = () => {
-    const [stream, setStream] = useState(undefined)
+const AudioRecorder = ({handleQuestionSubmit}) => {
     const [isRecording, setIsRecording] = useState(false)
     const [audioChunks, setAudioChunks] = useState([])
     const mediaRecorder = useRef(null);
 
-    async function toggleRecording() {
-        try {
-            if (!isRecording) {
-                // get permission
-                const streamData = await navigator.mediaDevices.getUserMedia({ audio: true });
-                setStream(streamData)
-    
-                // create media recorder instance
-                const media = new MediaRecorder(stream);
-                mediaRecorder.current = media;
-    
-                mediaRecorder.current.ondataavailable = function (event) {
-                    if (event.data.size > 0) {
-                        setAudioChunks([...audioChunks, event.data])
-                    }
-                };
-    
-                mediaRecorder.current.onstop = async function () {
-                    const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
-                    // creates a playable URL from the blob file.
-                    // const audioUrl = URL.createObjectURL(audioBlob);
-    
-                    // Send audio data to the backend
-                    const response = await sendAudioData(audioBlob);
-                    // look at response TODO
-    
-                    // Reset the audioChunks array for the next recording
-                    setAudioChunks([]);
-                };
-                mediaRecorder.current.start();
-                console.log("Recording...");
-                setIsRecording(true);
-            } else {
-                if (mediaRecorder.current && mediaRecorder.current.state !== "inactive") {
-                  mediaRecorder.current.stop();
-                  console.log("Stop button clicked. Stopping recording...");
-                }
-                setIsRecording(false);
-              }
-        } catch (error) {
-            console.error("Error accessing microphone:", error);
-        }
+    const startRecording = async () => {
         
+        // get permission
+        try {
+            const streamData = await navigator.mediaDevices.getUserMedia({ audio: true });
+            setIsRecording(true);
+            //create new Media recorder instance using the stream
+            const media = new MediaRecorder(streamData);
+            //set the MediaRecorder instance to the mediaRecorder ref
+            mediaRecorder.current = media;
+            //invokes the start method to start the recording process
+            mediaRecorder.current.start();
+            let localAudioChunks = [];
+            mediaRecorder.current.ondataavailable = (event) => {
+                if (typeof event.data === "undefined") return;
+                if (event.data.size === 0) return;
+                localAudioChunks.push(event.data);
+            };
+            setAudioChunks(localAudioChunks);
+        } catch (error) {
+            alert("Error in enabling microphone: ", error)
+        }
+      };
 
+    const stopRecording = () => {
+        // setRecordingStatus("inactive");
+        //stops the recording instance
+        setIsRecording(false);
+        mediaRecorder.current.stop();
+        mediaRecorder.current.onstop = async () => {
+            //creates a blob file from the audiochunks data
+            const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
+
+            // Send audio data to the backend
+            const response = await sendAudioData(audioBlob);
+            if (response.ok) {
+                const transcription = await response.json();
+                console.log('here', transcription)
+                // send question to get answer
+                handleQuestionSubmit(transcription["transcription"]["text"])
+              } else {
+                console.error("Failed to upload audio. Status:", response.status);
+              }
+            setAudioChunks([]);
+        };
+    };
+
+    function toggleRecording() {
+        if (isRecording) {
+            stopRecording();
+        } else {
+            startRecording();
+        }
     }
 
-    
     return (
-        <div>
-            <button id="recordButton" type="button" aria-label="To begin voice input press enter. To end and submit, press enter again">
-                <i id="record-button-i" class="fas fa-microphone"></i>
-                <p id="record-button-p">Stop</p>
-            </button>
-        </div>
+        <Button variant="outline-secondary" onClick={toggleRecording}>
+            {isRecording ? "Stop" : "Start"}
+        </Button>
     )
 }
 

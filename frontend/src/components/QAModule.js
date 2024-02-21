@@ -2,10 +2,11 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import InputGroup from 'react-bootstrap/InputGroup';
+import AudioRecorder from './AudioRecorder';
 
-const QAModule = ({answerToQuestion, classificationExplanation, 
+const QAModule = ({userQuestion, answerToQuestion, classificationExplanation, 
     isLoadingAnswer, suggestedQuestions, handleQuestionSubmit, revisedQuestion}) => {
-
+    
     return (
         <div>
             <Row>
@@ -26,11 +27,12 @@ const QAModule = ({answerToQuestion, classificationExplanation,
                     placeholder="Type your question here."
                     />
                     <Button type = "submit" variant="outline-secondary">Submit</Button>
-                    <Button variant="outline-secondary">Record</Button>
+                    <AudioRecorder handleQuestionSubmit = {handleQuestionSubmit}/>
+                    {/* <Button variant="outline-secondary">Record</Button> */}
                 </InputGroup>
             </Form>
             <Row>
-                {isLoadingAnswer && <p>Working, please wait!</p>}
+                {isLoadingAnswer && <p>Working on question: {userQuestion}, please wait!</p>}
             </Row>
             {!isLoadingAnswer && classificationExplanation && answerToQuestion &&
             <Row>  
