@@ -1,0 +1,12 @@
+.nav-bar {
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: oklch(80% 3% 200);
+    background-color: white;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,.2);
+}
+
+.nav-brand {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-weight: bold;
+}
