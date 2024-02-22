@@ -1,21 +1,24 @@
 import Button from 'react-bootstrap/Button';
+import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import InputGroup from 'react-bootstrap/InputGroup';
 import AudioRecorder from './AudioRecorder';
+import "../styles/QAModule.css"
+
 
 const QAModule = ({userQuestion, answerToQuestion, classificationExplanation, 
     isLoadingAnswer, suggestedQuestions, handleQuestionSubmit, revisedQuestion}) => {
     
     return (
-        <div>
+        <Container>
             <Row>
                 {/* <Button onClick=></Row>>Generate New Questions</Button> */}
                 {suggestedQuestions.map((question, i) => {
-                    return <Button variant="outline-secondary" onClick={()=> handleQuestionSubmit(question)} key={"question" + i}>{question}</Button>
+                    return <Button className='suggestion-buttons' variant="outline-secondary" onClick={()=> handleQuestionSubmit(question)} key={"question" + i}>{question}</Button>
                 })}
             </Row>
-            <Form onSubmit={(event) => {
+            <Form className="question-form" onSubmit={(event) => {
                 event.preventDefault()
                 handleQuestionSubmit(event.target.question.value)
                 // reset value
@@ -45,7 +48,7 @@ const QAModule = ({userQuestion, answerToQuestion, classificationExplanation,
 
            
     
-        </div>
+        </Container>
     )
 }
 

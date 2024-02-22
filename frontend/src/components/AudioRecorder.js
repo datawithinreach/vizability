@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import { sendAudioData } from "../utils/helperFuncs";
 import Button from 'react-bootstrap/Button';
+import microphone from "../images/microphone.png";
 
 const AudioRecorder = ({handleQuestionSubmit}) => {
     const [isRecording, setIsRecording] = useState(false)
@@ -64,7 +65,8 @@ const AudioRecorder = ({handleQuestionSubmit}) => {
 
     return (
         <Button variant="outline-secondary" onClick={toggleRecording}>
-            {isRecording ? "Stop" : "Start"}
+            {isRecording ? "Stop" : 
+            <img width= "20px" src={microphone} alt="microphone" aria-label="To begin voice input press enter. To end and submit, press enter again"/>}
         </Button>
     )
 }

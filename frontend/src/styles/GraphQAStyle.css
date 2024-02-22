@@ -12,3 +12,11 @@
     overflow: scroll;
 }
 
+.add-big-margin {
+    margin: 1em;
+}
+
+.toggle-buttons {
+    margin-left: 10px;
+    width: 200px;
+}

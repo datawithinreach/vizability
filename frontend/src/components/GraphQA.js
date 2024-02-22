@@ -1,6 +1,7 @@
 import React, {useEffect, useState, useRef} from "react";
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import "../styles/GraphQAStyle.css"
 import Olli from "./Olli";
 import { getAnswer, getValuesForKey, findContinentByCountry, getColorName, getSuggestedQuestions, generateSubsequentSuggestions} from "../utils/helperFuncs";
@@ -27,14 +28,6 @@ const GraphQA = ({graphSpec, setGraphSpec}) => {
     const activeElementNodeAddress = useRef(null);
     const activeElementNodeInnerText = useRef(null);
     const tree = useRef(null);
-
-
-    // let activeElement = '';
-    // let activeElementNode = null;
-    // let activeElementNodeAddress = null;
-    // let activeElementNodeInnerText = null;
-    // let tree;
-
 
     // QA module states
     const [suggestedQuestions, setSuggestedQuestions] = useState([])
@@ -348,23 +341,22 @@ const GraphQA = ({graphSpec, setGraphSpec}) => {
             <Row>{graphSpec && <VegaLite spec={graphSpec} onNewView={handleNewView}/>}</Row>
             {isLoading && <h3>LOADING</h3>}
 
-            {graphSpec && <span>
-
-                  <Button variant="outline-secondary" onClick={() => {
+            {graphSpec && <Col className="add-big-margin ">
+                  <Button className="toggle-buttons" variant="outline-primary" onClick={() => {
                     setShowOlli(!showOlli);
                     if (!showOlli) { // olli should be true now
                       setShowTable(false)
                     }
                 }}>Toggle Olli</Button>
 
-                <Button variant="outline-success"  onClick={() => {
+                <Button className="toggle-buttons" variant="outline-success"  onClick={() => {
                     setShowTable(!showTable);
                     if (!showTable) { // table should be true now
                       setShowOlli(false)
                     }
                 }}>Toggle Table</Button>
 
-                </span>}
+                </Col>}
 
 
             <Olli showOlli = {showOlli} graphSpec = {graphSpec}/>
