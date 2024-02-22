@@ -64,11 +64,11 @@ const HomePage = () => {
   return (
     <div className="qa-page">
       <h1 className="title"> Data Visualization</h1>
-      <Row className="direction-section">
+      <Container className="direction-section">
         <h4>Load in a chart by selecting one of the four options or upload your own file.<br/> Explore the structure and
         components of the chart through a text representation. <br/>Supplement your knowledge of the chart by asking
         questions, either through typing or voice input. </h4>
-      </Row>
+      </Container>
 
       <Container>
         <Row className="files-upload-section">
