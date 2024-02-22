@@ -63,25 +63,42 @@ const HomePage = () => {
 
   return (
     <div className="qa-page">
-      <h1 className="title">VizAbility - Data Visualization</h1>
-      <h2>Load in a chart by selecting one of the four options or upload your own file.<br/> Explore the structure and
-      components of the chart through a text representation. <br/>Supplement your knowledge of the chart by asking
-      questions, either through typing or voice input. </h2>
-
+      <h1 className="title"> Data Visualization</h1>
+      <Row className="direction-section">
+        <h4>Load in a chart by selecting one of the four options or upload your own file.<br/> Explore the structure and
+        components of the chart through a text representation. <br/>Supplement your knowledge of the chart by asking
+        questions, either through typing or voice input. </h4>
+      </Row>
 
       <Container>
-      <Row>
-        <Form.Group onChange= {handleFileSubmit} controlId="formFile" className="mb-3">
-          <Form.Label>Upload Local File</Form.Label>
-          <Form.Control type="file" accept=".json, .vg"/>
-        </Form.Group>
-      </Row>
-      <Row className="justify-content-md-center">
-        <Col> <Button size="lg" onClick={() => {setGraphType("chart1")}}> Line Chart </Button> </Col>
-        <Col> <Button size="lg" onClick={() => {setGraphType("chart2")}}> Bar Chart </Button> </Col>
-        <Col> <Button size="lg" onClick={() => {setGraphType("chart3")}}> Scatter Plot </Button> </Col>
-        <Col> <Button size="lg" onClick={() => {setGraphType("chart4")}}> Choropleth Map </Button> </Col>
-      </Row>
+        <Row className="files-upload-section">
+          <Col xs={8} className="justify-content-md-center">
+            <Row className="add-margin">
+              <Col>
+               <Button className="chart-buttons" variant="outline-secondary" size="lg" onClick={() => {setGraphType("chart1")}}> Line Chart </Button>
+              </Col>
+             <Col>
+              <Button className="chart-buttons" variant="outline-secondary" size="lg" onClick={() => {setGraphType("chart2")}}> Bar Chart </Button>
+             </Col>
+            </Row>
+
+            <Row className="add-margin">
+              <Col>
+                <Button className="chart-buttons" variant="outline-secondary" size="lg" onClick={() => {setGraphType("chart3")}}> Scatter Plot </Button>
+              </Col>
+              <Col>
+                <Button className="chart-buttons" variant="outline-secondary" size="lg" onClick={() => {setGraphType("chart4")}}> Choropleth Map </Button>
+              </Col>
+            </Row>
+          </Col>
+          
+          <Col>
+            <Form.Group onChange= {handleFileSubmit} controlId="formFile" className="mb-3">
+              <Form.Label>Upload Local File</Form.Label>
+              <Form.Control type="file" accept=".json, .vg"/>
+            </Form.Group>
+          </Col>
+        </Row>
 
       </Container>
 
