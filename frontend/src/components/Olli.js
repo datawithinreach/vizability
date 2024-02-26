@@ -16,9 +16,18 @@ const Olli = ({graphSpec, showOlli}) => {
                 // console.log("graph ", graphSpec)
                 // console.log(olliVisSpec.axes[0].field )
                 // olliVisSpec.axes[0].field = 'year';
-                // console.log("olli spec", olliVisSpec)
+
+                // // convert inventory into int instead, it worked!
+                // console.log("olli spec", olliVisSpec.data)
+                // olliVisSpec.data = olliVisSpec.data.map((row)=>{
+                //     return {date: row.date, inventory: parseInt(row.inventory), "Symbol(vega_id)": row["Symbol(vega_id)"]}
+                // })
+                // console.log("olli spec 1", olliVisSpec.data)
+
+
 
                 const olliRender = olli(olliVisSpec);
+                // console.log(olliVisSpec, graphSpec)
 
                 if (document.getElementById("olli-container")) {
                     document.getElementById("olli-container").replaceChildren(olliRender);
