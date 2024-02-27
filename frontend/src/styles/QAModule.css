@@ -1,8 +1,19 @@
 .suggestion-buttons {
     margin: 3px;
-}
-
-.question-form {
+ }
+ 
+ 
+ .question-form {
     margin: 1em 0 1em 0;
-}
+ }
 
+ .response-section {
+    text-align: justify;
+    border: solid #22639178;
+    padding: 1em;
+    border-radius: 10px;
+ }
+ .response-section h3 {
+    color: #226291;
+ }
+ 

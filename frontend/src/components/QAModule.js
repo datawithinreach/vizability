@@ -35,14 +35,14 @@ const QAModule = ({userQuestion, answerToQuestion, classificationExplanation,
                 </InputGroup>
             </Form>
             <Row>
-                {isLoadingAnswer && <p>Working on question: {userQuestion}, please wait!</p>}
+                {isLoadingAnswer && <p> Please wait! Working on question: {userQuestion}</p>}
             </Row>
             {!isLoadingAnswer && classificationExplanation && answerToQuestion &&
-            <Row>  
-                <h4>Response: </h4>
-                <p>Question: {classificationExplanation}</p>
-                <p>Revised Question: {revisedQuestion}</p>
-                <p>Answer: {answerToQuestion}</p>
+            <Row className='response-section'>  
+                <h3> Generated Response: </h3>
+                <p> <b>Question:</b> {classificationExplanation}</p>
+                <p> <b>Revised Question: </b> {revisedQuestion}</p>
+                <p> <b>Answer: </b> {answerToQuestion}</p>
             </Row>
             }
 
