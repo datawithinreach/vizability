@@ -5,3 +5,32 @@
     max-height: 50vh ;
     overflow-y: auto;
 }
+
+/* styling the table in the olli */
+#olli-container table {
+    width: 100%;
+    justify-items: center;
+}
+
+#olli-container button {
+    background: #FFFFFF;
+    border: 1px solid #000000;
+    box-sizing: border-box;
+    border-radius: 4px;
+    padding: 0.5rem;
+}
+
+#olli-container h2 {
+    color: #226291;
+}
+
+#olli-container th {
+   border: 1px solid rgb(173, 172, 172);
+   padding: 8px;
+   background-color: rgb(225, 223, 223);
+}
+
+#olli-container td {
+    border: 1px solid rgb(173, 172, 172);
+    padding: 8px;
+ }
