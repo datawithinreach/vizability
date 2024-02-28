@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import Table from 'react-bootstrap/Table';
-
+import Container from 'react-bootstrap/Container';
+import "../styles/GraphTable.css"
 
 const GraphTable = ({transformedData}) => { 
     const [headers, setHeaders] = useState([])
@@ -12,7 +13,7 @@ const GraphTable = ({transformedData}) => {
     }, [transformedData])
 
     return (
-        <div className="table-container">
+        <Container className="table-container">
             <Table responsive striped bordered hover size="md">
                 <thead>
                     <tr>
@@ -36,7 +37,7 @@ const GraphTable = ({transformedData}) => {
                     })}
                 </tbody>
             </Table>
-        </div>
+        </Container>
     );
 }
 

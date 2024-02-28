@@ -6,11 +6,6 @@
     background-color: lightgrey;
 }
 
-.table-container {
-    margin: 1vw;
-    max-height: 50vh;
-    overflow: scroll;
-}
 
 .add-big-margin {
     margin: 1em;
