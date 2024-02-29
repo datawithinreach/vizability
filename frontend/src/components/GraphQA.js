@@ -1,6 +1,6 @@
 import React, {useEffect, useState, useRef} from "react";
 import Button from 'react-bootstrap/Button';
-import Row from 'react-bootstrap/Row';
+import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
 import "../styles/GraphQAStyle.css"
 import Olli from "./Olli";
@@ -338,7 +338,7 @@ const GraphQA = ({graphSpec, setGraphSpec}) => {
 
     return (
         <div>
-            <Row>{graphSpec && <VegaLite spec={graphSpec} onNewView={handleNewView}/>}</Row>
+            <Container>{graphSpec && <VegaLite spec={graphSpec} onNewView={handleNewView}/>}</Container>
             {isLoading && <h3>LOADING</h3>}
 
             {graphSpec && <Col className="add-big-margin ">
