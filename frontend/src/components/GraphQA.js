@@ -338,7 +338,7 @@ const GraphQA = ({graphSpec, setGraphSpec}) => {
 
     return (
         <div>
-            <Container>{graphSpec && <VegaLite spec={graphSpec} onNewView={handleNewView}/>}</Container>
+            <Container className="graph-container">{graphSpec && <VegaLite spec={graphSpec} onNewView={handleNewView}/>}</Container>
             {isLoading && <h3>LOADING</h3>}
 
             {graphSpec && <Col className="add-big-margin ">
