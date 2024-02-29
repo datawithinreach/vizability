@@ -17,6 +17,8 @@ const HomePage = () => {
   const [graphType, setGraphType] = useState('');
   const [graphSpec, setGraphSpec] = useState(false)
 
+  const [isLoading, setIsLoading] = useState(false)
+
 
   async function getGraphData() {
     /**
@@ -36,14 +38,14 @@ const HomePage = () => {
     }
   }, [graphType])
 
-  // useEffect(()=> {
-  //   const chart = document.getElementsByClassName("chart-wrapper"); // ! might need to change if vega lite change their classname
-  //   if (graphType && chart.length < 1) {
-  //     setIsLoading(true);
-  //   } else {
-  //     setIsLoading(false);
-  //   }
-  // }, [graphSpec])
+  useEffect(()=> {
+    const chart = document.getElementsByClassName("chart-wrapper"); // ! might need to change if vega lite change their classname
+    if (graphType && !graphSpec && chart.length < 1) {
+      setIsLoading(true);
+    } else {
+      setIsLoading(false);
+    }
+  }, [graphType, graphSpec])
 
   async function handleFileSubmit (event) {
     const vegaLiteInfo = await processFile(event.target.files);
@@ -102,7 +104,8 @@ const HomePage = () => {
 
       </Container>
 
-      {graphType && <p>Graph selected.</p>}
+      {isLoading && <p>Loading graph...</p>}
+      {/* {graphType && <p>Graph selected.</p>} */}
       {graphSpec && <GraphQA graphSpec = {graphSpec} setGraphSpec = {setGraphSpec} />}
 
   </div>
