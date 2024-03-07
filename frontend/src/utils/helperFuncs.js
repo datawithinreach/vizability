@@ -591,11 +591,10 @@ async function getAnswer(question, hierarchy, activeElementNodeAddress, activeEl
   // Classification Categories Include: Analytical Query; Visual Query; Contextual Query; Navigation Query
   try {
     const queryType = await classifyQuery(question);
-    console.log("type here", queryType, typeof queryType);
+    // console.log("type here", queryType, typeof queryType);
     // Apply Answering Pipeline Based on Classification Response
-    let classificationExplanation = "";
+    // let classificationExplanation = "";
     const improveUserQueryPromptFilePath = "gptPrompts/improveUserQueryPrompt.txt";
-
 
 
     const improveUserQueryPromptRawRes = await fetch(process.env.REACT_APP_BACKEND_URL + "/api/get-backend-file?file_path=" + improveUserQueryPromptFilePath, { redirect: 'manual' })
@@ -609,7 +608,7 @@ async function getAnswer(question, hierarchy, activeElementNodeAddress, activeEl
       questionRevised = questionRevised.slice("Question:".length).trim();
     }
 
-    console.log("question rev", questionRevised)
+    // console.log("question rev", questionRevised)
     if (queryType.includes("Analytical Query") || queryType.includes("Visual Query")) {
       const descrPostRawRes = await fetch(process.env.REACT_APP_BACKEND_URL + "/api/get-backend-file?file_path=" + descrPostFilePath);
       const descrPostJSON = await descrPostRawRes.json();
@@ -656,9 +655,9 @@ async function getAnswer(question, hierarchy, activeElementNodeAddress, activeEl
         endingAddress = endingAddressMatch[1];
 
         let endNode = tree.getNodeFromAddress(endingAddress);
-        console.log("End Node: ", endingAddress);
+        // console.log("End Node: ", endingAddress);
         let startNode = tree.getNodeFromAddress(startingAddress);
-        console.log("Start Node: ", startingAddress);
+        // console.log("Start Node: ", startingAddress);
         navigationResponse = tree.getShortestPath(startNode, endNode); 
       } else { 
         if (startingAddressMatch) {
