@@ -258,7 +258,7 @@ function handleSubmit(event, question, hierarchy, loadingAnnouncement) {
   document.getElementById("suggestion-container").style.display = "none";
 
   // Initialize Variables
-  const descrPre = "\nHere's a structural layout of a data set. It is a hierarchy/tree data structure, where each sentence is preceded by its placement within the tree. For instance, 1.1.2 refers to the second child of the first child of the head:\n";
+  const descrPre = "\nHere's a structural layout of a data set. Note, this is not the entire data set, and is just a broad, top view. This is a hierarchy/tree data structure, where each sentence is preceded by its placement within the tree. For instance, 1.1.2 refers to the second child of the first child of the head:\n";
   // let descrPost = "\nBefore you output the answer check for the following:\nMake sure to format all numerical responses appropriately, using things such as commas, dollar signs, appropriate rounding, and other identifiers when necessary.\nYour answers should be verbose and must repeat the question.\nIf the question refers to data or variables that are not implied in the dataset and that you cannot reasonably extrapolate or calculate, respond with \"The variables you mentioned: {Specify which information triggered this response} are not provided in the dataset. Therefore, the question cannot be answered.\" and nothing more.\nUse this information along with everything else you are given to answer the following question: \n";
   // let descrPost = "\nBefore you output the answer check for the following:\nYou must follow the structure of Observation, Thought, Action, Action Input, etc.\nMake sure to format all numerical responses appropriately, using things such as commas, dollar signs, appropriate rounding, and other identifiers when necessary.\nYour answers should be specific, explanatory, and verbose, and must repeat the question.\n These answers will be read by a broad audience; you must avoid technical terms like 'dataframe' in your responses.\nUse everything you are given to answer the following question: \n";
   const descrPostFilePath = "gptPrompts/descrPost.txt";
@@ -279,6 +279,16 @@ function handleSubmit(event, question, hierarchy, loadingAnnouncement) {
     // descrPost = "\nBefore you output any answer:\nYou must follow the set structure of Question, Observation, Thought, Action, Action Input when using the pd dataframe.\nTo avoid errors, your Action Input should always be formatted accordingly. Do not format your action input like this: Action Input: \n```python\n{Insert Code Here}\n```\nInstead format it like this: \"Action Input: {Insert Code Here on One Line}\"\nKeep in mind that it is possible for the user question to be incomplete, or not relate to the dataframe at all in which you cannot answer the question.\nMake sure the FINAL Answer is verbose and explanatory, and that it rephrases the user question. The answer should explain the process.\nIf the FINAL Answer contains a number or any value, make sure to format it appropriately, either through rounding, adding percents, or including labels.\nDo not use the words \"dataframe\" or \"python_repl_ast\" in your FINAL response\n";
 
     const improveUserQueryPromptFilePath = "gptPrompts/improveUserQueryPrompt.txt";
+    let supplementCondensed = "";
+    let startPattern = "1 //";
+    let endPattern = "1.1 //";
+
+    let startIndex = supplement.indexOf(startPattern) + startPattern.length;
+    let endIndex = supplement.indexOf(endPattern);
+
+    if (startIndex !== -1 && endIndex !== -1 && startIndex < endIndex) {
+      supplementCondensed = supplement.substring(startIndex, endIndex);
+    }
     fetch(("/api/get-backend-file?file_path=" + improveUserQueryPromptFilePath), { redirect: 'manual' })
       .then(function (improveUserQueryPromptRaw) {
         return improveUserQueryPromptRaw.json();
@@ -288,13 +298,17 @@ function handleSubmit(event, question, hierarchy, loadingAnnouncement) {
         let improveUserQueryPrompt = improveUserQueryPromptJSON["contents"];
 
         improveUserQueryPrompt = improveUserQueryPrompt
-          .replace("{Description}", supplement)
+          .replace("{Description}", supplementCondensed)
           .replace("{Question}", question);
 
         sendPromptDefault(improveUserQueryPrompt, "gpt-4")
           .then(function (questionRevised) {
             if (questionRevised.startsWith("Question:")) {
               questionRevised = questionRevised.slice("Question:".length).trim();
+            }
+            let index = questionRevised.indexOf("Rationale:");
+            if (index !== -1) {
+              questionRevised = questionRevised.substring(0, index);
             }
             console.log("REVISED QUESTION", questionRevised);
             if (queryType.includes("Analytical Query") || queryType.includes("Visual Query")) {
@@ -314,19 +328,19 @@ function handleSubmit(event, question, hierarchy, loadingAnnouncement) {
             else if (queryType.includes("Contextual Query")) {
               sendPromptDefault("Here is a description of a dataset:" + hierarchy + "Use this description of the dataset along with outside knowledge to answer the following question:\nQuestion: " + questionRevised, "gpt-3.5-turbo-1106").then(function (response) {
                 classificationExplanation = "Your question \"" + question + "\" was categorized as being context-seeking, and as such, has been answered based on information found on the web.";
-        
+
                 const loadStatus = document.getElementById("load-status");
                 const responseInfo = document.getElementById("response-info");
-        
+
                 // Clear the loading announcement
                 clearInterval(loadingAnnouncement);
-        
+
                 loadStatus.innerHTML = "Response Generated";
                 responseInfo.style.display = "block";
-        
+
                 document.getElementById("prompt").textContent = "Question: " + classificationExplanation;
                 (response != "Agent stopped due to iteration limit or time limit.") ? document.getElementById("response").textContent = "Answer: " + response : document.getElementById("response").textContent = "Answer: I'm sorry; the process has been terminated because it took too long to arrive at an answer.";
-        
+
                 if (response.startsWith("The variables you mentioned") || response.includes("I am sorry but I cannot understand the question") || response.includes("Agent stopped due to iteration limit or time limit")) {
                   document.getElementById("subsequentSuggestionsContainer").style.display = "flex";
                   generateSubsequentSuggestions(supplement, questionRevised, response)
@@ -343,33 +357,33 @@ function handleSubmit(event, question, hierarchy, loadingAnnouncement) {
             }
             else if (queryType.includes("Navigation Query")) {
               // Provide Context to OpenAPI about User's Current Position within the Olli Treeview
-        
+
               // Packaged Question to be Sent to OpenAPI
               const navigationQuestion = supplement + "\nUse all of this to answer the following question:\n" + questionRevised;
               const classificationExplanation = "Your question \"" + question + "\" was categorized as being related to navigating the chart structure, and as such has been answered based on the treeview.";
               const loadStatus = document.getElementById("load-status");
               const responseInfo = document.getElementById("response-info");
-        
+
               // Answer Navigation Query
               handleNavigationQuery(navigationQuestion).then(function (response) {
                 // Regular expression to match the starting and ending addresses
                 const startingAddressPattern = /Starting Address: ([\d.]+)/;
                 const endingAddressPattern = /Ending Address: ([\d.]+)/;
-        
+
                 // Extract starting and ending addresses using regular expressions
                 console.log("Response: ", response);
                 const startingAddressMatch = response.match(startingAddressPattern);
                 const endingAddressMatch = response.match(endingAddressPattern);
-        
+
                 let navigationResponse = "";
                 let startingAddress = "";
                 let endingAddress = "";
-        
+
                 if (endingAddressMatch && startingAddressMatch) {
                   // Extracted addresses
                   startingAddress = startingAddressMatch[1];
                   endingAddress = endingAddressMatch[1];
-        
+
                   let endNode = tree.getNodeFromAddress(endingAddress);
                   console.log("End Node: ", endingAddress);
                   let startNode = tree.getNodeFromAddress(startingAddress);
@@ -388,8 +402,8 @@ function handleSubmit(event, question, hierarchy, loadingAnnouncement) {
                     navigationResponse = "The question was interpreted as involving navigation but either no starting/ending point was provided or the Treeview was not activated. Please try again.";
                   }
                 }
-        
-        
+
+
                 // Clear the loading announcement
                 clearInterval(loadingAnnouncement);
                 loadStatus.innerHTML = "Response Generated";
@@ -416,16 +430,16 @@ function handleSubmit(event, question, hierarchy, loadingAnnouncement) {
               // sendPromptAgent(supplement + descrPost, question, loadingAnnouncement, classificationExplanation, isTest);
               // const loadStatus = document.getElementById("load-status");
               // const responseInfo = document.getElementById("response-info");
-        
+
               // // Clear the loading announcement
               // clearInterval(loadingAnnouncement);
-        
+
               // loadStatus.innerHTML = "Response Generated";
               // responseInfo.style.display = "block";
-        
+
               // document.getElementById("prompt").textContent = classificationExplanation;
               // document.getElementById("response").textContent = queryType;
-        
+
               document.getElementById("subsequentSuggestionsContainer").style.display = "flex";
               generateSubsequentSuggestions(supplement, questionRevised, classificationExplanation)
                 .then(function (output) {
