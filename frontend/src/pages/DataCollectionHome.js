@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import {
   Box,
   Container,
@@ -6,7 +6,7 @@ import {
   Button,
 } from "@mui/material";
 
-import { useNavigate, useMatch } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 // import { SessionContext } from "contexts/Session";
 
 function DataCollectionHome() {
@@ -14,8 +14,8 @@ function DataCollectionHome() {
   const focusEl = useRef(null);
 
   function handleContinue(){
-    console.log("navigate to /informedconsent")
-    navigate("/informedconsent", { replace: true });
+    console.log('navifate to consent')
+    navigate("/VizAbility/data/informedconsent", { replace: true });
   }
 
   useEffect(()=>{
