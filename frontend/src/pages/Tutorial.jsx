@@ -307,7 +307,7 @@ function Tutorial() {
   }
   function handleContinue() {
     setTutorialResponse(responses, params.stage);
-    navigate(`/task/${params.stage}`);
+    navigate(`/VizAbility/data/task/${params.stage}`);
   }
   function handleLog(name, data, datetime) {
     setLog({
