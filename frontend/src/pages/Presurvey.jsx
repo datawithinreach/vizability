@@ -35,7 +35,7 @@ function Presurvey() {
       questions
     );
     setBackground(questions);
-    navigate("/main");
+    navigate("/VizAbility/data/main");
   }
   const focusEl = useRef(null);
   useEffect(()=>{
