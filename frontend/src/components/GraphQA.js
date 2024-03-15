@@ -20,8 +20,6 @@ const GraphQA = ({graphSpec, setGraphSpec}) => {
     const [showTable, setShowTable] = useState(false)
     const [transformedData, setTransformedData] = useState([])
 
-    const [isLoading, setIsLoading] = useState(false)
-
     // Initialize All Global Variables as ref
     const activeElement = useRef('');
     const activeElementNode = useRef(null);
@@ -138,7 +136,6 @@ const GraphQA = ({graphSpec, setGraphSpec}) => {
      * transform it then send it to the backend.
      * @param view Vega view
      */
-      setIsLoading(true);
 
       resetQAStates();
       handleViewUpdates(view);
@@ -225,7 +222,6 @@ const GraphQA = ({graphSpec, setGraphSpec}) => {
       // generate questions
       handleGetNewSuggestedQuestions(condensedString);
 
-      setIsLoading(false);
       setUpEventListener(olliContainer, activeElementStack);
     };
 
@@ -339,7 +335,6 @@ const GraphQA = ({graphSpec, setGraphSpec}) => {
     return (
         <div>
             <Container className="graph-container">{graphSpec && <VegaLite spec={graphSpec} onNewView={handleNewView}/>}</Container>
-            {isLoading && <h3>LOADING</h3>}
 
             {graphSpec && <Col className="add-big-margin ">
                   <Button className="toggle-buttons" variant="outline-primary" onClick={() => {
