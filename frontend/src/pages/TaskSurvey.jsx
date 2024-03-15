@@ -50,11 +50,13 @@ function TaskSurvey() {
     );
     setTaskSurveyResponse(questions, params.stage);
 
-    if (params.stage == 2) {
-      navigate("/postsurvey");
-    } else {
-      navigate(`/tutorial/${parseInt(params.stage) + 1}`);
-    }
+    navigate("/VizAbility/data/postsurvey");
+
+    // if (params.stage == 2) {
+    //   navigate("/postsurvey");
+    // } else {
+    //   navigate(`/tutorial/${parseInt(params.stage) + 1}`);
+    // }
   }
   function renderMethodName(config) {
     switch (config.method) {
