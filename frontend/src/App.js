@@ -10,6 +10,8 @@ import Presurvey from './pages/Presurvey.jsx';
 import Main from './pages/Main.jsx';
 import Tutorial from './pages/Tutorial.jsx';
 import Task from './pages/Task.jsx';
+import TaskSurvey from './pages/TaskSurvey.jsx';
+
 
 import NavBar from './components/NavBar';
 
@@ -30,6 +32,7 @@ function App() {
               <Route path="/VizAbility/data/main" element={<Main/>} />
               <Route path="/VizAbility/data/tutorial/:stage" element={<Tutorial/>} />
               <Route path="/VizAbility/data/task/:stage" element={<Task/>} />
+              <Route path="/VizAbility/data/tasksurvey/:stage" element={<TaskSurvey/>} />
           </Routes>
           </SessionProvider>
         </Router>

@@ -162,7 +162,7 @@ function Task() {
   }
   function handleContinue() {
     setTaskResponse(responses, params.stage);
-    navigate(`/tasksurvey/${params.stage}`);
+    navigate(`/VizAbility/data/tasksurvey/${params.stage}`);
   }
   function renderMethodName(config) {
     switch (config.method) {
