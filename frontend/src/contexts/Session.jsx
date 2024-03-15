@@ -50,7 +50,8 @@ export const SessionProvider = ({ children }) => {
     const method = "table"
     const charts = shuffleArray(["bar", "line", "scatter", "map"]).slice(0, 3);
     // const setup = methods.map((m, i) => ({ chart: charts[i], method: m }));
-    const setup = [{chart: charts[0], medthod: method }]
+    const setup = [{chart: charts[0], method: method }]
+    console.log(setup, "setup")
     const updated = {
       ...initialState, // start from scratch
       PID,

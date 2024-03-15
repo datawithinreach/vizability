@@ -335,10 +335,10 @@ function Tutorial() {
     switch (config.method) {
       case "table":
         return "data table";
-      case "structured":
-        return "structured navigation";
-      case "speech":
-        return "speech interaction";
+      // case "structured":
+      //   return "structured navigation";
+      // case "speech":
+      //   return "speech interaction";
     }
   }
   function renderExplanation(config) {
