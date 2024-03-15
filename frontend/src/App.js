@@ -12,6 +12,7 @@ import Tutorial from './pages/Tutorial.jsx';
 import Task from './pages/Task.jsx';
 import TaskSurvey from './pages/TaskSurvey.jsx';
 import PostSurvey from './pages/PostSurvey.jsx';
+import Debrief from './pages/Debrief.jsx';
 
 import NavBar from './components/NavBar';
 
@@ -34,6 +35,7 @@ function App() {
               <Route path="/VizAbility/data/task/:stage" element={<Task/>} />
               <Route path="/VizAbility/data/tasksurvey/:stage" element={<TaskSurvey/>} />
               <Route path="/VizAbility/data/postsurvey" element={<PostSurvey/>} />
+              <Route path="/VizAbility/data/debrief" element={<Debrief/>} />
           </Routes>
           </SessionProvider>
         </Router>

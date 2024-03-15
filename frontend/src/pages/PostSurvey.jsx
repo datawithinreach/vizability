@@ -35,7 +35,7 @@ function PostSurvey() {
       questions
     );
     setPostSurvey(questions);
-    navigate("/debrief");
+    navigate("/VizAbility/data/debrief");
   }
   const focusEl = useRef(null);
   useEffect(()=>{
@@ -91,8 +91,6 @@ function PostSurvey() {
   }
 
   return (
-    <React.Fragment>
-      {/* {PID === '' && <Navigate to={baseURL} replace={true} />} */}
       <Container maxWidth="md" mt={5}>
         <Typography mt={3} variant="h3"  ref={focusEl} tabIndex={-1} gutterBottom>
           Post Study Survey
@@ -112,7 +110,6 @@ function PostSurvey() {
           </Button>
         </Box>
       </Container>
-    </React.Fragment>
   );
 }
 

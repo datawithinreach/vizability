@@ -164,6 +164,10 @@ export const SessionProvider = ({ children }) => {
     return session;
   };
   const uploadDataToCloud = async (filename, jsonDataStr) => {
+    console.log("in upload", filename, jsonDataStr)
+    if (!filename) {
+      return
+    }
     const storageRef = ref(storage, filename);
     // try {
     //   const docRef = await addDoc(collection(db, "sessions"), {PID:session.PID});
