@@ -336,7 +336,7 @@ const GraphQA = ({graphSpec, setGraphSpec}) => {
         <div>
             <Container className="graph-container">{graphSpec && <VegaLite spec={graphSpec} onNewView={handleNewView}/>}</Container>
 
-            {graphSpec && <Col className="add-big-margin ">
+            {graphSpec && <Col className="add-big-margin" aria-live="polite">
                   <Button className="toggle-buttons" variant="outline-primary" onClick={() => {
                     setShowOlli(!showOlli);
                     if (!showOlli) { // olli should be true now

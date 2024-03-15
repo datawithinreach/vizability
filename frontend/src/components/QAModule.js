@@ -11,7 +11,10 @@ const QAModule = ({userQuestion, answerToQuestion, classificationExplanation,
     isLoadingAnswer, suggestedQuestions, handleQuestionSubmit, revisedQuestion}) => {
     
     return (
-        <Container>
+        <Container aria-live="polite">
+            <Row>
+                <b>Supplement your knowledge of the chart by asking questions, either through typing or voice input.</b>
+            </Row>
             <Row>
                 {/* <Button onClick=></Row>>Generate New Questions</Button> */}
                 {suggestedQuestions.map((question, i) => {

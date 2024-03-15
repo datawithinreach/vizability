@@ -103,8 +103,9 @@ const HomePage = () => {
         </Row>
 
       </Container>
-
-      {isLoading && <p aria-live="polite">Loading graph...</p>}
+      <div aria-live="polite">
+        {isLoading && <p>Loading graph...</p>}
+      </div>
       {/* {graphType && <p>Graph selected.</p>} */}
       {graphSpec && <GraphQA graphSpec = {graphSpec} setGraphSpec = {setGraphSpec} />}
 

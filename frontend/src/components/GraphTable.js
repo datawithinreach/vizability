@@ -13,7 +13,7 @@ const GraphTable = ({transformedData}) => {
     }, [transformedData])
 
     return (
-        <Container className="table-container">
+        <Container aria-live = "polite" className="table-container">
             <Table responsive striped bordered hover size="md">
                 <thead>
                     <tr>

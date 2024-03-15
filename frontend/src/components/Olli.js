@@ -49,7 +49,7 @@ const Olli = ({graphSpec, showOlli}) => {
     }, [showOlli])
 
     return (
-        <Container className = 'olli-section' id = 'olli-section'> 
+        <Container aria-live = "polite" className = 'olli-section' id = 'olli-section'> 
             <h6> (For Screen Readers) Explore the structure and components of the chart through a text representation. Instructions: Press enter on the treeview to explore the contents of the chart. Navigate using the arrows keys. To exit, press escape.</h6> 
             {/* <p className= "olli-description" onClick={() => {setShowAxesInfo(!showAxesInfo)}}>{graphDescription}</p> */}
             <div id = "olli-container"></div>
