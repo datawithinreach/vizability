@@ -1,0 +1,310 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Life expectancy and Income of 38 OECD countries in different regions",
+  "description": "A scatter plot showing life expectancy and income per person for 38 OECD countries in different regions. The horizontal axis encodes life expectancy ranging from 74 to 84 years. The vertical axis encodes income ranging from $0 to $90,000. Each circle in the plot represents a OECD country, while its color represents a corresponding region such as America, Asia, Europe, and Middle East.",
+  "width": 500,
+  "height": 300,
+  "data": {
+    "values": [
+      {
+        "country": "Mexico",
+        "life_expectancy": 75,
+        "income": 16496,
+        "population": 125385833,
+        "region": "America"
+      },
+      {
+        "country": "Lithuania",
+        "life_expectancy": 75.2,
+        "income": 25708,
+        "population": 2916798,
+        "region": "Europe"
+      },
+      {
+        "country": "Latvia",
+        "life_expectancy": 75.5,
+        "income": 22460,
+        "population": 1989354,
+        "region": "Europe"
+      },
+      {
+        "country": "Colombia",
+        "life_expectancy": 75.7,
+        "income": 12447,
+        "population": 47791393,
+        "region": "America"
+      },
+      {
+        "country": "Hungary",
+        "life_expectancy": 76,
+        "income": 23609,
+        "population": 9889540,
+        "region": "Europe"
+      },
+      {
+        "country": "Slovak Republic",
+        "life_expectancy": 76.3,
+        "income": 26355,
+        "population": 5422861,
+        "region": "Europe"
+      },
+      {
+        "country": "Turkey",
+        "life_expectancy": 76.4,
+        "income": 18884,
+        "population": 77523788,
+        "region": "Europe"
+      },
+      {
+        "country": "Estonia",
+        "life_expectancy": 76.7,
+        "income": 25865,
+        "population": 1316203,
+        "region": "Europe"
+      },
+      {
+        "country": "Poland",
+        "life_expectancy": 77.1,
+        "income": 23952,
+        "population": 38619974,
+        "region": "Europe"
+      },
+      {
+        "country": "Czech Republic",
+        "life_expectancy": 78.4,
+        "income": 28695,
+        "population": 10542666,
+        "region": "Europe"
+      },
+      {
+        "country": "United States",
+        "life_expectancy": 79,
+        "income": 52118,
+        "population": 319448634,
+        "region": "America"
+      },
+      {
+        "country": "Chile",
+        "life_expectancy": 79.2,
+        "income": 21967,
+        "population": 17762647,
+        "region": "America"
+      },
+      {
+        "country": "Greece",
+        "life_expectancy": 79.8,
+        "income": 24502,
+        "population": 11000777,
+        "region": "Europe"
+      },
+      {
+        "country": "Portugal",
+        "life_expectancy": 79.8,
+        "income": 26055,
+        "population": 10402343,
+        "region": "Europe"
+      },
+      {
+        "country": "Costa Rica",
+        "life_expectancy": 79.9,
+        "income": 13713,
+        "population": 4757606,
+        "region": "America"
+      },
+      {
+        "country": "Denmark",
+        "life_expectancy": 80,
+        "income": 42777,
+        "population": 5646899,
+        "region": "Europe"
+      },
+      {
+        "country": "Slovenia",
+        "life_expectancy": 80.1,
+        "income": 28059,
+        "population": 2066068,
+        "region": "Europe"
+      },
+      {
+        "country": "Belgium",
+        "life_expectancy": 80.3,
+        "income": 40885,
+        "population": 11226322,
+        "region": "Europe"
+      },
+      {
+        "country": "Ireland",
+        "life_expectancy": 80.4,
+        "income": 46633,
+        "population": 4675164,
+        "region": "Europe"
+      },
+      {
+        "country": "Netherlands",
+        "life_expectancy": 80.6,
+        "income": 45281,
+        "population": 16868020,
+        "region": "Europe"
+      },
+      {
+        "country": "New Zealand",
+        "life_expectancy": 80.6,
+        "income": 33538,
+        "population": 4495482,
+        "region": "Asia"
+      },
+      {
+        "country": "Finland",
+        "life_expectancy": 80.7,
+        "income": 38569,
+        "population": 5479660,
+        "region": "Europe"
+      },
+      {
+        "country": "Austria",
+        "life_expectancy": 80.9,
+        "income": 43906,
+        "population": 8516916,
+        "region": "Europe"
+      },
+      {
+        "country": "Germany",
+        "life_expectancy": 80.9,
+        "income": 43444,
+        "population": 80646262,
+        "region": "Europe"
+      },
+      {
+        "country": "Luxembourg",
+        "life_expectancy": 81.1,
+        "income": 88203,
+        "population": 556573,
+        "region": "Europe"
+      },
+      {
+        "country": "United Kingdom",
+        "life_expectancy": 81.2,
+        "income": 37614,
+        "population": 64331348,
+        "region": "Europe"
+      },
+      {
+        "country": "Norway",
+        "life_expectancy": 81.5,
+        "income": 64020,
+        "population": 5147970,
+        "region": "Europe"
+      },
+      {
+        "country": "Canada",
+        "life_expectancy": 81.6,
+        "income": 42817,
+        "population": 35587793,
+        "region": "America"
+      },
+      {
+        "country": "Spain",
+        "life_expectancy": 81.7,
+        "income": 32270,
+        "population": 46259716,
+        "region": "Europe"
+      },
+      {
+        "country": "Australia",
+        "life_expectancy": 81.8,
+        "income": 43219,
+        "population": 23622353,
+        "region": "Asia"
+      },
+      {
+        "country": "France",
+        "life_expectancy": 81.8,
+        "income": 37218,
+        "population": 64121249,
+        "region": "Europe"
+      },
+      {
+        "country": "Sweden",
+        "life_expectancy": 81.9,
+        "income": 44029,
+        "population": 9703247,
+        "region": "Europe"
+      },
+      {
+        "country": "Italy",
+        "life_expectancy": 82.1,
+        "income": 33078,
+        "population": 59788667,
+        "region": "Europe"
+      },
+      {
+        "country": "Israel",
+        "life_expectancy": 82.3,
+        "income": 31180,
+        "population": 7939483,
+        "region": "Middle East"
+      },
+      {
+        "country": "Iceland",
+        "life_expectancy": 82.8,
+        "income": 41237,
+        "population": 327318,
+        "region": "Europe"
+      },
+      {
+        "country": "Switzerland",
+        "life_expectancy": 82.8,
+        "income": 55776,
+        "population": 8211383,
+        "region": "Europe"
+      },
+      {
+        "country": "Japan",
+        "life_expectancy": 83.4,
+        "income": 35635,
+        "population": 126794564,
+        "region": "Asia"
+      },
+      {
+        "country": "Korea",
+        "life_expectancy": 80.6,
+        "income": 33629,
+        "population": 50074401,
+        "region": "Asia"
+      }
+    ]
+  },
+  "mark": {
+    "type": "circle",
+    "tooltip": {
+      "content": "data"
+    }
+  },
+  "encoding": {
+    "y": {
+      "field": "income",
+      "type": "quantitative",
+      "title":"Income"
+    },
+    "x": {
+      "field": "life_expectancy",
+      "type": "quantitative",
+      "title": "Life Expectancy",
+      "scale": {
+        "zero": false,
+        "domain": [
+          74,
+          84
+        ]
+      },
+      "axis": {
+        "grid": true
+      }
+    },
+    "color": {
+      "field": "region",
+      "title": "Region"
+    }
+  },
+  "config": {}
+}

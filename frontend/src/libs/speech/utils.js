@@ -9,6 +9,7 @@ import settings from "./settings";
 import defaults from "defaults";
 import p5 from "p5";
 import "p5.js-speech/lib/p5.speech";
+// import "p"
 
 //get os
 const os = new UAParser().getOS();
@@ -28,16 +29,6 @@ export const sanitizeInquiry = text=>{
     return inquiry.concat("?");
   }
 }
-//generate feedback text
-// const getFeedbackText = () => {
-//   const feedbacks = [
-//     "I understand you're looking for",
-//     "It seems like you asked about the",
-//   ];
-//   const randomIndex = random(0, feedbacks.length - 1);
-
-//   return feedbacks[randomIndex];
-// };
 
 //find modifiers: key bindings to trigger responds
 export const getModifier = (

@@ -1,0 +1,115 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Covid-19 Cases by country and continent as of June 27, 2022",
+  "description": "A horizontal bar chart showing Covid-19 Cases by country and continent as of June 27, 2022. The vertical axis shows bars representing different countries from United States to Netherlands. The length of the bars is mapped to the number of covid cases along the horizontal axis, while their color represents its corresponding continent such as America, Asia, and Europe.",
+  "data": {
+    "values": [
+      {
+        "country": "United States",
+        "continent": "America",
+        "cases": 86900000
+      },
+      {
+        "country": "India",
+        "continent": "Asia",
+        "cases": 43400000
+      },
+      {
+        "country": "Brazil",
+        "continent": "America",
+        "cases": 32000000
+      },
+      {
+        "country": "France",
+        "continent": "Europe",
+        "cases": 29700000
+      },
+      {
+        "country": "Germany",
+        "continent": "Europe",
+        "cases": 27800000
+      },
+      {
+        "country": "United Kingdom",
+        "continent": "Europe",
+        "cases": 22700000
+      },
+      {
+        "country": "South Korea",
+        "continent": "Asia",
+        "cases": 18300000
+      },
+      {
+        "country": "Italy",
+        "continent": "Europe",
+        "cases": 18200000
+      },
+      {
+        "country": "Russia",
+        "continent": "Europe",
+        "cases": 18200000
+      },
+      {
+        "country": "Turkey",
+        "continent": "Europe",
+        "cases": 15100000
+      },
+      {
+        "country": "Spain",
+        "continent": "Europe",
+        "cases": 12700000
+      },
+      {
+        "country": "Vietnam",
+        "continent": "Asia",
+        "cases": 10700000
+      },
+      {
+        "country": "Argentina",
+        "continent": "America",
+        "cases": 9370000
+      },
+      {
+        "country": "Japan",
+        "continent": "Asia",
+        "cases": 9240000
+      },
+      {
+        "country": "Netherlands",
+        "continent": "Europe",
+        "cases": 8150000
+      }
+    ]
+  },
+  "width": 600,
+  "height": 400,
+  "encoding": {
+    "y": {
+      "field": "country",
+      "type": "nominal",
+      "sort": "-x",
+      "axis": {
+        "title": "Country"
+      }
+    },
+    "x": {
+      "field": "cases",
+      "type": "quantitative",
+      "axis": {
+        "format": ".2s",
+        "title": "Total Covid-19 Cases"
+      }
+    },
+    "color": {
+      "field": "continent",
+      "type": "nominal",
+      "legend": {
+        "title": "Continent"
+      }
+    }
+  },
+  "mark": {
+    "type": "bar",
+    "tooltip": true
+  }
+}

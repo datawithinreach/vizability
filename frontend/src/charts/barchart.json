@@ -1,0 +1,378 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Count of days of different weather types in Seattle from 2012 to 2015",
+  "description": "A stacked bar chart showing the count of days for different weather types by each month, from 2012 to 2015. The horizontal axis shows different month from January to December. The vertical axis encodes the count of days. Color legend represents different weather types including sun, fog, drizzle, rain, and snow.",
+  "data": {
+    "values": [
+      {
+        "month": "January",
+        "weather": "rain",
+        "count": 65
+      },
+      {
+        "month": "January",
+        "weather": "sun",
+        "count": 25
+      },
+      {
+        "month": "January",
+        "weather": "snow",
+        "count": 8
+      },
+      {
+        "month": "January",
+        "weather": "drizzle",
+        "count": 9
+      },
+      {
+        "month": "January",
+        "weather": "fog",
+        "count": 17
+      },
+      {
+        "month": "February",
+        "weather": "sun",
+        "count": 29
+      },
+      {
+        "month": "February",
+        "weather": "rain",
+        "count": 73
+      },
+      {
+        "month": "February",
+        "weather": "drizzle",
+        "count": 4
+      },
+      {
+        "month": "February",
+        "weather": "snow",
+        "count": 4
+      },
+      {
+        "month": "February",
+        "weather": "fog",
+        "count": 3
+      },
+      {
+        "month": "March",
+        "weather": "rain",
+        "count": 73
+      },
+      {
+        "month": "March",
+        "weather": "sun",
+        "count": 36
+      },
+      {
+        "month": "March",
+        "weather": "snow",
+        "count": 6
+      },
+      {
+        "month": "March",
+        "weather": "drizzle",
+        "count": 3
+      },
+      {
+        "month": "March",
+        "weather": "fog",
+        "count": 6
+      },
+      {
+        "month": "April",
+        "weather": "sun",
+        "count": 53
+      },
+      {
+        "month": "April",
+        "weather": "rain",
+        "count": 60
+      },
+      {
+        "month": "April",
+        "weather": "snow",
+        "count": 1
+      },
+      {
+        "month": "April",
+        "weather": "drizzle",
+        "count": 3
+      },
+      {
+        "month": "April",
+        "weather": "fog",
+        "count": 3
+      },
+      {
+        "month": "May",
+        "weather": "rain",
+        "count": 41
+      },
+      {
+        "month": "May",
+        "weather": "sun",
+        "count": 77
+      },
+      {
+        "month": "May",
+        "weather": "drizzle",
+        "count": 1
+      },
+      {
+        "month": "May",
+        "weather": "fog",
+        "count": 5
+      },
+      {
+        "month": "May",
+        "weather": "snow",
+        "count": 0
+      },
+      {
+        "month": "June",
+        "weather": "rain",
+        "count": 41
+      },
+      {
+        "month": "June",
+        "weather": "sun",
+        "count": 76
+      },
+      {
+        "month": "June",
+        "weather": "drizzle",
+        "count": 2
+      },
+      {
+        "month": "June",
+        "weather": "fog",
+        "count": 1
+      },
+      {
+        "month": "June",
+        "weather": "snow",
+        "count": 0
+      },
+      {
+        "month": "July",
+        "weather": "rain",
+        "count": 15
+      },
+      {
+        "month": "July",
+        "weather": "sun",
+        "count": 90
+      },
+      {
+        "month": "July",
+        "weather": "drizzle",
+        "count": 9
+      },
+      {
+        "month": "July",
+        "weather": "fog",
+        "count": 10
+      },
+      {
+        "month": "July",
+        "weather": "snow",
+        "count": 0
+      },
+      {
+        "month": "August",
+        "weather": "sun",
+        "count": 86
+      },
+      {
+        "month": "August",
+        "weather": "rain",
+        "count": 25
+      },
+      {
+        "month": "August",
+        "weather": "drizzle",
+        "count": 7
+      },
+      {
+        "month": "August",
+        "weather": "fog",
+        "count": 6
+      },
+      {
+        "month": "August",
+        "weather": "snow",
+        "count": 0
+      },
+      {
+        "month": "September",
+        "weather": "sun",
+        "count": 64
+      },
+      {
+        "month": "September",
+        "weather": "rain",
+        "count": 36
+      },
+      {
+        "month": "September",
+        "weather": "fog",
+        "count": 15
+      },
+      {
+        "month": "September",
+        "weather": "drizzle",
+        "count": 5
+      },
+      {
+        "month": "September",
+        "weather": "snow",
+        "count": 0
+      },
+      {
+        "month": "October",
+        "weather": "sun",
+        "count": 37
+      },
+      {
+        "month": "October",
+        "weather": "drizzle",
+        "count": 4
+      },
+      {
+        "month": "October",
+        "weather": "rain",
+        "count": 64
+      },
+      {
+        "month": "October",
+        "weather": "fog",
+        "count": 19
+      },
+      {
+        "month": "October",
+        "weather": "snow",
+        "count": 0
+      },
+      {
+        "month": "November",
+        "weather": "rain",
+        "count": 75
+      },
+      {
+        "month": "November",
+        "weather": "sun",
+        "count": 33
+      },
+      {
+        "month": "November",
+        "weather": "drizzle",
+        "count": 3
+      },
+      {
+        "month": "November",
+        "weather": "fog",
+        "count": 8
+      },
+      {
+        "month": "November",
+        "weather": "snow",
+        "count": 1
+      },
+      {
+        "month": "December",
+        "weather": "rain",
+        "count": 73
+      },
+      {
+        "month": "December",
+        "weather": "sun",
+        "count": 34
+      },
+      {
+        "month": "December",
+        "weather": "snow",
+        "count": 6
+      },
+      {
+        "month": "December",
+        "weather": "drizzle",
+        "count": 3
+      },
+      {
+        "month": "December",
+        "weather": "fog",
+        "count": 8
+      }
+    ]
+  },
+  "mark": {
+    "type": "bar"
+  },
+  "encoding": {
+    "x": {
+      "field": "month",
+      "type": "ordinal",
+      "title": "Month",
+      "scale": {
+        "domain": [
+          "January",
+          "February",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+          "August",
+          "September",
+          "October",
+          "November",
+          "December"
+        ]
+      }
+    },
+    "y": {
+      "field": "count",
+      "type": "quantitative",
+      "title": "Count"
+    },
+    "color": {
+      "field": "weather",
+      "type": "nominal",
+      "scale": {
+        "domain": [
+          "sun",
+          "fog",
+          "drizzle",
+          "rain",
+          "snow"
+        ],
+        "range": [
+          "#e7ba52",
+          "#c7c7c7",
+          "#aec7e8",
+          "#1f77b4",
+          "#9467bd"
+        ]
+      },
+      "title": "Weather type"
+    },
+    "tooltip": [
+      {
+        "field": "weather",
+        "type": "nominal",
+        "title": "Weather type"
+      },
+      {
+        "field": "month",
+        "type": "nominal",
+        "title": "Month"
+      },
+      {
+        "field": "count",
+        "type": "quantitative",
+        "title": "Count"
+      }
+    ]
+  }
+}

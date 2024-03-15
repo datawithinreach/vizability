@@ -8,6 +8,7 @@ import InformedConsent from './pages/InformedConsent.jsx';
 import Ready from './pages/Ready.jsx';
 import Presurvey from './pages/Presurvey.jsx';
 import Main from './pages/Main.jsx';
+import Tutorial from './pages/Tutorial.jsx';
 
 import NavBar from './components/NavBar';
 
@@ -26,6 +27,7 @@ function App() {
               <Route path="/VizAbility/data/ready" element={<Ready/>} />
               <Route path="/VizAbility/data/presurvey" element={<Presurvey/>} />
               <Route path="/VizAbility/data/main" element={<Main/>} />
+              <Route path="/VizAbility/data/tutorial/:stage" element={<Tutorial/>} />
               
           </Routes>
           </SessionProvider>

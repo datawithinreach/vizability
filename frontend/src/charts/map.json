@@ -1,0 +1,309 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 500,
+  "height": 300,
+  "title":"Vaccination rate by State",
+  "description": "A U.S. map showing vaccination rates of all states in the U.S. Each geometric shape represents each state in their location, from Rhode Island to Wyoming. Color encodes vaccination rate, ranging from 51.41% to 83.81%.",
+  "data": {
+    "values": [
+      {
+        "fips": 1,
+        "state": "Alabama",
+        "vaccination_rate": 51.63
+      },
+      {
+        "fips": 2,
+        "state": "Alaska",
+        "vaccination_rate": 62.77
+      },
+      {
+        "fips": 4,
+        "state": "Arizona",
+        "vaccination_rate": 62.47
+      },
+      {
+        "fips": 5,
+        "state": "Arkansas",
+        "vaccination_rate": 55.1
+      },
+      {
+        "fips": 6,
+        "state": "California",
+        "vaccination_rate": 72.88
+      },
+      {
+        "fips": 8,
+        "state": "Colorado",
+        "vaccination_rate": 70.9
+      },
+      {
+        "fips": 9,
+        "state": "Connecticut",
+        "vaccination_rate": 80.15
+      },
+      {
+        "fips": 10,
+        "state": "Delaware",
+        "vaccination_rate": 70.18
+      },
+      {
+        "fips": 12,
+        "state": "Florida",
+        "vaccination_rate": 67.68
+      },
+      {
+        "fips": 13,
+        "state": "Georgia",
+        "vaccination_rate": 55.47
+      },
+      {
+        "fips": 15,
+        "state": "Hawaii",
+        "vaccination_rate": 79.07
+      },
+      {
+        "fips": 16,
+        "state": "Idaho",
+        "vaccination_rate": 55.88
+      },
+      {
+        "fips": 17,
+        "state": "Illinois",
+        "vaccination_rate": 69.11
+      },
+      {
+        "fips": 18,
+        "state": "Indiana",
+        "vaccination_rate": 56.47
+      },
+      {
+        "fips": 19,
+        "state": "Iowa",
+        "vaccination_rate": 62.48
+      },
+      {
+        "fips": 20,
+        "state": "Kansas",
+        "vaccination_rate": 62.62
+      },
+      {
+        "fips": 21,
+        "state": "Kentucky",
+        "vaccination_rate": 57.94
+      },
+      {
+        "fips": 22,
+        "state": "Louisiana",
+        "vaccination_rate": 53.98
+      },
+      {
+        "fips": 23,
+        "state": "Maine",
+        "vaccination_rate": 80.62
+      },
+      {
+        "fips": 24,
+        "state": "Maryland",
+        "vaccination_rate": 76.52
+      },
+      {
+        "fips": 25,
+        "state": "Massachusetts",
+        "vaccination_rate": 80.08
+      },
+      {
+        "fips": 26,
+        "state": "Michigan",
+        "vaccination_rate": 60.7
+      },
+      {
+        "fips": 27,
+        "state": "Minnesota",
+        "vaccination_rate": 69.79
+      },
+      {
+        "fips": 28,
+        "state": "Mississippi",
+        "vaccination_rate": 52.34
+      },
+      {
+        "fips": 29,
+        "state": "Missouri",
+        "vaccination_rate": 56.74
+      },
+      {
+        "fips": 30,
+        "state": "Montana",
+        "vaccination_rate": 57.36
+      },
+      {
+        "fips": 31,
+        "state": "Nebraska",
+        "vaccination_rate": 64.14
+      },
+      {
+        "fips": 32,
+        "state": "Nevada",
+        "vaccination_rate": 61.47
+      },
+      {
+        "fips": 33,
+        "state": "New Hampshire",
+        "vaccination_rate": 71.67
+      },
+      {
+        "fips": 34,
+        "state": "New Jersey",
+        "vaccination_rate": 76.51
+      },
+      {
+        "fips": 35,
+        "state": "New Mexico",
+        "vaccination_rate": 72.06
+      },
+      {
+        "fips": 36,
+        "state": "New York",
+        "vaccination_rate": 77.86
+      },
+      {
+        "fips": 37,
+        "state": "North Carolina",
+        "vaccination_rate": 62.58
+      },
+      {
+        "fips": 38,
+        "state": "North Dakota",
+        "vaccination_rate": 56.11
+      },
+      {
+        "fips": 39,
+        "state": "Ohio",
+        "vaccination_rate": 58.84
+      },
+      {
+        "fips": 40,
+        "state": "Oklahoma",
+        "vaccination_rate": 57.96
+      },
+      {
+        "fips": 41,
+        "state": "Oregon",
+        "vaccination_rate": 70.29
+      },
+      {
+        "fips": 42,
+        "state": "Pennsylvania",
+        "vaccination_rate": 69.67
+      },
+      {
+        "fips": 44,
+        "state": "Rhode Island",
+        "vaccination_rate": 83.81
+      },
+      {
+        "fips": 45,
+        "state": "South Carolina",
+        "vaccination_rate": 57.73
+      },
+      {
+        "fips": 46,
+        "state": "South Dakota",
+        "vaccination_rate": 62.68
+      },
+      {
+        "fips": 47,
+        "state": "Tennessee",
+        "vaccination_rate": 54.96
+      },
+      {
+        "fips": 48,
+        "state": "Texas",
+        "vaccination_rate": 62.35
+      },
+      {
+        "fips": 49,
+        "state": "Utah",
+        "vaccination_rate": 64.81
+      },
+      {
+        "fips": 50,
+        "state": "Vermont",
+        "vaccination_rate": 82.04
+      },
+      {
+        "fips": 51,
+        "state": "Virginia",
+        "vaccination_rate": 73.88
+      },
+      {
+        "fips": 53,
+        "state": "Washington",
+        "vaccination_rate": 73.04
+      },
+      {
+        "fips": 54,
+        "state": "West Virginia",
+        "vaccination_rate": 58.15
+      },
+      {
+        "fips": 55,
+        "state": "Wisconsin",
+        "vaccination_rate": 66.15
+      },
+      {
+        "fips": 56,
+        "state": "Wyoming",
+        "vaccination_rate": 51.41
+      }
+    ]
+  },
+  "transform": [
+    {
+      "lookup": "fips",
+      "from": {
+        "data": {
+          "url": "https://vega.github.io/editor/data/us-10m.json",
+          "format": {
+            "type": "topojson",
+            "feature": "states"
+          }
+        },
+        "key": "id",
+        "fields": [
+          "type",
+          "geometry"
+        ]
+      }
+    }
+  ],
+  "projection": {
+    "type": "albersUsa"
+  },
+  "mark": {
+    "type": "geoshape"
+  },
+  "encoding": {
+    "color": {
+      "field": "vaccination_rate",
+      "type": "quantitative",
+      "legend": {
+        "title": "Vaccination Rate",
+        "direction": "horizontal",
+        "orient": "top"
+      }
+    },
+    "tooltip": [
+      {
+        "field": "state",
+        "type": "nominal",
+        "title": "State"
+      },
+      {
+        "field": "vaccination_rate",
+        "type": "quantitative",
+        "title": "Vaccination Rate"
+      }
+    ]
+  }
+}

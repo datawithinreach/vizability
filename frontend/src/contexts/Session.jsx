@@ -46,9 +46,11 @@ export const SessionProvider = ({ children }) => {
 
   const setPID = (PID) => {
     //ref? https://www.dcode.fr/partial-k-permutations
-    const methods = shuffleArray(["table", "structured", "speech"]);
+    // const methods = shuffleArray(["table", "structured", "speech"]);
+    const method = "table"
     const charts = shuffleArray(["bar", "line", "scatter", "map"]).slice(0, 3);
-    const setup = methods.map((m, i) => ({ chart: charts[i], method: m }));
+    // const setup = methods.map((m, i) => ({ chart: charts[i], method: m }));
+    const setup = [{chart: charts[0], medthod: method }]
     const updated = {
       ...initialState, // start from scratch
       PID,

@@ -1,0 +1,274 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Stock prices of 5 Tech Companies over Time",
+  "description": "A multi-series line chart showing stock prices of 5 tech companies over time. The horizontal axis shows different years from 2000 to 2010. The vertical axis encodes stock price from $0 to $550. Each colored line encodes each company including Amazon, Apple, Google, IBM, and Microsoft.",
+  "data": {
+    "values": [
+  {
+    "Company": "Microsoft",
+    "Year": 2000,
+    "Price": 29.67
+  },
+  {
+    "Company": "Microsoft",
+    "Year": 2001,
+    "Price": 25.35
+  },
+  {
+    "Company": "Microsoft",
+    "Year": 2002,
+    "Price": 21.83
+  },
+  {
+    "Company": "Microsoft",
+    "Year": 2003,
+    "Price": 20.93
+  },
+  {
+    "Company": "Microsoft",
+    "Year": 2004,
+    "Price": 22.67
+  },
+  {
+    "Company": "Microsoft",
+    "Year": 2005,
+    "Price": 23.85
+  },
+  {
+    "Company": "Microsoft",
+    "Year": 2006,
+    "Price": 24.76
+  },
+  {
+    "Company": "Microsoft",
+    "Year": 2007,
+    "Price": 29.28
+  },
+  {
+    "Company": "Microsoft",
+    "Year": 2008,
+    "Price": 25.21
+  },
+  {
+    "Company": "Microsoft",
+    "Year": 2009,
+    "Price": 22.87
+  },
+  {
+    "Company": "Microsoft",
+    "Year": 2010,
+    "Price": 28.51
+  },
+  {
+    "Company": "Amazon",
+    "Year": 2000,
+    "Price": 43.93
+  },
+  {
+    "Company": "Amazon",
+    "Year": 2001,
+    "Price": 11.74
+  },
+  {
+    "Company": "Amazon",
+    "Year": 2002,
+    "Price": 16.72
+  },
+  {
+    "Company": "Amazon",
+    "Year": 2003,
+    "Price": 39.02
+  },
+  {
+    "Company": "Amazon",
+    "Year": 2004,
+    "Price": 43.27
+  },
+  {
+    "Company": "Amazon",
+    "Year": 2005,
+    "Price": 40.19
+  },
+  {
+    "Company": "Amazon",
+    "Year": 2006,
+    "Price": 36.25
+  },
+  {
+    "Company": "Amazon",
+    "Year": 2007,
+    "Price": 69.95
+  },
+  {
+    "Company": "Amazon",
+    "Year": 2008,
+    "Price": 69.01
+  },
+  {
+    "Company": "Amazon",
+    "Year": 2009,
+    "Price": 90.73
+  },
+  {
+    "Company": "Amazon",
+    "Year": 2010,
+    "Price": 124.21
+  },
+  {
+    "Company": "IBM",
+    "Year": 2000,
+    "Price": 96.91
+  },
+  {
+    "Company": "IBM",
+    "Year": 2001,
+    "Price": 96.97
+  },
+  {
+    "Company": "IBM",
+    "Year": 2002,
+    "Price": 75.13
+  },
+  {
+    "Company": "IBM",
+    "Year": 2003,
+    "Price": 77.31
+  },
+  {
+    "Company": "IBM",
+    "Year": 2004,
+    "Price": 83.89
+  },
+  {
+    "Company": "IBM",
+    "Year": 2005,
+    "Price": 77.5
+  },
+  {
+    "Company": "IBM",
+    "Year": 2006,
+    "Price": 78.72
+  },
+  {
+    "Company": "IBM",
+    "Year": 2007,
+    "Price": 101.28
+  },
+  {
+    "Company": "IBM",
+    "Year": 2008,
+    "Price": 107.22
+  },
+  {
+    "Company": "IBM",
+    "Year": 2009,
+    "Price": 109.3
+  },
+  {
+    "Company": "IBM",
+    "Year": 2010,
+    "Price": 124.85
+  },
+  {
+    "Company": "Google",
+    "Year": 2004,
+    "Price": 159.48
+  },
+  {
+    "Company": "Google",
+    "Year": 2005,
+    "Price": 286.47
+  },
+  {
+    "Company": "Google",
+    "Year": 2006,
+    "Price": 415.26
+  },
+  {
+    "Company": "Google",
+    "Year": 2007,
+    "Price": 548.76
+  },
+  {
+    "Company": "Google",
+    "Year": 2008,
+    "Price": 455
+  },
+  {
+    "Company": "Google",
+    "Year": 2009,
+    "Price": 449.92
+  },
+  {
+    "Company": "Google",
+    "Year": 2010,
+    "Price": 538.98
+  },
+  {
+    "Company": "Apple",
+    "Year": 2000,
+    "Price": 21.75
+  },
+  {
+    "Company": "Apple",
+    "Year": 2001,
+    "Price": 10.18
+  },
+  {
+    "Company": "Apple",
+    "Year": 2002,
+    "Price": 9.41
+  },
+  {
+    "Company": "Apple",
+    "Year": 2003,
+    "Price": 9.35
+  },
+  {
+    "Company": "Apple",
+    "Year": 2004,
+    "Price": 18.72
+  },
+  {
+    "Company": "Apple",
+    "Year": 2005,
+    "Price": 48.17
+  },
+  {
+    "Company": "Apple",
+    "Year": 2006,
+    "Price": 72.04
+  },
+  {
+    "Company": "Apple",
+    "Year": 2007,
+    "Price": 133.35
+  },
+  {
+    "Company": "Apple",
+    "Year": 2008,
+    "Price": 138.48
+  },
+  {
+    "Company": "Apple",
+    "Year": 2009,
+    "Price": 150.39
+  },
+  {
+    "Company": "Apple",
+    "Year": 2010,
+    "Price": 206.57
+  }
+]
+  },
+  "mark": {
+    "type": "line",
+    "point": {"filled": false, "fill": "white"},
+    "tooltip": true
+  },
+  "encoding": {
+    "x": {"field": "Year", "axis": {"title": "Year"}},
+    "y": {"field": "Price", "type": "quantitative"},
+    "color": {"field": "Company", "type": "nominal"}
+  }
+}

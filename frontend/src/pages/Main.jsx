@@ -18,7 +18,7 @@ function Main() {
   const { setStart } = useContext(SessionContext);
   function handleContinue(e) {
     setStart();
-    navigate("/tutorial/0");
+    navigate("/VizAbility/data/tutorial/0");
   }
   const focusEl = useRef(null);
   useEffect(() => {
