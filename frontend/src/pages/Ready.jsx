@@ -44,7 +44,7 @@ function Ready() {
       return;
     }
     setPID(_PID);
-    navigate("/presurvey");
+    navigate("/VizAbility/data/presurvey");
   }
   const ariaLiveEl = useRef(null);
   const [_PID, _setPID] = useState("");

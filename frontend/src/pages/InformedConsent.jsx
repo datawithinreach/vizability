@@ -8,7 +8,7 @@ function InformedConsent() {
   const navigate = useNavigate();
 
   function handleContinue(event) {
-    navigate("/ready");
+    navigate("/VizAbility/data/ready");
   }
   const focusEl = useRef(null);
   useEffect(()=>{

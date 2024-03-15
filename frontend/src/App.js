@@ -3,9 +3,10 @@ import {BrowserRouter as Router,Routes,Route} from "react-router-dom";
 
 // pages
 import HomePage from './pages/HomePage';
-import DataCollectionHome from './pages/DataCollectionHome.js';
-import InformedConsent from './pages/InformedConsent.js';
-import Ready from './pages/Ready.js';
+import DataCollectionHome from './pages/DataCollectionHome.jsx';
+import InformedConsent from './pages/InformedConsent.jsx';
+import Ready from './pages/Ready.jsx';
+import Presurvey from './pages/Presurvey.jsx';
 
 import NavBar from './components/NavBar';
 
@@ -22,6 +23,7 @@ function App() {
               <Route path="/VizAbility/data" element={<DataCollectionHome/>} />
               <Route path="/VizAbility/data/informedconsent" element={<InformedConsent/>} />
               <Route path="/VizAbility/data/ready" element={<Ready/>} />
+              <Route path="/VizAbility/data/presurvey" element={<Presurvey/>} />
               
           </Routes>
           </SessionProvider>
