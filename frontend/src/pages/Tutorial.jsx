@@ -5,9 +5,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import { SessionContext } from "../contexts/Session";
 
 import Questionnaire from "../components/Questionaire.jsx";
-import BasicTutorial from "../components/BasicTutorial.jsx";
+// import BasicTutorial from "../components/BasicTutorial.jsx";
 // import SpeechTutorial from "components/SpeechTutorial";
 // import StructuredTutorial from "components/StructuredTutorial";
+import QATutorial from "../components/QATutorial.jsx";
 
 import {
   generateExplanation,
@@ -322,7 +323,7 @@ function Tutorial() {
   function renderStimuli(config) {
     switch (config.method) {
       case "table":
-        return <BasicTutorial onLog={handleLog} />;
+        return <QATutorial />;
     //   case "structured":
     //     return <StructuredTutorial onLog={handleLog} />;
     //   case "speech":
