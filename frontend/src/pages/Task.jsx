@@ -8,10 +8,10 @@ import Questionnaire from "../components/Questionaire.jsx";
 import { taskQuestions } from "../charts/questions.js";
 
 
-import BasicBar from "../components/BasicBar";
-import BasicScatterPlot from "../components/BasicScatterPlot";
-import BasicLine from "../components/BasicLine";
-import BasicMap from "../components/BasicMap";
+// import BasicBar from "../components/BasicBar";
+// import BasicScatterPlot from "../components/BasicScatterPlot";
+// import BasicLine from "../components/BasicLine";
+// import BasicMap from "../components/BasicMap";
 import GraphQA from "../components/GraphQA.jsx";
 
 // import StructuredBar from "components/StructuredBar";
