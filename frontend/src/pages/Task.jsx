@@ -12,6 +12,7 @@ import BasicBar from "../components/BasicBar";
 import BasicScatterPlot from "../components/BasicScatterPlot";
 import BasicLine from "../components/BasicLine";
 import BasicMap from "../components/BasicMap";
+import GraphQA from "../components/GraphQA.jsx";
 
 // import StructuredBar from "components/StructuredBar";
 // import StructuredScatterPlot from "components/StructuredScatterPlot";
@@ -25,19 +26,26 @@ import BasicMap from "../components/BasicMap";
 
 import toTitleCase from "../utils/toTitleCase.js";
 
+import lineChart from "../charts/linechart.json"
+import barChart from "../charts/barchart.json"
+import mapChart from "../charts/map.json"
+import scatterChart from "../charts/scatterplot.json"
+
+
 function Task() {
   // const baseURL = process.env.PUBLIC_URL;
   const params = useParams();
   const navigate = useNavigate();
   //   console.log(params);
   const { setup, setTaskResponse, setLog } = useContext(SessionContext);
-  console.log("setup", setup);
+  // console.log("setup", setup);
   const config = setup.length === 0 ? null : setup[params.stage];
-  console.log("config", config);
+  // console.log("config", config);
   const [status, setStatus] = useState("preview");
+  // const [spec, setSpec] = useState({})
 
   const questions = !config ? null : taskQuestions[config.chart];
-  console.log("task questions", questions);
+  // console.log("task questions", questions);
 
   const [curResp, setCurResp] = useState();
   const [responses, setResponses] = useState([]);
@@ -189,13 +197,17 @@ function Task() {
       case "table":
         switch (config.chart) {
           case "bar":
-            return <BasicBar onLog={handleLog} />;
+            // return <BasicBar onLog={handleLog} />;
+            return <GraphQA graphSpec={barChart} />;
           case "line":
-            return <BasicLine onLog={handleLog} />;
+            // return <BasicLine onLog={handleLog} />;
+            return <GraphQA graphSpec={lineChart} />;
           case "scatter":
-            return <BasicScatterPlot onLog={handleLog} />;
+            // return <BasicScatterPlot onLog={handleLog} />;
+            return <GraphQA graphSpec={scatterChart} />;
           case "map":
-            return <BasicMap onLog={handleLog} />;
+            // return <BasicMap onLog={handleLog} />;
+            return <GraphQA graphSpec={mapChart} />;
           default:
             return;
         }
