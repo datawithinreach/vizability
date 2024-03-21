@@ -11,7 +11,7 @@ const QAModule = ({userQuestion, answerToQuestion, classificationExplanation,
     isLoadingAnswer, suggestedQuestions, handleQuestionSubmit, revisedQuestion}) => {
     
     return (
-        <Container aria-live="polite">
+        <Container className = "center-text" aria-live="polite">
             <Row>
                 <b>Supplement your knowledge of the chart by asking questions, either through typing or voice input.</b>
             </Row>

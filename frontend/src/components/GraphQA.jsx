@@ -333,7 +333,7 @@ const GraphQA = ({graphSpec, setGraphSpec}) => {
     }
 
     return (
-        <div>
+        <div className="center-text">
             <Container className="graph-container">{graphSpec && <VegaLite spec={graphSpec} onNewView={handleNewView}/>}</Container>
 
             {graphSpec && <Col className="add-big-margin" aria-live="polite">

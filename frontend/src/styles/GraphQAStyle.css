@@ -6,6 +6,9 @@
     background-color: lightgrey;
 }
 
+.center-text {
+    text-align: center; 
+}
 
 .add-big-margin {
     margin: 1em;
