@@ -10,3 +10,7 @@
     font-family: 'Hanken Grotesk', sans-serif;
     font-weight: bold;
 }
+
+.center-text {
+    text-align: center; 
+}

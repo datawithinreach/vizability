@@ -8,7 +8,7 @@ import ".././styles/NavBar.css"
 function NavBar() {
   return (
     <Navbar expand="lg" className='nav-bar' sticky='top'>
-      <Container>
+      <Container className='center-text'>
         <Navbar.Brand className='nav-brand' href="">VizAbility</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
