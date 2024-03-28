@@ -1,0 +1,181 @@
+type,properties,geometry,properties.name,continent,country,people_fully_vaccinated_pct_of_pop_display,percent_fully_vaccinated,Color
+Feature,Non-String,Non-String,Costa Rica,North America,Costa Rica,85%*,85,Green
+Feature,Non-String,Non-String,Nicaragua,North America,Nicaragua,92%,92,Green
+Feature,Non-String,Non-String,Haiti,North America,Haiti,2.1%*,2.1,Red
+Feature,Non-String,Non-String,El Salvador,North America,El Salvador,67%*,67,Light Green
+Feature,Non-String,Non-String,Guatemala,North America,Guatemala,43%,43,Yellow
+Feature,Non-String,Non-String,Cuba,North America,Cuba,88%,88,Green
+Feature,Non-String,Non-String,Honduras,North America,Honduras,60%,60,Light Green
+Feature,Non-String,Non-String,United States of America,North America,United States,68%*,68,Light Green
+Feature,Non-String,Non-String,Canada,North America,Canada,84%*,84,Green
+Feature,Non-String,Non-String,Belize,North America,Belize,57%*,57,Lime
+Feature,Non-String,Non-String,Mexico,North America,Mexico,65%*,65,Light Green
+Feature,Non-String,Non-String,Panama,North America,Panama,75%*,75,Green
+Feature,Non-String,Non-String,Greenland,North America,Greenland,68%*,68,Light Green
+Feature,Non-String,Non-String,Aruba,South America,Aruba,79%,79,Green
+Feature,Non-String,Non-String,Bahamas,North America,Bahamas,43%*,43,Yellow
+Feature,Non-String,Non-String,Trinidad and Tobago,North America,Trinidad and Tobago,51%*,51,Lime
+Feature,Non-String,Non-String,Grenada,North America,Grenada,35%*,35,Orange
+Feature,Non-String,Non-String,Barbados,North America,Barbados,54%*,54,Lime
+Feature,Non-String,Non-String,Saint Lucia,North America,Saint Lucia,30%*,30,Orange
+Feature,Non-String,Non-String,Dominica,North America,Dominica,43%*,43,Yellow
+Feature,Non-String,Non-String,Montserrat,North America,Montserrat,39%*,39,Amber
+Feature,Non-String,Non-String,Anguilla,North America,Anguilla,70%*,70,Light Green
+Feature,Non-String,Non-String,Jamaica,North America,Jamaica,25%,25,Deep Orange
+Feature,Non-String,Non-String,Bermuda,North America,Bermuda,75%*,75,Green
+Feature,Non-String,Non-String,Bolivia,South America,Bolivia,54%*,54,Lime
+Feature,Non-String,Non-String,Peru,South America,Peru,88%,88,Green
+Feature,Non-String,Non-String,Chile,South America,Chile,93%*,93,Green
+Feature,Non-String,Non-String,Suriname,South America,Suriname,41%*,41,Yellow
+Feature,Non-String,Non-String,Argentina,South America,Argentina,78%,78,Green
+Feature,Non-String,Non-String,Guyana,South America,Guyana,49%,49,Lime
+Feature,Non-String,Non-String,Brazil,South America,Brazil,83%,83,Green
+Feature,Non-String,Non-String,Uruguay,South America,Uruguay,84%,84,Green
+Feature,Non-String,Non-String,Ecuador,South America,Ecuador,82%,82,Green
+Feature,Non-String,Non-String,Colombia,South America,Colombia,73%*,73,Green
+Feature,Non-String,Non-String,Paraguay,South America,Paraguay,50%*,50,Lime
+Feature,Non-String,Non-String,Venezuela,South America,Venezuela,52%*,52,Lime
+Feature,Non-String,Non-String,Indonesia,Asia,Indonesia,64%*,64,Light Green
+Feature,Non-String,Non-String,Malaysia,Asia,Malaysia,86%,86,Green
+Feature,Non-String,Non-String,Cyprus,Asia,Cyprus,54%*,54,Lime
+Feature,Non-String,Non-String,India,Asia,India,70%,70,Light Green
+Feature,Non-String,Non-String,Israel,Asia,Israel,68%,68,Light Green
+Feature,Non-String,Non-String,China,Asia,China,91%*,91,Green
+Feature,Non-String,Non-String,Lebanon,Asia,Lebanon,35%*,35,Orange
+Feature,Non-String,Non-String,Palestine,Asia,Palestine,38%*,38,Amber
+Feature,Non-String,Non-String,Syria,Asia,Syria,13%*,13,Red
+Feature,Non-String,Non-String,South Korea,Asia,South Korea,86%,86,Green
+Feature,Non-String,Non-String,Bhutan,Asia,Bhutan,89%*,89,Green
+Feature,Non-String,Non-String,Oman,Asia,Oman,61%*,61,Light Green
+Feature,Non-String,Non-String,Uzbekistan,Asia,Uzbekistan,54%*,54,Lime
+Feature,Non-String,Non-String,Kazakhstan,Asia,Kazakhstan,57%*,57,Lime
+Feature,Non-String,Non-String,Tajikistan,Asia,Tajikistan,55%*,55,Lime
+Feature,Non-String,Non-String,Mongolia,Asia,Mongolia,67%*,67,Light Green
+Feature,Non-String,Non-String,Cambodia,Asia,Cambodia,89%,89,Green
+Feature,Non-String,Non-String,Georgia,Asia,Georgia,34%*,34,Orange
+Feature,Non-String,Non-String,Azerbaijan,Asia,Azerbaijan,49%*,49,Lime
+Feature,Non-String,Non-String,Vietnam,Asia,Vietnam,89%*,89,Green
+Feature,Non-String,Non-String,Turkey,Asia,Turkey,64%*,64,Light Green
+Feature,Non-String,Non-String,Laos,Asia,Laos,73%*,73,Green
+Feature,Non-String,Non-String,Kyrgyzstan,Asia,Kyrgyzstan,21%,21,Deep Orange
+Feature,Non-String,Non-String,Armenia,Asia,Armenia,33%*,33,Orange
+Feature,Non-String,Non-String,Iraq,Asia,Iraq,20%*,20,Deep Orange
+Feature,Non-String,Non-String,Iran,Asia,Iran,71%,71,Light Green
+Feature,Non-String,Non-String,Saudi Arabia,Asia,Saudi Arabia,74%*,74,Green
+Feature,Non-String,Non-String,Kuwait,Asia,Kuwait,80%,80,Green
+Feature,Non-String,Non-String,Thailand,Asia,Thailand,77%*,77,Green
+Feature,Non-String,Non-String,Pakistan,Asia,Pakistan,64%,64,Light Green
+Feature,Non-String,Non-String,Myanmar,Asia,Myanmar,51%*,51,Lime
+Feature,Non-String,Non-String,Bangladesh,Asia,Bangladesh,84%,84,Green
+Feature,Non-String,Non-String,Afghanistan,Asia,Afghanistan,31%,31,Orange
+Feature,Non-String,Non-String,Turkmenistan,Asia,Turkmenistan,62%*,62,Light Green
+Feature,Non-String,Non-String,Jordan,Asia,Jordan,45%*,45,Yellow
+Feature,Non-String,Non-String,Nepal,Asia,Nepal,85%,85,Green
+Feature,Non-String,Non-String,Hong Kong,Asia,Hong Kong,91%,91,Green
+Feature,Non-String,Non-String,Yemen,Asia,Yemen,2.6%,2.6,Red
+Feature,Non-String,Non-String,Philippines,Asia,Philippines,68%,68,Light Green
+Feature,Non-String,Non-String,Sri Lanka,Asia,Sri Lanka,68%*,68,Light Green
+Feature,Non-String,Non-String,Taiwan,Asia,Taiwan,87%,87,Green
+Feature,Non-String,Non-String,Japan,Asia,Japan,82%,82,Green
+Feature,Non-String,Non-String,Singapore,Asia,Singapore,90%*,90,Green
+Feature,Non-String,Non-String,Bahrain,Asia,Bahrain,75%*,75,Green
+Feature,Non-String,Non-String,Ethiopia,Africa,Ethiopia,33%*,33,Orange
+Feature,Non-String,Non-String,Somalia,Africa,Somalia,42%*,42,Yellow
+Feature,Non-String,Non-String,Kenya,Africa,Kenya,21%,21,Deep Orange
+Feature,Non-String,Non-String,Malawi,Africa,Malawi,21%*,21,Deep Orange
+Feature,Non-String,Non-String,Tanzania,Africa,Tanzania,55%,55,Lime
+Feature,Non-String,Non-String,Morocco,Africa,Morocco,64%,64,Light Green
+Feature,Non-String,Non-String,Congo,Africa,Congo,12%*,12,Red
+Feature,Non-String,Non-String,Dem. Rep. Congo,Africa,Democratic Republic of Congo,11%*,11,Red
+Feature,Non-String,Non-String,Namibia,Africa,Namibia,21%,21,Deep Orange
+Feature,Non-String,Non-String,South Africa,Africa,South Africa,36%*,36,Orange
+Feature,Non-String,Non-String,Libya,Africa,Libya,18%*,18,Deep Orange
+Feature,Non-String,Non-String,Tunisia,Africa,Tunisia,55%,55,Lime
+Feature,Non-String,Non-String,Zambia,Africa,Zambia,49%*,49,Lime
+Feature,Non-String,Non-String,Sierra Leone,Africa,Sierra Leone,49%,49,Lime
+Feature,Non-String,Non-String,Guinea,Africa,Guinea,34%*,34,Orange
+Feature,Non-String,Non-String,Liberia,Africa,Liberia,76%*,76,Green
+Feature,Non-String,Non-String,Central African Rep.,Africa,Central African Republic,46%*,46,Yellow
+Feature,Non-String,Non-String,Sudan,Africa,Sudan,25%,25,Deep Orange
+Feature,Non-String,Non-String,Djibouti,Africa,Djibouti,35%,35,Orange
+Feature,Non-String,Non-String,Mali,Africa,Mali,15%*,15,Red
+Feature,Non-String,Non-String,Senegal,Africa,Senegal,8.8%*,8.8,Red
+Feature,Non-String,Non-String,Nigeria,Africa,Nigeria,33%*,33,Orange
+Feature,Non-String,Non-String,Benin,Africa,Benin,23%*,23,Deep Orange
+Feature,Non-String,Non-String,Angola,Africa,Angola,26%,26,Deep Orange
+Feature,Non-String,Non-String,Botswana,Africa,Botswana,71%,71,Light Green
+Feature,Non-String,Non-String,Zimbabwe,Africa,Zimbabwe,32%*,32,Orange
+Feature,Non-String,Non-String,Chad,Africa,Chad,38%,38,Amber
+Feature,Non-String,Non-String,Algeria,Africa,Algeria,15%*,15,Red
+Feature,Non-String,Non-String,Mozambique,Africa,Mozambique,61%*,61,Light Green
+Feature,Non-String,Non-String,Burundi,Africa,Burundi,0.3%*,0.3,Red
+Feature,Non-String,Non-String,Rwanda,Africa,Rwanda,78%*,78,Green
+Feature,Non-String,Non-String,Uganda,Africa,Uganda,29%*,29,Orange
+Feature,Non-String,Non-String,Lesotho,Africa,Lesotho,44%,44,Yellow
+Feature,Non-String,Non-String,Cameroon,Africa,Cameroon,13%,13,Red
+Feature,Non-String,Non-String,Gabon,Africa,Gabon,12%*,12,Red
+Feature,Non-String,Non-String,Niger,Africa,Niger,23%*,23,Deep Orange
+Feature,Non-String,Non-String,Burkina Faso,Africa,Burkina Faso,17%,17,Deep Orange
+Feature,Non-String,Non-String,Togo,Africa,Togo,19%*,19,Deep Orange
+Feature,Non-String,Non-String,Ghana,Africa,Ghana,32%*,32,Orange
+Feature,Non-String,Non-String,Guinea-Bissau,Africa,Guinea-Bissau,19%*,19,Deep Orange
+Feature,Non-String,Non-String,Egypt,Africa,Egypt,41%,41,Yellow
+Feature,Non-String,Non-String,Mauritania,Africa,Mauritania,34%,34,Orange
+Feature,Non-String,Non-String,Gambia,Africa,Gambia,19%*,19,Deep Orange
+Feature,Non-String,Non-String,Madagascar,Africa,Madagascar,8.3%,8.3,Red
+Feature,Non-String,Non-String,Comoros,Africa,Comoros,47%*,47,Lime
+Feature,Non-String,Non-String,France,Europe,France,79%,79,Green
+Feature,Non-String,Non-String,Ukraine,Europe,Ukraine,34%*,34,Orange
+Feature,Non-String,Non-String,Belarus,Europe,Belarus,68%*,68,Light Green
+Feature,Non-String,Non-String,Lithuania,Europe,Lithuania,67%,67,Light Green
+Feature,Non-String,Non-String,Russia,Europe,Russia,55%,55,Lime
+Feature,Non-String,Non-String,Czechia,Europe,Czechia,65%,65,Light Green
+Feature,Non-String,Non-String,Germany,Europe,Germany,76%,76,Green
+Feature,Non-String,Non-String,Estonia,Europe,Estonia,64%,64,Light Green
+Feature,Non-String,Non-String,Latvia,Europe,Latvia,68%*,68,Light Green
+Feature,Non-String,Non-String,Norway,Europe,Norway,76%*,76,Green
+Feature,Non-String,Non-String,Sweden,Europe,Sweden,74%,74,Green
+Feature,Non-String,Non-String,Finland,Europe,Finland,79%,79,Green
+Feature,Non-String,Non-String,Luxembourg,Europe,Luxembourg,75%*,75,Green
+Feature,Non-String,Non-String,Belgium,Europe,Belgium,80%,80,Green
+Feature,Non-String,Non-String,North Macedonia,Europe,North Macedonia,40%*,40,Amber
+Feature,Non-String,Non-String,Albania,Europe,Albania,45%*,45,Yellow
+Feature,Non-String,Non-String,Kosovo,Europe,Kosovo,45%*,45,Yellow
+Feature,Non-String,Non-String,Denmark,Europe,Denmark,82%,82,Green
+Feature,Non-String,Non-String,Spain,Europe,Spain,87%,87,Green
+Feature,Non-String,Non-String,Romania,Europe,Romania,42%*,42,Yellow
+Feature,Non-String,Non-String,Hungary,Europe,Hungary,64%*,64,Light Green
+Feature,Non-String,Non-String,Slovakia,Europe,Slovakia,47%*,47,Lime
+Feature,Non-String,Non-String,Poland,Europe,Poland,60%,60,Light Green
+Feature,Non-String,Non-String,Ireland,Europe,Ireland,82%,82,Green
+Feature,Non-String,Non-String,United Kingdom,Europe,United Kingdom,76%*,76,Green
+Feature,Non-String,Non-String,Greece,Europe,Greece,71%,71,Light Green
+Feature,Non-String,Non-String,Austria,Europe,Austria,77%*,77,Green
+Feature,Non-String,Non-String,Italy,Europe,Italy,80%,80,Green
+Feature,Non-String,Non-String,Switzerland,Europe,Switzerland,70%,70,Light Green
+Feature,Non-String,Non-String,Liechtenstein,Europe,Liechtenstein,70%*,70,Light Green
+Feature,Non-String,Non-String,Netherlands,Europe,Netherlands,69%*,69,Light Green
+Feature,Non-String,Non-String,Serbia,Europe,Serbia,47%*,47,Lime
+Feature,Non-String,Non-String,Croatia,Europe,Croatia,55%,55,Lime
+Feature,Non-String,Non-String,Slovenia,Europe,Slovenia,59%*,59,Light Green
+Feature,Non-String,Non-String,Bulgaria,Europe,Bulgaria,30%,30,Orange
+Feature,Non-String,Non-String,San Marino,Europe,San Marino,70%*,70,Light Green
+Feature,Non-String,Non-String,Monaco,Europe,Monaco,66%*,66,Light Green
+Feature,Non-String,Non-String,Andorra,Europe,Andorra,69%*,69,Light Green
+Feature,Non-String,Non-String,Montenegro,Europe,Montenegro,46%*,46,Yellow
+Feature,Non-String,Non-String,Portugal,Europe,Portugal,87%*,87,Green
+Feature,Non-String,Non-String,Moldova,Europe,Moldova,40%*,40,Amber
+Feature,Non-String,Non-String,Malta,Europe,Malta,94%,94,Green
+Feature,Non-String,Non-String,Iceland,Europe,Iceland,80%*,80,Green
+Feature,Non-String,Non-String,Isle of Man,Europe,Isle of Man,79%*,79,Green
+Feature,Non-String,Non-String,Fiji,Oceania,Fiji,72%,72,Green
+Feature,Non-String,Non-String,Papua New Guinea,Oceania,Papua New Guinea,3.6%,3.6,Red
+Feature,Non-String,Non-String,New Zealand,Oceania,New Zealand,84%*,84,Green
+Feature,Non-String,Non-String,Australia,Oceania,Australia,85%*,85,Green
+Feature,Non-String,Non-String,New Caledonia,Oceania,New Caledonia,64%,64,Light Green
+Feature,Non-String,Non-String,Kiribati,Oceania,Kiribati,69%,69,Light Green
+Feature,Non-String,Non-String,Tonga,Oceania,Tonga,74%,74,Green
+Feature,Non-String,Non-String,Samoa,Oceania,Samoa,90%,90,Green
+Feature,Non-String,Non-String,Tuvalu,Oceania,Tuvalu,80%*,80,Green
+Feature,Non-String,Non-String,Nauru,Oceania,Nauru,90%,90,Green
+Feature,Non-String,Non-String,Vanuatu,Oceania,Vanuatu,54%,54,Lime
