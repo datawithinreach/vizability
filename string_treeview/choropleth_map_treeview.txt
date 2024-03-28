@@ -1,0 +1,194 @@
+Hierarchy,Content
+1 // A geographic map.  percent_fully_vaccinated, country.
+1.1 // Legend titled percent_fully_vaccinated. For a quantitative scale. With values from 0 to 100.
+1.1.1 // Percent_fully_vaccinated is between 0 and 10. 6 values. 
+1.1.2 // Percent_fully_vaccinated is between 10 and 20. 12 values. 
+1.1.3 // Percent_fully_vaccinated is between 20 and 30. 11 values. 
+1.1.4 // Percent_fully_vaccinated is between 30 and 40. 19 values. 
+1.1.5 // Percent_fully_vaccinated is between 40 and 50. 22 values. 
+1.1.6 // Percent_fully_vaccinated is between 50 and 60. 17 values. 
+1.1.7 // Percent_fully_vaccinated is between 60 and 70. 28 values. 
+1.1.8 // Percent_fully_vaccinated is between 70 and 80. 30 values. 
+1.1.9 // Percent_fully_vaccinated is between 80 and 90. 27 values. 
+1.1.10 // Percent_fully_vaccinated is between 90 and 100. 8 values. 
+1.2 // Detail titled country. For a nominal scale. With 180 values from Costa Rica to Vanuatu.
+1.2.1 // Country: Costa Rica.  
+1.2.2 // Country: Nicaragua.  
+1.2.3 // Country: Haiti.  
+1.2.4 // Country: El Salvador.  
+1.2.5 // Country: Guatemala.  
+1.2.6 // Country: Cuba.  
+1.2.7 // Country: Honduras.  
+1.2.8 // Country: United States.  
+1.2.9 // Country: Canada.  
+1.2.10 // Country: Belize.  
+1.2.11 // Country: Mexico.  
+1.2.12 // Country: Panama.  
+1.2.13 // Country: Greenland.  
+1.2.14 // Country: Aruba.  
+1.2.15 // Country: Bahamas.  
+1.2.16 // Country: Trinidad and Tobago.  
+1.2.17 // Country: Grenada.  
+1.2.18 // Country: Barbados.  
+1.2.19 // Country: Saint Lucia.  
+1.2.20 // Country: Dominica.  
+1.2.21 // Country: Montserrat.  
+1.2.22 // Country: Anguilla.  
+1.2.23 // Country: Jamaica.  
+1.2.24 // Country: Bermuda.  
+1.2.25 // Country: Bolivia.  
+1.2.26 // Country: Peru.  
+1.2.27 // Country: Chile.  
+1.2.28 // Country: Suriname.  
+1.2.29 // Country: Argentina.  
+1.2.30 // Country: Guyana.  
+1.2.31 // Country: Brazil.  
+1.2.32 // Country: Uruguay.  
+1.2.33 // Country: Ecuador.  
+1.2.34 // Country: Colombia.  
+1.2.35 // Country: Paraguay.  
+1.2.36 // Country: Venezuela.  
+1.2.37 // Country: Indonesia.  
+1.2.38 // Country: Malaysia.  
+1.2.39 // Country: Cyprus.  
+1.2.40 // Country: India.  
+1.2.41 // Country: Israel.  
+1.2.42 // Country: China.  
+1.2.43 // Country: Lebanon.  
+1.2.44 // Country: Palestine.  
+1.2.45 // Country: Syria.  
+1.2.46 // Country: South Korea.  
+1.2.47 // Country: Bhutan.  
+1.2.48 // Country: Oman.  
+1.2.49 // Country: Uzbekistan.  
+1.2.50 // Country: Kazakhstan.  
+1.2.51 // Country: Tajikistan.  
+1.2.52 // Country: Mongolia.  
+1.2.53 // Country: Cambodia.  
+1.2.54 // Country: Georgia.  
+1.2.55 // Country: Azerbaijan.  
+1.2.56 // Country: Vietnam.  
+1.2.57 // Country: Turkey.  
+1.2.58 // Country: Laos.  
+1.2.59 // Country: Kyrgyzstan.  
+1.2.60 // Country: Armenia.  
+1.2.61 // Country: Iraq.  
+1.2.62 // Country: Iran.  
+1.2.63 // Country: Saudi Arabia.  
+1.2.64 // Country: Kuwait.  
+1.2.65 // Country: Thailand.  
+1.2.66 // Country: Pakistan.  
+1.2.67 // Country: Myanmar.  
+1.2.68 // Country: Bangladesh.  
+1.2.69 // Country: Afghanistan.  
+1.2.70 // Country: Turkmenistan.  
+1.2.71 // Country: Jordan.  
+1.2.72 // Country: Nepal.  
+1.2.73 // Country: Hong Kong.  
+1.2.74 // Country: Yemen.  
+1.2.75 // Country: Philippines.  
+1.2.76 // Country: Sri Lanka.  
+1.2.77 // Country: Taiwan.  
+1.2.78 // Country: Japan.  
+1.2.79 // Country: Singapore.  
+1.2.80 // Country: Bahrain.  
+1.2.81 // Country: Ethiopia.  
+1.2.82 // Country: Somalia.  
+1.2.83 // Country: Kenya.  
+1.2.84 // Country: Malawi.  
+1.2.85 // Country: Tanzania.  
+1.2.86 // Country: Morocco.  
+1.2.87 // Country: Congo.  
+1.2.88 // Country: Democratic Republic of Congo.  
+1.2.89 // Country: Namibia.  
+1.2.90 // Country: South Africa.  
+1.2.91 // Country: Libya.  
+1.2.92 // Country: Tunisia.  
+1.2.93 // Country: Zambia.  
+1.2.94 // Country: Sierra Leone.  
+1.2.95 // Country: Guinea.  
+1.2.96 // Country: Liberia.  
+1.2.97 // Country: Central African Republic.  
+1.2.98 // Country: Sudan.  
+1.2.99 // Country: Djibouti.  
+1.2.100 // Country: Mali.  
+1.2.101 // Country: Senegal.  
+1.2.102 // Country: Nigeria.  
+1.2.103 // Country: Benin.  
+1.2.104 // Country: Angola.  
+1.2.105 // Country: Botswana.  
+1.2.106 // Country: Zimbabwe.  
+1.2.107 // Country: Chad.  
+1.2.108 // Country: Algeria.  
+1.2.109 // Country: Mozambique.  
+1.2.110 // Country: Burundi.  
+1.2.111 // Country: Rwanda.  
+1.2.112 // Country: Uganda.  
+1.2.113 // Country: Lesotho.  
+1.2.114 // Country: Cameroon.  
+1.2.115 // Country: Gabon.  
+1.2.116 // Country: Niger.  
+1.2.117 // Country: Burkina Faso.  
+1.2.118 // Country: Togo.  
+1.2.119 // Country: Ghana.  
+1.2.120 // Country: Guinea-Bissau.  
+1.2.121 // Country: Egypt.  
+1.2.122 // Country: Mauritania.  
+1.2.123 // Country: Gambia.  
+1.2.124 // Country: Madagascar.  
+1.2.125 // Country: Comoros.  
+1.2.126 // Country: France.  
+1.2.127 // Country: Ukraine.  
+1.2.128 // Country: Belarus.  
+1.2.129 // Country: Lithuania.  
+1.2.130 // Country: Russia.  
+1.2.131 // Country: Czechia.  
+1.2.132 // Country: Germany.  
+1.2.133 // Country: Estonia.  
+1.2.134 // Country: Latvia.  
+1.2.135 // Country: Norway.  
+1.2.136 // Country: Sweden.  
+1.2.137 // Country: Finland.  
+1.2.138 // Country: Luxembourg.  
+1.2.139 // Country: Belgium.  
+1.2.140 // Country: North Macedonia.  
+1.2.141 // Country: Albania.  
+1.2.142 // Country: Kosovo.  
+1.2.143 // Country: Denmark.  
+1.2.144 // Country: Spain.  
+1.2.145 // Country: Romania.  
+1.2.146 // Country: Hungary.  
+1.2.147 // Country: Slovakia.  
+1.2.148 // Country: Poland.  
+1.2.149 // Country: Ireland.  
+1.2.150 // Country: United Kingdom.  
+1.2.151 // Country: Greece.  
+1.2.152 // Country: Austria.  
+1.2.153 // Country: Italy.  
+1.2.154 // Country: Switzerland.  
+1.2.155 // Country: Liechtenstein.  
+1.2.156 // Country: Netherlands.  
+1.2.157 // Country: Serbia.  
+1.2.158 // Country: Croatia.  
+1.2.159 // Country: Slovenia.  
+1.2.160 // Country: Bulgaria.  
+1.2.161 // Country: San Marino.  
+1.2.162 // Country: Monaco.  
+1.2.163 // Country: Andorra.  
+1.2.164 // Country: Montenegro.  
+1.2.165 // Country: Portugal.  
+1.2.166 // Country: Moldova.  
+1.2.167 // Country: Malta.  
+1.2.168 // Country: Iceland.  
+1.2.169 // Country: Isle of Man.  
+1.2.170 // Country: Fiji.  
+1.2.171 // Country: Papua New Guinea.  
+1.2.172 // Country: New Zealand.  
+1.2.173 // Country: Australia.  
+1.2.174 // Country: New Caledonia.  
+1.2.175 // Country: Kiribati.  
+1.2.176 // Country: Tonga.  
+1.2.177 // Country: Samoa.  
+1.2.178 // Country: Tuvalu.  
+1.2.179 // Country: Nauru.  
+1.2.180 // Country: Vanuatu.  
