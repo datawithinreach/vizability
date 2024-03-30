@@ -1,0 +1,7 @@
+Here is a textual representation of a chart:
+
+{treeview_text}
+
+Use this description of the chart along with outside knowledge to answer the following question:
+
+{question}

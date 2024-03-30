@@ -1,0 +1,27 @@
+Here's a structural layout of a data set. Note, this is not the entire data set, and is just a broad, top view. 
+This is a hierarchy/tree data structure, where each sentence is preceded by its placement within the tree. 
+For instance, 1.1.2 refers to the second child of the first child of the head:
+
+{chart_context}
+
+A user has asked a question about this dataset: {question}
+
+Using the layout of the dataset, the user question, and what you know, refine and clarify the user question in the context of the data.
+
+Here are a few examples containing questions, their revised counterparts, and a sentence of rationale:
+
+For a dataset with the following variables: country, percent_working_age, color, GDP
+Question: Which country has 50%?
+Refined Question: For what country is 50% percent of the population of working age?
+Rationale: Clarify question by explicitly stating implied variable 'percent_working_age'. 
+
+Question: What is the next highest country?
+Refined Question: Which country has the second highest percent of its population being of working age?
+Rationale: Clarify question by explicitly stating implied variable 'percent_working_age'.
+
+Question: What's the relationship between GDP and the percent of a country's population that is working age?
+Refined Question: What's the relationship between GDP and percent of working age?
+Rationale: Simplify question to better conform to variables in the dataset; did not introduce other unnecessary variables like color.
+
+
+{format_instructions}

@@ -45,7 +45,7 @@ def classify(query):
     # Iterate through the DataFrame rows and categorize questions
     for index, row in df.iterrows():
         question = row['Questions']
-        ground_truth = row['Ground_Truth']
+        ground_truth = row['Classification_Ground_Truth']
         if ground_truth != "I am sorry but I cannot understand the question":
             validation_set_sample_dict[ground_truth].append(question)
     
@@ -88,9 +88,9 @@ def classify(query):
         # if index != -1:
         #     prompt = prompt[:index + len(substring_to_find[ground_truth])] + "\n" + validation_processed_string + prompt[index + len(substring_to_find[ground_truth]):]
     output = send_prompt(chat_prompt.format_messages())
-    return output[1].content
+    return output.content
 
 
 if __name__ == '__main__':
     output = classify("Are the ocean level rising?")
-    print(output.content)
+    print(output)
