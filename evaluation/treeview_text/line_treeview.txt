@@ -1,4 +1,4 @@
-Hierarchy,Content
+Address // Description
 1 // A line chart. With axes Date and Number of Homes for Sale.
 1.1 // X-axis titled date. For a temporal scale. With values from May 22, 2014 to Feb 11, 2021.
 1.1.1 // Date is between May 22, 2014 and Jan 1, 2015. 32 values. 

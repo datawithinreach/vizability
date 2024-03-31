@@ -55,7 +55,7 @@ def reply(query, query_type, treeview_text, active_element="", chart_data=None):
         human_message_prompt = HumanMessagePromptTemplate.from_template(base_navigation_prompt)
         chat_prompt = ChatPromptTemplate(
             messages = [human_message_prompt],
-            input_variables=["chart_context, question"],
+            input_variables=["chart_context", "question"],
             partial_variables={"format_instructions": parser.get_format_instructions()})
         messages = chat_prompt.format_messages(question=query, chart_context=chart_context)
         response = send_prompt(messages)

@@ -43,7 +43,7 @@ def refine(query, treeview_text, active_element=""):
     
     chat_prompt = ChatPromptTemplate(
         messages = [human_message_prompt],
-        input_variables=["chart_context, question"],
+        input_variables=["chart_context", "question"],
         partial_variables={"format_instructions": parser.get_format_instructions()})
 
 

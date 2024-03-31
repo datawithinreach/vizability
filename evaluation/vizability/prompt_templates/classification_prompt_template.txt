@@ -1,20 +1,20 @@
-Analytical Queries involve any possible lookup operations, computations, or analysis involving data.
+The following tree view provides a textual representation of the chart, allowing users to navigate through the chart's components using a keyboard. It outlines the chart's content in a structured hierarchy, beginning with the general type of chart and followed by specific visual elements such as axes and legends. Each line in the tree view text consists of a node address, indicating the level of detail, and a node description, which describes the chart element or data range at that level. The hierarchy starts with the overall chart description and breaks down into finer details, such as the properties of individual axes and the data ranges they represent.
+{treeview_text}
 
+Analytical Queries primarily focus on understanding the underlying data. Examples:
 {analytical_query_examples}
 
-Visual Queries involve references to visual cues such as color or graph shape/characteristics. 
-
+Visual Queries involve references to visual cues such as color or graph shape/characteristics. Examples: 
 {visual_query_examples}
 
-Navigation Queries involve questions relating to location within the Olli navigation table. They usually take up the form: 'How do I get from () to ().'
-Navigation Query // Take me to the y-axis.
-Navigation Query // How do I navigate to the year 2015?
-Navigation Query // What is my current position?
+Navigation Queries involve questions relating to navigation and orientation within the textual view of the chart above. Examples: 
+{navigation_query_examples}
 
-Contextual Queries involve broad questions that do not necessarily need the graph's specific data to be answered and often involve questions like: "Why?". 
+Contextual Queries seek information not directly present on the chart but require ancillary knowledge. Examples: 
 {contextual_query_examples}
 
-Your objective is to classify the following question into one of these 4 categories: ["Analytical Query", "Visual Query", "Navigation Query", "Contextual Query"]. 
-If you do not know how to classify the question, return "I am sorry but I cannot understand the question" and nothing more. 
-If you can classify it, your answer should only be two words: [Type of Query] Query. 
-Refer back to the examples above to help classify the question:
+Your task is to categorize the following question into one of four types: Analytical, Visual, Navigation, or Contextual. If you're unsure how to classify the question, write 'I am sorry but I cannot understand the question.' in the query type. Please also include the rationale for your classification.
+
+Question to be categorized: {question}
+
+{format_instructions}

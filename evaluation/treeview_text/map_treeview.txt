@@ -1,4 +1,4 @@
-Hierarchy,Content
+Address // Description
 1 // A geographic map.  percent_fully_vaccinated, country.
 1.1 // Legend titled percent_fully_vaccinated. For a quantitative scale. With values from 0 to 100.
 1.1.1 // Percent_fully_vaccinated is between 0 and 10. 6 values. 

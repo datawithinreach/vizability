@@ -7,6 +7,9 @@ config = load_config()
 from dotenv import load_dotenv
 load_dotenv()
 # assuming we are using chat models
+
+def check_config():
+    return config
 def send_prompt(messages, model_name = config["default_model"], temperature = config["default_temperature"]):
     chat_model = ChatOpenAI(temperature=temperature, model_name=model_name)
     return chat_model.invoke(messages)

@@ -1,4 +1,4 @@
-Hierarchy,Content
+Address // Description
 1 // A bar chart. With axes Year and Temperature Anomaly (Â°C).
 1.1 // X-axis titled Year. For a ordinal scale. With 172 values from 1850 to 2021.
 1.1.1 // Year: 1850.  

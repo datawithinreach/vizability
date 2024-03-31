@@ -1,12 +1,8 @@
-Here's a structural layout of a data set. Note, this is not the entire data set, and is just a broad, top view. 
-This is a hierarchy/tree data structure, where each sentence is preceded by its placement within the tree. 
-For instance, 1.1.2 refers to the second child of the first child of the head:
+The following tree view provides a textual representation of the chart, allowing users to navigate through the chart's components using a keyboard. It outlines the chart's content in a structured hierarchy, beginning with the general type of chart and followed by specific visual elements such as axes and legends. Each line in the tree view text consists of a node address, indicating the level of detail, and a node description, which describes the chart element or data range at that level. The hierarchy starts with the overall chart description and breaks down into finer details, such as the properties of individual axes and the data ranges they represent. The active element, if present, signifies the user's current position within the tree view structure.
 
 {chart_context}
 
-A user has asked a question about this dataset: {question}
-
-Using the layout of the dataset, the user question, and what you know, refine and clarify the user question in the context of the data.
+Improve the following user question about this chart: {question} Make sure to preserve the core meaning and objective of the question, which may pertain to the data, visual elements, background information, or navigating the tree view outlined above.
 
 Here are a few examples containing questions, their revised counterparts, and a sentence of rationale:
 
@@ -22,6 +18,5 @@ Rationale: Clarify question by explicitly stating implied variable 'percent_work
 Question: What's the relationship between GDP and the percent of a country's population that is working age?
 Refined Question: What's the relationship between GDP and percent of working age?
 Rationale: Simplify question to better conform to variables in the dataset; did not introduce other unnecessary variables like color.
-
 
 {format_instructions}
