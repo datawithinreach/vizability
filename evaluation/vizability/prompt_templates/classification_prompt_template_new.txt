@@ -1,0 +1,20 @@
+The following tree view provides a textual representation of the chart, allowing users to navigate through the chart's components using a keyboard. It outlines the chart's content in a structured hierarchy, beginning with the general type of chart and followed by specific visual elements such as axes and legends. Each line in the tree view text consists of a node address, indicating the level of detail, and a node description, which describes the chart element or data range at that level. The hierarchy starts with the overall chart description and breaks down into finer details, such as the properties of individual axes and the data ranges they represent.
+{treeview_text}
+
+Analytical Queries primarily focus on understanding the underlying data. Examples:
+{analytical_query_examples}
+
+Visual Queries involve references to visual cues such as color or graph shape/characteristics. Examples: 
+{visual_query_examples}
+
+Navigation Queries involve questions relating to navigation and orientation within the textual view of the chart above. Examples: 
+{navigation_query_examples}
+
+Contextual Queries seek information not directly present on the chart but require ancillary knowledge. Examples: 
+{contextual_query_examples}
+
+Your task is to categorize the following question into one of four types: Analytical, Visual, Navigation, or Contextual. If you're unsure how to classify the question, write 'I am sorry but I cannot understand the question.' in the query type. Please also include the rationale for your classification.
+
+Question to be categorized: {question}
+
+{format_instructions}

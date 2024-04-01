@@ -1,6 +1,7 @@
 import pandas as pd 
 import json
 import torch
+import asyncio
 from importlib.resources import files
 from vizability.prompt import send_prompt
 from langchain_core.prompts.chat import (
@@ -98,32 +99,100 @@ def classify(query, num_examples=4, treeview_text=None):
     # print("prompt", chat_prompt.format_messages(treeview_text=treeview_text, question=query))
     output = send_prompt(chat_prompt.format_messages(treeview_text=treeview_text, question=query))
     # print("output", output)
-    
-    try:
-        query_type = json.loads(output.content)["query_type"]
-    except json.JSONDecodeError as e:
-        try:
-            # Attempt to clean the string and parse again (GPT4)
-            cleaned_content = output.content.strip().replace("```json\n", "").replace("\n```", "").strip()
-            query_type = json.loads(cleaned_content)["query_type"]
-        except json.JSONDecodeError as e:
-            print(f"Error parsing JSON after cleaning: {e}", 'output.content:', cleaned_content)
-            query_type = "Query classification failed."
+    query_type = parser.parse(output.content)["query_type"]
+    # try:
+    #     query_type = json.loads(output.content)["query_type"]
+    # except json.JSONDecodeError as e:
+    #     try:
+    #         # Attempt to clean the string and parse again (GPT4)
+    #         cleaned_content = output.content.strip().replace("```json\n", "").replace("\n```", "").strip()
+    #         query_type = json.loads(cleaned_content)["query_type"]
+    #     except json.JSONDecodeError as e:
+    #         print(f"Error parsing JSON after cleaning: {e}", 'output.content:', cleaned_content)
+    #         query_type = "Query classification failed."
 
     return query_type
 
-
+import time
 if __name__ == '__main__':
     testset_link = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTDwtO5qoHM1RmugyVcxeXa-uLit2TAF0fKsPiSDxi6GtoNYXIV6EdiZ6-oGEzBg-7L-dICHJiB4Vis/pub?gid=914137684&single=true&output=csv"
     testset = pd.read_csv(testset_link)
-    sampled_df = testset.iloc[0: 200]
-    # sampled_df = testset[testset['Classification_Ground_Truth'] == 'Navigation Query'].sample(n=5, random_state=42)
+    sampled_df = testset.sample(n=2, random_state=42)
     def apply_classify(row):
         with open(f"treeview_text/{row['Chart Type']}_treeview.txt", "r") as file_object:
-            treeview_text = file_object.read()  
+            treeview_text = file_object.read()
         # chart_data = pd.read_csv(f"chart_data/{row['Chart Type']}_transformed_data.csv")
-        query_type = classify(row['Questions'], 8, treeview_text)
+        # time.sleep(2)
+        query_type = classify(row['Questions'])
         print(row.name, "classifying ", row['Questions'], row['Classification_Ground_Truth'], ">>>", query_type)
+        return query_type
+    
+    start_time = time.time()
     sampled_df['System_Classification'] = sampled_df.apply(apply_classify, axis=1)
-    sampled_df.apply(lambda d: print(d["Questions"], d['Classification_Ground_Truth'], " >>> ", d["System_Classification"]), axis=1)
-    sampled_df.to_csv('my_dataframe-200.csv', index=False)
+
+    # sidx = 400
+    # eidx = 450
+    # sampled_df = testset.iloc[sidx:eidx]
+    
+    # print("Asynchonous classification")
+    # start_time = time.time()
+    # async def apply_classify(row):
+    #     with open(f"treeview_text/{row['Chart Type']}_treeview.txt", "r") as file_object:
+    #         treeview_text = file_object.read()
+    #     # chart_data = pd.read_csv(f"chart_data/{row['Chart Type']}_transformed_data.csv")
+    #     query_type = await classify(row['Questions'], 8, treeview_text)
+    #     print(row.name, "classifying ", row['Questions'], row['Classification_Ground_Truth'], ">>>", query_type,  flush=True)
+    #     return query_type
+
+    # async def classify_all(sampled_df, chunk_size=5):
+    #     # Divide the DataFrame into chunks
+    #     chunks = [sampled_df.iloc[i:i + chunk_size] for i in range(0, len(sampled_df), chunk_size)]
+        
+    #     all_results = []
+    #     for i, chunk in enumerate(chunks):
+    #         tasks = [apply_classify(row) for _, row in chunk.iterrows()]
+    #         results = await asyncio.gather(*tasks)
+    #         all_results.extend(results)
+    #         print(f"Completed classification for chunk {i + 1}/{len(chunks)}")
+    #         end_time = time.time()
+
+    #         # Calculate the elapsed time
+    #         elapsed_time = end_time - start_time
+    #         print(f"Elapsed time: {elapsed_time} seconds")
+    #     return all_results
+    
+    # classification_results = asyncio.run(classify_all(sampled_df))
+    # sampled_df.loc[:, 'System_Classification'] = classification_results
+   
+
+    # sampled_df.apply(lambda d: print(d["Questions"], d['Classification_Ground_Truth'], " >>> ", d["System_Classification"]), axis=1)
+    # sampled_df.to_csv(f'classification_results_{sidx}_{eidx}.csv', index=False)
+
+
+    #================================================================
+    # print("Synchonous classification")
+    # def apply_classify(row):
+    #     with open(f"treeview_text/{row['Chart Type']}_treeview.txt", "r") as file_object:
+    #         treeview_text = file_object.read()
+    #     # chart_data = pd.read_csv(f"chart_data/{row['Chart Type']}_transformed_data.csv")
+    #     # time.sleep(2)
+    #     query_type = classify(row['Questions'], 8, treeview_text)
+    #     print(row.name, "classifying ", row['Questions'], row['Classification_Ground_Truth'], ">>>", query_type)
+    #     return query_type
+    
+    # start_time = time.time()
+    # sampled_df['System_Classification'] = sampled_df.apply(apply_classify, axis=1)
+    # end_time = time.time()
+    # # Calculate the elapsed time
+    # elapsed_time = end_time - start_time
+    # print(f"Elapsed time: {elapsed_time} seconds")
+
+    # # sampled_df.apply(lambda d: print(d["Questions"], d['Classification_Ground_Truth'], " >>> ", d["System_Classification"]), axis=1)
+    # # sampled_df.to_csv(f'classification_results_{sidx}_{eidx}.csv', index=False)
+    # # # Load the first CSV file into a DataFrame
+    # prev_df = pd.read_csv('classification_results.csv')    
+  
+    # appended_df = pd.concat([prev_df, sampled_df])
+
+    # # Save the merged DataFrame back into the same CSV file
+    # appended_df.to_csv('classification_results.csv', index=False)
