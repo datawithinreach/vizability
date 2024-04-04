@@ -13,7 +13,7 @@ function NavBar() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link href="/VizAbility">Data Visualization</Nav.Link>
+            <Nav.Link href="/vizability">Data Visualization</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>

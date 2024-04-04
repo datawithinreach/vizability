@@ -10,7 +10,7 @@ function App() {
       <Router>
         <NavBar/>
           <Routes>
-              <Route path="/VizAbility" element={<HomePage/>} />
+              <Route path="/vizability" element={<HomePage/>} />
           </Routes>
         </Router>
     </div>
