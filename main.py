@@ -176,7 +176,7 @@ async def get_validation_few_shot_prompting(user_query: str):
     substring_to_find = {
         "Analytical Query": "analysis involving data.",
         "Visual Query": "graph shape/characteristics.",
-        "Contextual Query": "specific data to be answered.",
+        "Contextual Query": "questions like: \"Why?\".",
         "Navigation Query": "What is my current position?"
     }
 
@@ -186,7 +186,7 @@ async def get_validation_few_shot_prompting(user_query: str):
     # Iterate through the DataFrame rows and categorize questions
     for index, row in df.iterrows():
         question = row['Questions']
-        ground_truth = row['Ground_Truth']
+        ground_truth = row['Classification_Ground_Truth']
         if ground_truth != "I am sorry but I cannot understand the question":
             validation_set_sample_dict[ground_truth].append(question)
 
