@@ -6,9 +6,28 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import AudioRecorder from './AudioRecorder';
 import "../styles/QAModule.css"
 
+import { useState, useEffect } from 'react';
+
 
 const QAModule = ({userQuestion, answerToQuestion, classificationExplanation, 
     isLoadingAnswer, suggestedQuestions, handleQuestionSubmit, revisedQuestion}) => {
+
+    const [waitingStatus, setWaitingStatus] = useState(`Please wait! Working on question: ${userQuestion}.`);
+        
+    useEffect(() => {
+        //Implementing the setInterval method
+        if (isLoadingAnswer) {
+            const interval = setInterval(() => {
+                setWaitingStatus("Still Loading.")
+            }, 4000);
+
+            //Clearing the interval
+            return () => clearInterval(interval);
+        } else {
+            setWaitingStatus(`Please wait! Working on question: ${userQuestion}.`)
+        }
+ 
+    }, [isLoadingAnswer]);
     
     return (
         <Container aria-live="polite">
@@ -38,7 +57,7 @@ const QAModule = ({userQuestion, answerToQuestion, classificationExplanation,
                 </InputGroup>
             </Form>
             <Row>
-                {isLoadingAnswer && <p> Please wait! Working on question: {userQuestion}</p>}
+                {isLoadingAnswer && <p> {waitingStatus} </p>}
             </Row>
             {!isLoadingAnswer && classificationExplanation && answerToQuestion &&
             <Row className='response-section'>  

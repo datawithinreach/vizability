@@ -35,6 +35,8 @@ const GraphQA = ({graphSpec, setGraphSpec}) => {
     const [revisedQuestion, setRevisedQuestion] = useState('')
     const [userQuestion, setUserQuestion] = useState('') 
 
+    const [changeQuestionWarning, setChangeQuestionWarning] = useState("")
+
     function resetQAStates() {
       // prepare for new question or new specs
       // setSuggestedQuestions([])
@@ -272,7 +274,10 @@ const GraphQA = ({graphSpec, setGraphSpec}) => {
        */
 
       if (isLoadingAnswer) { // already true, that means previous question has not fned loading
-        alert("STILL WAITING for previous question!")
+        setChangeQuestionWarning("STILL WAITING for previous question!")
+        setTimeout(() => {
+          setChangeQuestionWarning('');
+        }, 5000);
         return;
       }
       resetQAStates();
@@ -366,6 +371,10 @@ const GraphQA = ({graphSpec, setGraphSpec}) => {
               revisedQuestion = {revisedQuestion}
               userQuestion={userQuestion}
               />
+              <div aria-live="assertive">
+                {changeQuestionWarning.length !== 0 && <p>  {changeQuestionWarning}</p>}
+              </div>
+            
         </div>
     );
 };
