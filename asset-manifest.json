@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/vizability/static/css/main.1ca2da98.css",
-    "main.js": "/vizability/static/js/main.af2a4d21.js",
+    "main.js": "/vizability/static/js/main.a48697fc.js",
     "static/js/787.9e9f4ffd.chunk.js": "/vizability/static/js/787.9e9f4ffd.chunk.js",
     "index.html": "/vizability/index.html",
     "main.1ca2da98.css.map": "/vizability/static/css/main.1ca2da98.css.map",
-    "main.af2a4d21.js.map": "/vizability/static/js/main.af2a4d21.js.map",
+    "main.a48697fc.js.map": "/vizability/static/js/main.a48697fc.js.map",
     "787.9e9f4ffd.chunk.js.map": "/vizability/static/js/787.9e9f4ffd.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.1ca2da98.css",
-    "static/js/main.af2a4d21.js"
+    "static/js/main.a48697fc.js"
   ]
 }
