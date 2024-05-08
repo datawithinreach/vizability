@@ -12,7 +12,7 @@ import { useState, useEffect } from 'react';
 const QAModule = ({userQuestion, answerToQuestion, classificationExplanation, 
     isLoadingAnswer, suggestedQuestions, handleQuestionSubmit, revisedQuestion}) => {
 
-    const [waitingStatus, setWaitingStatus] = useState(`Please wait! Working on question: ${userQuestion}.`);
+    const [waitingStatus, setWaitingStatus] = useState("");
         
     useEffect(() => {
         //Implementing the setInterval method
@@ -24,10 +24,12 @@ const QAModule = ({userQuestion, answerToQuestion, classificationExplanation,
             //Clearing the interval
             return () => clearInterval(interval);
         } else {
-            setWaitingStatus(`Please wait! Working on question: ${userQuestion}.`)
+            if (userQuestion.length) {
+                setWaitingStatus(`Please wait! Working on question: ${userQuestion}.`)
+            }
         }
  
-    }, [isLoadingAnswer]);
+    }, [isLoadingAnswer, userQuestion]);
     
     return (
         <Container aria-live="polite">
@@ -57,7 +59,7 @@ const QAModule = ({userQuestion, answerToQuestion, classificationExplanation,
                 </InputGroup>
             </Form>
             <Row>
-                {isLoadingAnswer && <p> {waitingStatus} </p>}
+                {isLoadingAnswer && waitingStatus && <p> {waitingStatus} </p>}
             </Row>
             {!isLoadingAnswer && classificationExplanation && answerToQuestion &&
             <Row className='response-section'>  
