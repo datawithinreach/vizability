@@ -25,17 +25,17 @@ function App() {
         <SessionProvider>
         <NavBar/>
           <Routes>
-              <Route path="/VizAbility" element={<HomePage/>} />
-              <Route path="/VizAbility/data" element={<DataCollectionHome/>} />
-              <Route path="/VizAbility/data/informedconsent" element={<InformedConsent/>} />
-              <Route path="/VizAbility/data/ready" element={<Ready/>} />
-              <Route path="/VizAbility/data/presurvey" element={<Presurvey/>} />
-              <Route path="/VizAbility/data/main" element={<Main/>} />
-              <Route path="/VizAbility/data/tutorial/:stage" element={<Tutorial/>} />
-              <Route path="/VizAbility/data/task/:stage" element={<Task/>} />
-              <Route path="/VizAbility/data/tasksurvey/:stage" element={<TaskSurvey/>} />
-              <Route path="/VizAbility/data/postsurvey" element={<PostSurvey/>} />
-              <Route path="/VizAbility/data/debrief" element={<Debrief/>} />
+              <Route path="/vizability" element={<HomePage/>} />
+              <Route path="/vizability/data" element={<DataCollectionHome/>} />
+              <Route path="/vizability/data/informedconsent" element={<InformedConsent/>} />
+              <Route path="/vizability/data/ready" element={<Ready/>} />
+              <Route path="/vizability/data/presurvey" element={<Presurvey/>} />
+              <Route path="/vizability/data/main" element={<Main/>} />
+              <Route path="/vizability/data/tutorial/:stage" element={<Tutorial/>} />
+              <Route path="/vizability/data/task/:stage" element={<Task/>} />
+              <Route path="/vizability/data/tasksurvey/:stage" element={<TaskSurvey/>} />
+              <Route path="/vizability/data/postsurvey" element={<PostSurvey/>} />
+              <Route path="/vizability/data/debrief" element={<Debrief/>} />
           </Routes>
           </SessionProvider>
         </Router>

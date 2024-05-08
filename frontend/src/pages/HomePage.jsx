@@ -48,6 +48,9 @@ const HomePage = () => {
   }, [graphType, graphSpec])
 
   async function handleFileSubmit (event) {
+     /**
+     * Update the states for when users submit a custom graph.
+     */
     const vegaLiteInfo = await processFile(event.target.files);
     try {
       if (vegaLiteInfo) {
