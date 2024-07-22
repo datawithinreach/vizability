@@ -98,12 +98,17 @@ export function handleDataUpdate(view, vegaLiteSpec, isTest) {
 
           // Extract the various components of the date
           const year = date.getUTCFullYear();
-          const month = date.getUTCMonth() + 1; // Months are zero-based
-          const day = date.getUTCDate();
+          let month = date.getUTCMonth() + 1; // Months are zero-based
+          let day = date.getUTCDate();
+          // Add leading zero if month is a single digit
+          month = month < 10 ? `0${month}` : month;
+
+          // Add leading zero if day is a single digit
+          day = day < 10 ? `0${day}` : day;
 
           // Create a human-readable date string
           const dateString = `${year}-${month}-${day}`;
-          newItem[key] = item[key]
+          // newItem[key] = item[key]
           newItem["formatted_date(Y-M-D)"] = dateString;
         }
         else if (key == "country") {

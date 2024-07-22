@@ -15,9 +15,13 @@ Question: What is the next highest country?
 Refined Question: Which country has the second highest percent of its population being of working age?
 Rationale: Clarify question by explicitly stating implied variable 'percent_working_age'.
 
-Question: What's the relationship between GDP and the percent of a country's population that is working age?
-Refined Question: What's the relationship between GDP and percent of working age?
-Rationale: Simplify question to better conform to variables in the dataset; did not introduce other unecessary variables like color.
+Question: Describe the data?
+Refined Question: Describe the data?
+Rationale: Question is relevant enough and does not need to be clarified further.
+
+Question: Which country has the highest GDP?
+Refined Question: Accoridng to the dataset, which country has the highest value for GDP?
+Rationale: Clarifies question without introducing unecessary variables such as percent_working_age or color.
 
 Output the revised question like this:
 

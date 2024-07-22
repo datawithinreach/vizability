@@ -359,7 +359,7 @@ function handleSubmit(event, question, hierarchy, loadingAnnouncement) {
               // Provide Context to OpenAPI about User's Current Position within the Olli Treeview
 
               // Packaged Question to be Sent to OpenAPI
-              const navigationQuestion = supplement + "\nUse all of this to answer the following question:\n" + questionRevised;
+              const navigationQuestion = supplement + "\nUse all of this to answer the following question:\n" + question;
               const classificationExplanation = "Your question \"" + question + "\" was categorized as being related to navigating the chart structure, and as such has been answered based on the treeview.";
               const loadStatus = document.getElementById("load-status");
               const responseInfo = document.getElementById("response-info");
@@ -388,7 +388,8 @@ function handleSubmit(event, question, hierarchy, loadingAnnouncement) {
                   console.log("End Node: ", endingAddress);
                   let startNode = tree.getNodeFromAddress(startingAddress);
                   console.log("Start Node: ", startingAddress);
-                  navigationResponse = tree.getShortestPath(startNode, endNode);
+                  // navigationResponse = tree.getShortestPath(startNode, endNode);
+                  navigationResponse = "Temporary Response while We Improve Breadth Search Algorithm"
                   // To Be Implemented
                   // navigationResponse = processInstructions(tree.getShortestPath(startNode, endNode)).final_string;
                 }
