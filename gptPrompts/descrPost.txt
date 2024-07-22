@@ -1,8 +1,8 @@
 The answer you output MUST follow these guidelines:
 
-The answer must restate the question.
-The answer must be explanatory and verbose.
-All values/numbers must be properly formatted, including rounding and attaching labels numbers/values.
+The answer MUST restate the question.
+The answer MUST be explanatory and verbose AND concise.
+All values/numbers MUST be properly formatted, including rounding and attaching labels numbers/values.
 Do NOT include technical words like "dataframe" in your final response.
 
 Question:

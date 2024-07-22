@@ -1,14 +1,15 @@
 You will be provided a question about a dataset and two accompanying responses, titled Response A and Response B. 
 
-Using the provided question for context, your task is to evaluate Response B's coherence to Response A.
+Using the provided question for context, your task is to evaluate Response B's consistency with Response A. 
+When evaluating, use a bifocal vantage point: make sure that individual key details and numbers correspond; however, you should also check if the overall quality of Response B (verboseness, thoroughness, the supporting of claims with evidence) corresponds to Response A.
 
 Evaluate Response B by this metric according to this scale:
 
 1 - The content of Response B is irrelevant to that of Response A and bears no similarities
 2 - The content of Response B is somewhat irrelevant to that of Response A; the core information in Response B does not match that of Response A
-3 - It is unclear whether there are any similarities between Response A and Response B due to the ambiguity of one or two of the Responses
-4 - Response B is mostly similar to Response A but may lack some of the more specific key details such as labels
-5 - Response B is not only similar but also faithful to Response A
+3 - There are some inconsistencies between Response B and Response A, potentially stemming from the ambiguity of the Question (ie, the question can be interpreted multiple ways).
+4 - Response B is mostly consistent with Response A but the overall quality of Response B is lower than Response A because of missing labels, improper formatting, or overly technical language.
+5 - Response B is consistent with Response A and provides a relevant, thorough, high-quality, and well supported answer to the Question.
 
 Provide one sentence of reasoning behind your answer.
 Format your answer like this:
@@ -17,23 +18,29 @@ Score: {Insert Score Integer}
 
 Here are some examples:
 
-Question: What was the average amount of houses sold in 2015?
-Response A: On average, 1327792.6346153845 homes were for sale in 2015?
+Question: What was the average inventory of houses for sale in 2015?
+Response A: On average, 1,327,792.6346153845 homes were for sale in 2015.
 Response B: The average inventory in 2015 was approximately 1,327,793.
-Reasoning: The key information (average number of houses sold) is identical for both Responses; in addition, Response B is equally as explanatory as Response A.
+Reasoning: The desired information (average number of houses sold) is near identical for both Responses, accounting for a small margin of error due to rounding; in addition, the numerical answer in Response B is properly formatted with commas, just like in Response A.
 Score: 5
 
-Question: What was the average amount of houses sold in 2015?
-Response A: On average, 1327792.6346153845 homes were for sale in 2015?
+Question: What was the average inventory of houses for sale in 2015?
+Response A: On average, 1,327,792.6346153845 homes were for sale in 2015.
 Response B: 1,327,793.
-Reasoning: Although the core information conveyed by Response B is identical to that of Response A, Response B lacks the explanatory wording of Response A.
+Reasoning: Although the desired information (average number of houses sold) is near identical for both Responses, accounting for a small margin of error due to rounding, Response B is missing labels and is therefore not as explanatory as Response A.
 Score: 4
+
+Question: What was the average amount of houses sold in 2015?
+Response A: The chart does not display any information about the inventory of houses sold for any given time period. Instead, the data depicts the inventory of houses for sale.
+Response B: On average, 1,327,792.6346153845 homes were for sale in 2015.
+Reasoning: Although the answer outputted by the model may be factually correct, it is not relevant to the question, which asks for inventory sold and not inventory for sale.
+Score: 2
 
 Question: What country in Africa has the lowest vaccination rate?
 Response A: Burundi has the lowest vaccination rate
 Response B: The country in Africa with the lowest vaccination rate is Malawi.
-Reasoning: The core information for Response B (Malawi) does not match Response A (Burundi); however, Response B is worded similarly to Response A.
-Score: 2
+Reasoning: The desired information in Response B (Malawi) is not consistent with Response A (Burundi).
+Score: 1
 
 Question: Is Africa the country that needs the vaccine the most?
 Response A: Africa is not a country, however it is the continent with the lowest average vaccination rate.
@@ -44,13 +51,13 @@ Score: 5
 Question: What is the second highest GDP per capita?
 Response A: The second highest GDP per capita is $45,675.
 Response B: Malawi has the second highest GDP per capita.
-Reasoning: Responses B and A convey two completely different variables. However, it is unclear whether there is a connection between the two. If Malawi were to have a GDP per capita of $45,675 then Response B would receive a high score. If this were not the case Response B would receive a low score. The situation is ambiguous.
+Reasoning: Responses B and A convey two completely different variables. However, it is unclear whether there is a connection between the two. If Malawi were to have a GDP per capita of $45,675 then Response B would receive a high score. If this were not the case Response B would receive a low score. The situation is ambiguous because the Question can be interpreted in multiple ways.
 Score: 3
 
 Question: What is the average number of houses for sale for the year 2015?
 Response A: On average, 1,460,000 houses were for sale throughout 2015.
 Response B: The average number of houses for sale is not defined in the data.
-Reasoning: Response B is irrelevant to Response A.
+Reasoning: Response B is not consistent with Response A. Whereas, Response A states a clear and defined number, Response B has an inconclusive response.
 Score: 1
 
 Question: What day had the third highest number of homes for sale?
