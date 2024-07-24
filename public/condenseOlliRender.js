@@ -9,11 +9,7 @@ class TreeItem {
     }
 
     setAriaLevel() {
-        if (this.content) {
-            return parseInt(this.content.getAttribute("aria-level"));
-        }
-        // Since the content of head is null, its aria-level is 0
-        return 0;
+        return this.content ? parseInt(this.content.getAttribute("aria-level")) : 0;
     }
 
     setIsActiveChild(isActiveChild) {
@@ -28,7 +24,9 @@ class TreeItem {
         this.address = address;
     }
 
-    getAddress() { return this.address; }
+    getAddress() {
+        return this.address;
+    }
 
     getAriaLevel() {
         return this.ariaLevel;
@@ -55,10 +53,7 @@ class TreeItem {
     }
 
     getInnerText() {
-        if (this.content) {
-            return this.content.children[0].innerText;
-        }
-        return null;
+        return this.content ? this.content.children[0].innerText : null;
     }
 }
 
@@ -66,11 +61,11 @@ class Queue {
     constructor() {
         this.elements = [];
     }
-    
+
     enqueue(element) {
         this.elements.push(element);
     }
-    
+
     dequeue() {
         return this.elements.shift();
     }
@@ -82,14 +77,9 @@ class Queue {
     size() {
         return this.elements.length;
     }
-    
+
     shift() {
-        if (this.elements.length === 0) {
-            return null;
-        }
-        const shiftedElement = this.elements[0];
-        this.elements.splice(0, 1);
-        return shiftedElement;
+        return this.elements.length === 0 ? null : this.elements.shift();
     }
 }
 
@@ -133,7 +123,6 @@ export class CondensedOlliRender {
         return csvString;
     }
 
-
     convertToDictionary() {
         const treeDictionary = {};
 
@@ -152,19 +141,22 @@ export class CondensedOlliRender {
         return treeDictionary;
     }
 
-    // Helper Method to convertToDictionary()
+    /**
+     * Generates a hierarchy key for a given tree item.
+     * @param {TreeItem} treeItem - The tree item to generate the hierarchy key for.
+     * @returns {string} - The hierarchy key.
+     */
     getHierarchyKey(treeItem) {
         let key = "";
-
         let currentNode = treeItem;
+
         while (currentNode.parent !== null) {
             key = "." + (currentNode.parent.children.indexOf(currentNode) + 1) + key;
             currentNode = currentNode.parent;
         }
 
-        return key.substring(1, key.length);
+        return key.substring(1);
     }
-
 
     getOlliVis() {
         return this.olliVis;
@@ -174,182 +166,185 @@ export class CondensedOlliRender {
         return this.treeItemArray;
     }
 
+    /**
+     * Recursively sets the parent-child relationship for a tree item.
+     * @param {TreeItem} currentTreeItem - The current tree item to be added.
+     * @param {number} n - The index of the parent tree item in the tree item array.
+     */
     recursionFunction(currentTreeItem, n) {
         if (currentTreeItem.getAriaLevel() > this.treeItemArray[n].getAriaLevel()) {
             this.treeItemArray[n].addChild(currentTreeItem);
             currentTreeItem.setParent(this.treeItemArray[n]);
-        }
-        else {
-            this.recursionFunction(currentTreeItem, (n - 1));
+        } else {
+            this.recursionFunction(currentTreeItem, n - 1);
         }
     }
 
+    /**
+     * Populates the tree item array by parsing the Olli visualization tree.
+     */
     populateTreeItemArray() {
-        const tree = this.olliVis.querySelectorAll('[role="tree"]');
-        const treeItems = tree[0].querySelectorAll('[role="treeitem"]');
-        for (var n = 0; n < treeItems.length; n++) {
-            var treeItem = new TreeItem(treeItems[n]);
-            this.recursionFunction(treeItem, n)
+        const treeItems = this.olliVis.querySelectorAll('[role="treeitem"]');
+        treeItems.forEach((item, index) => {
+            const treeItem = new TreeItem(item);
+            this.recursionFunction(treeItem, index);
             this.treeItemArray.push(treeItem);
-        }
+        });
     }
 
-    printIsActiveChildNodes() {
-        this.treeItemArray.forEach(node => {
-            if (node.getIsActiveChild()) {
-            }
-        })
-    }
-
+    /**
+     * Retrieves a tree item by its address.
+     * @param {string} address - The address of the tree item.
+     * @returns {TreeItem} - The tree item corresponding to the address.
+     */
     getNodeFromAddress(address) {
-        const index = this.treeItemArray.findIndex(obj => obj.getAddress() == address);
-        return this.treeItemArray[index];
+        return this.treeItemArray.find(obj => obj.getAddress() === address);
     }
 
+    /**
+     * Finds the shortest path between two tree items.
+     * @param {TreeItem} startNode - The starting tree item.
+     * @param {TreeItem} endNode - The ending tree item.
+     * @returns {string} - The sequence of arrow key presses to navigate from start to end node.
+     */
     getShortestPath(startNode, endNode) {
-
-        function checkIfInVisited(visited, newAdress, currentAddress) {
-            for (let i = 0; i < visited.length; i++) {
-                if (visited[i][[newAdress]] && visited[i][[newAdress]][0] == currentAddress) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        function getIndexWithinParent(node) {
-            const parent = node.getParent();
-            if (parent) {
-                const children = parent.getChildren();
-                const index = children.findIndex(obj => obj.getAddress() === node.getAddress());
-                return index;
-            }
-            return -1;
-        }
-
-        // ERROR CHECK LATER
-        function getActiveChildAddress(node) {
-            const children = node.getChildren();
-            for (let i = 0; i < children.length; i++) {
-                if (children[i].getIsActiveChild()) {
-                    return children[i].getAddress();
-                }
-            }
-            return null;
-        }
-
         const queue = new Queue();
-        queue.enqueue({ node: startNode, address: startNode.getAddress(), activeChildAddress: getActiveChildAddress(startNode), indexWithinParent: getIndexWithinParent(startNode)});
-        // const visited = { [startNode.getAddress()]: [] };
+        queue.enqueue({
+            node: startNode,
+            address: startNode.getAddress(),
+            activeChildAddress: this.getActiveChildAddress(startNode),
+            indexWithinParent: this.getIndexWithinParent(startNode)
+        });
+
         const visited = [];
-        
+
         while (queue.size() > 0) {
-            const { node: currentNode, address: currentAddress, activeChildAddress: activeChildAddress, indexWithinParent: indexWithinParent } = queue.shift();
-            
-            if (currentAddress === endNode.getAddress()) {
-                break;
-            }
-            
-            // Movement: Move left
-            if (indexWithinParent > 0) {
-                const newAddress = currentAddress.slice(0, -1) + indexWithinParent;
-                if (this.treeItemDictionary[newAddress]) {
-                    const newNode = this.getNodeFromAddress(newAddress);
-                    queue.enqueue({ node: newNode, address: newAddress, activeChildAddress: getActiveChildAddress(newNode), indexWithinParent: indexWithinParent - 1});
-                    if (!checkIfInVisited(visited, newAddress, currentAddress)) {
-                        visited.push({ [newAddress]: [currentAddress, "left"] });
-                    }
-                }
-            }
-            
-            // Movement: Move right
-            if (indexWithinParent < (currentNode.getParent().getChildren().length - 1)) {
-                const newAddress = currentAddress.slice(0, -1) + (indexWithinParent + 2);
-                if (this.treeItemDictionary[newAddress]) {
-                    const newNode = this.getNodeFromAddress(newAddress);
-                    queue.enqueue({ node: newNode, address: newAddress, activeChildAddress: getActiveChildAddress(newNode), indexWithinParent: indexWithinParent + 1});
-                    // if (!visited[currentAddress]) {
-                    //     visited[currentAddress] = [];
-                    // }
-                    // visited[currentAddress].push(newAddress);
-                    if (!checkIfInVisited(visited, newAddress, currentAddress)) {
-                        visited.push({ [newAddress]: [currentAddress, "right"] });
-                    }
-                } 
-            }
-            
-            // Movement: Move up (without changing active child)
-            if (currentNode.getParent()) {
-                const newAddress = currentAddress.slice(0, -2);
-                if (this.treeItemDictionary[newAddress]) {
-                    const newNode = this.getNodeFromAddress(newAddress);
-                    queue.enqueue({ node: newNode, address: newAddress, activeChildAddress: getActiveChildAddress(newNode), indexWithinParent: getIndexWithinParent(newNode)});
-                    // if (!visited[currentAddress]) {
-                    //     visited[currentAddress] = [];
-                    // }
-                    // visited[currentAddress].push(newAddress);
-                    if (!checkIfInVisited(visited, newAddress, currentAddress)) {
-                        visited.push({ [newAddress]: [currentAddress, "up"] });
-                    }
-                }
-            }
-            
-            // Movement: Move down TO DO
-            // set all addresses ending in one initially to activeChildAddress
-            if (currentNode.getChildren().length != 0) {
-                const newAddress = activeChildAddress;
-                if (activeChildAddress) {
-                    const newNode = this.getNodeFromAddress(activeChildAddress);
-                    queue.enqueue({ node: newNode, address: newAddress, activeChildAddress: getActiveChildAddress(newNode), indexWithinParent: getIndexWithinParent(newNode)});
-                    // if (!visited[currentAddress]) {
-                    //     visited[currentAddress] = [];
-                    // }
-                    // visited[currentAddress].push(newAddress);
-                    if (!checkIfInVisited(visited, newAddress, currentAddress)) {
-                        visited.push({ [newAddress]: [currentAddress, "down"] });
-                    }
-                }
-            }
-        }
-        
-        // Find End Node
-        let endingNodeInVisited = null;
-        for (let i = 0; i < visited.length; i++) {
-            const key = Object.keys(visited[i]);
-            if (key[0] == endNode.getAddress()) {
-                endingNodeInVisited = visited[i];
-            }
+            const { node: currentNode, address: currentAddress, activeChildAddress, indexWithinParent } = queue.shift();
+
+            if (currentAddress === endNode.getAddress()) break;
+
+            this.enqueueAdjacentNodes(queue, currentNode, currentAddress, activeChildAddress, indexWithinParent, visited);
         }
 
+        return this.constructPath(visited, startNode, endNode);
+    }
+
+    /**
+     * Checks if a node has already been visited.
+     * @param {Array} visited - The list of visited nodes.
+     * @param {string} newAddress - The address of the new node.
+     * @param {string} currentAddress - The address of the current node.
+     * @returns {boolean} - Whether the node has been visited.
+     */
+    checkIfInVisited(visited, newAddress, currentAddress) {
+        return visited.some(visit => visit[newAddress] && visit[newAddress][0] === currentAddress);
+    }
+
+    /**
+     * Enqueues adjacent nodes (left, right, up, down) for BFS traversal.
+     * @param {Queue} queue - The queue for BFS traversal.
+     * @param {TreeItem} currentNode - The current tree item.
+     * @param {string} currentAddress - The current address.
+     * @param {string} activeChildAddress - The address of the active child.
+     * @param {number} indexWithinParent - The index within the parent node.
+     * @param {Array} visited - The list of visited nodes.
+     */
+    enqueueAdjacentNodes(queue, currentNode, currentAddress, activeChildAddress, indexWithinParent, visited) {
+        const movements = [
+            { direction: "left", condition: indexWithinParent > 0, newIndex: indexWithinParent - 1 },
+            { direction: "right", condition: indexWithinParent < currentNode.getParent().getChildren().length - 1, newIndex: indexWithinParent + 1 },
+            { direction: "up", condition: currentNode.getParent(), newIndex: -2 },
+            { direction: "down", condition: currentNode.getChildren().length > 0, newIndex: activeChildAddress }
+        ];
+
+        movements.forEach(({ direction, condition, newIndex }) => {
+            if (condition) {
+                const newAddress = this.calculateNewAddress(currentAddress, direction, newIndex, activeChildAddress);
+                if (newAddress && this.treeItemDictionary[newAddress]) {
+                    const newNode = this.getNodeFromAddress(newAddress);
+                    queue.enqueue({
+                        node: newNode,
+                        address: newAddress,
+                        activeChildAddress: this.getActiveChildAddress(newNode),
+                        indexWithinParent: this.getIndexWithinParent(newNode)
+                    });
+                    if (!this.checkIfInVisited(visited, newAddress, currentAddress)) {
+                        visited.push({ [newAddress]: [currentAddress, direction] });
+                    }
+                }
+            }
+        });
+    }
+
+    /**
+     * Calculates the new address based on the movement direction.
+     * @param {string} currentAddress - The current address.
+     * @param {string} direction - The movement direction.
+     * @param {number|string} newIndex - The new index or address.
+     * @param {string} activeChildAddress - The active child address.
+     * @returns {string|null} - The new address.
+     */
+    calculateNewAddress(currentAddress, direction, newIndex, activeChildAddress) {
+        switch (direction) {
+            case "left":
+            case "right":
+                return currentAddress.slice(0, -1) + (newIndex + 1);
+            case "up":
+                return currentAddress.slice(0, newIndex);
+            case "down":
+                return activeChildAddress;
+            default:
+                return null;
+        }
+    }
+
+    /**
+     * Retrieves the index of a node within its parent.
+     * @param {TreeItem} node - The tree item.
+     * @returns {number} - The index within the parent.
+     */
+    getIndexWithinParent(node) {
+        const parent = node.getParent();
+        return parent ? parent.getChildren().indexOf(node) : -1;
+    }
+
+    /**
+     * Retrieves the active child address of a node.
+     * @param {TreeItem} node - The tree item.
+     * @returns {string|null} - The active child address.
+     */
+    getActiveChildAddress(node) {
+        const activeChild = node.getChildren().find(child => child.getIsActiveChild());
+        return activeChild ? activeChild.getAddress() : null;
+    }
+
+    /**
+     * Constructs the path from start to end node.
+     * @param {Array} visited - The list of visited nodes.
+     * @param {TreeItem} startNode - The starting tree item.
+     * @param {TreeItem} endNode - The ending tree item.
+     * @returns {string} - The sequence of arrow key presses to navigate from start to end node.
+     */
+    constructPath(visited, startNode, endNode) {
+        let endingNodeInVisited = visited.find(visit => Object.keys(visit)[0] === endNode.getAddress());
         let path = [];
         path.push(Object.values(endingNodeInVisited)[0]);
         const visitedQueue = new Queue();
         visitedQueue.enqueue(path);
+
         while (visitedQueue.size() > 0) {
             path = visitedQueue.dequeue();
 
-            if (path[path.length - 1][0] == startNode.getAddress()) {
-                break;
-            }
+            if (path[path.length - 1][0] === startNode.getAddress()) break;
 
-            for (let i = 0; i < visited.length; i++) {
-                
-                if (Object.keys(visited[i])[0] == path[path.length - 1][0]) {
-                    let copyOfPath = [];
-                    for (let i = 0; i < path.length; i++) {
-                        copyOfPath.push(path[i]);
-                    }
-                    copyOfPath.push(Object.values(visited[i])[0]);
-                    visitedQueue.enqueue(copyOfPath);
-                    // path.pop();
+            visited.forEach(visit => {
+                if (Object.keys(visit)[0] === path[path.length - 1][0]) {
+                    let newPath = [...path, Object.values(visit)[0]];
+                    visitedQueue.enqueue(newPath);
                 }
-            }
+            });
         }
-        let stringOutput = "";
-        for (let i = (path.length - 1); i >= 0; i--) {
-            stringOutput += "Press the " + path[i][1] + " arrow key. ";
-        }
-        return stringOutput;
-    }
 
+        return path.reverse().map(step => `Press the ${step[1]} arrow key.`).join(" ");
+    }
 }

@@ -1,30 +1,34 @@
 // Helper Functions for main.js and eval/test.js
 
-// Functions for main.js
-
+/**
+ * Classifies a user's query by sending it to an API and getting a response from GPT-3.5.
+ * @param {string} question - The question or query to classify.
+ * @returns {Promise<string>} - The output from the classification process.
+ */
 export async function classifyQuery(question) {
-  return fetch("/api/get-validation-few-shot-prompting?user_query=" + question, { redirect: 'manual' })
-    .then(function (response) {
-      return response.json();
-    })
-    .then(async function (classificationQuery) {
-      var classificationQueryContents = classificationQuery["contents"];
+  try {
+    // Fetch classification query from the server
+    const response = await fetch(`/api/get-validation-few-shot-prompting?user_query=${encodeURIComponent(question)}`, { redirect: 'manual' });
+    const classificationQuery = await response.json();
+    const classificationQueryContents = classificationQuery["contents"];
 
-      return sendPromptDefault(classificationQueryContents + question, "gpt-3.5-turbo-1106")
-        .then(function (output) {
-          return output; // Return the output value if needed for further processing
-        })
-        .catch(function (error) {
-          console.error(error);
-        });
-    });
+    // Send prompt to GPT-3.5 and return the result
+    const output = await sendPromptDefault(classificationQueryContents + question, "gpt-3.5-turbo-1106");
+    return output;
+  } catch (error) {
+    console.error('Error in classifyQuery:', error);
+    throw error;
+  }
 }
 
-
-
-// Functions for main.js and eval/test.js
-
+/**
+ * Handles data transformation and updates the data table based on Vega-Lite specifications.
+ * @param {Object} view - The Vega view object containing the data.
+ * @param {Object} vegaLiteSpec - The Vega-Lite specification for the chart.
+ * @param {boolean} isTest - A flag indicating whether this is a test run.
+ */
 export function handleDataUpdate(view, vegaLiteSpec, isTest) {
+  // Define continents and countries data
   const continentsAndCountries = {
     "Africa": [
       "Algeria", "Angola", "Benin", "Botswana", "Burkina Faso", "Burundi", "Cabo Verde", "Cameroon",
@@ -55,10 +59,8 @@ export function handleDataUpdate(view, vegaLiteSpec, isTest) {
       "United Kingdom", "Vatican City"
     ],
     "North America": [
-      "Anguilla", "Antigua and Barbuda", "Bahamas", "Barbados", "Belize", "Bermuda", "Canada", "Costa Rica", "Cuba",
-      "Dominica", "Dominican Republic", "El Salvador", "Greenland", "Grenada", "Guatemala", "Haiti", "Honduras",
-      "Jamaica", "Mexico", "Montserrat", "Nicaragua", "Panama", "Saint Kitts and Nevis", "Saint Lucia",
-      "Saint Vincent and the Grenadines", "Trinidad and Tobago", "United States"
+      "Argentina", "Aruba", "Bolivia", "Brazil", "Chile", "Colombia", "Ecuador", "Guyana", "Paraguay", "Peru",
+      "Suriname", "Uruguay", "Venezuela"
     ],
     "Oceania": [
       "Australia", "Fiji", "Kiribati", "Marshall Islands", "Micronesia", "Nauru", "New Caledonia", "New Zealand",
@@ -70,11 +72,21 @@ export function handleDataUpdate(view, vegaLiteSpec, isTest) {
     ]
   };
 
-  // Function to get values for a given key
+  /**
+   * Gets values for a given key from an object.
+   * @param {Object} obj - The object to query.
+   * @param {string} key - The key to find in the object.
+   * @returns {Array} - The values associated with the key.
+   */
   function getValuesForKey(obj, key) {
-    return obj[key] || []; // Return the array of values for the key or an empty array if the key doesn't exist
+    return obj[key] || [];
   }
 
+  /**
+   * Finds the continent by a given country name.
+   * @param {string} countryName - The name of the country.
+   * @returns {string} - The continent name or "Null" if not found.
+   */
   function findContinentByCountry(countryName) {
     for (const continent in continentsAndCountries) {
       if (continentsAndCountries[continent].includes(countryName)) {
@@ -84,157 +96,58 @@ export function handleDataUpdate(view, vegaLiteSpec, isTest) {
     return "Null";
   }
 
-  // Get Transformed Data from Raw Data Set
+  // Transform raw data
   const transformedData = view.data("source_0");
   const transformedDataPolished = transformedData.map((item) => {
     const newItem = {};
+
     for (const key in item) {
       if (key !== "Symbol(vega_id)") {
-        if (key == "date") {
-          let tempItem = getValuesForKey(item, key);
-
-          // Create a new Date object using the timestamp
-          const date = new Date(tempItem);
-
-          // Extract the various components of the date
+        if (key === "date") {
+          // Process date field
+          const date = new Date(getValuesForKey(item, key));
           const year = date.getUTCFullYear();
-          let month = date.getUTCMonth() + 1; // Months are zero-based
-          let day = date.getUTCDate();
-          // Add leading zero if month is a single digit
-          month = month < 10 ? `0${month}` : month;
-
-          // Add leading zero if day is a single digit
-          day = day < 10 ? `0${day}` : day;
-
-          // Create a human-readable date string
-          const dateString = `${year}-${month}-${day}`;
-          // newItem[key] = item[key]
-          newItem["formatted_date(Y-M-D)"] = dateString;
-        }
-        else if (key == "country") {
-          let tempItem = getValuesForKey(item, key);
-          let continentOfCountry = findContinentByCountry(tempItem);
-          newItem["continent"] = continentOfCountry;
+          const month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
+          const day = date.getUTCDate().toString().padStart(2, '0');
+          newItem["formatted_date(Y-M-D)"] = `${year}-${month}-${day}`;
+        } else if (key === "country") {
+          // Process country field
+          const country = getValuesForKey(item, key);
+          newItem["continent"] = findContinentByCountry(country);
           newItem[key] = item[key];
-        }
-        else if (key == "inventory") {
+        } else if (key === "inventory") {
           newItem["inventory_of_houses_for_sale"] = item[key];
-        }
-        else {
+        } else {
           newItem[key] = item[key];
         }
       }
     }
 
-    // Encode Color Information
+    // Add color information if present
     if (vegaLiteSpec.encoding.color && vegaLiteSpec.encoding.color.field) {
       const colorScale = view.scale('color');
-      const independentVariable = item[vegaLiteSpec.encoding.color.field];
-      if (independentVariable != "None") {
-        const colorInfo = colorScale(independentVariable);
+      const colorInfo = colorScale(item[vegaLiteSpec.encoding.color.field]);
+      if (item[vegaLiteSpec.encoding.color.field] !== "None") {
         newItem["Color"] = getColorName(colorInfo);
       }
     }
     return newItem;
   });
 
-  // Send Transformed Data JSON to Backend
-  const payload = {
-    content: transformedDataPolished
-  }
-
+  // Send transformed data to the backend
   fetch("/api/process-json", {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(payload)
+    body: JSON.stringify({ content: transformedDataPolished })
   })
     .then(response => {
       if (response.ok) {
         console.log('CSV file sent successfully!');
-        // Add Table Functionality 
         if (!isTest) {
-          async function fetchCSVData() {
-            const response = await fetch('/api/get-backend-file?file_path=data/file.csv');
-            const text = await response.json();
-            const textFormatted = await text["contents"];
-            console.log(typeof textFormatted);
-            return textFormatted;
-          }
-
-          async function populateTable() {
-            const csvData = await fetchCSVData();
-            const rows = csvData.trim().split('\n');
-            const headers = rows.shift().split(',');
-
-            const table = document.getElementById('csv-table');
-
-            table.innerHTML = '';
-
-            const dataType = []; // To store the data type of each column
-
-            // Add table headers
-            const headerRow = document.createElement('tr');
-            for (const header of headers) {
-              const th = document.createElement('th');
-              th.textContent = header;
-
-              // Add click event listener to sort by the clicked header
-              th.addEventListener('click', async () => {
-                order = order === 'asc' ? 'desc' : 'asc'; // Toggle order
-                await sortTable(header, order);
-                populateTable(); // Refresh the table after sorting
-              });
-              headerRow.appendChild(th);
-
-              // Initialize the data type of each column as "string" by default
-              dataType.push('string');
-            }
-            table.appendChild(headerRow);
-
-            // Determine the data type of each column
-            for (const row of rows) {
-              const rowData = row.split(',');
-              for (let i = 0; i < rowData.length; i++) {
-                if (!isNaN(rowData[i])) {
-                  dataType[i] = 'number';
-                }
-              }
-            }
-
-            // Add table rows
-            for (const row of rows) {
-              const rowData = row.split(',');
-              const tr = document.createElement('tr');
-              for (let i = 0; i < rowData.length; i++) {
-                const td = document.createElement('td');
-                if (dataType[i] === 'number') {
-                  // Convert to number for numerical sorting
-                  td.textContent = parseFloat(rowData[i]);
-                } else {
-                  td.textContent = rowData[i];
-                }
-                tr.appendChild(td);
-              }
-              table.appendChild(tr);
-            }
-          }
-
-          let order = 'asc';
-
-          async function sortTable(field, order, dataType) {
-            const response = await fetch(`/sort_csv?field=${field}&order=${order}&dataType=${dataType}`);
-            const result = await response.json();
-            if (result.message) {
-              populateTable();
-            }
-          }
-
           populateTable();
         }
-
-
       } else {
         console.error('Failed to send CSV file.');
       }
@@ -242,11 +155,89 @@ export function handleDataUpdate(view, vegaLiteSpec, isTest) {
     .catch(error => {
       console.error('Error:', error);
     });
+
+  /**
+   * Fetches and populates the data table with CSV data.
+   */
+  async function populateTable() {
+    try {
+      // Fetch CSV data
+      const response = await fetch('/api/get-backend-file?file_path=data/file.csv');
+      const text = await response.json();
+      const csvData = text["contents"].trim().split('\n');
+      const headers = csvData.shift().split(',');
+
+      // Initialize table
+      const table = document.getElementById('csv-table');
+      table.innerHTML = '';
+
+      // Add table headers
+      const headerRow = document.createElement('tr');
+      headers.forEach(header => {
+        const th = document.createElement('th');
+        th.textContent = header;
+
+        // Add sorting functionality
+        th.addEventListener('click', async () => {
+          order = order === 'asc' ? 'desc' : 'asc'; // Toggle sort order
+          await sortTable(header, order);
+          populateTable(); // Refresh the table
+        });
+
+        headerRow.appendChild(th);
+      });
+      table.appendChild(headerRow);
+
+      // Determine data types for columns
+      const dataType = headers.map(() => 'string');
+      csvData.forEach(row => {
+        row.split(',').forEach((value, index) => {
+          if (!isNaN(value)) {
+            dataType[index] = 'number';
+          }
+        });
+      });
+
+      // Add table rows
+      csvData.forEach(row => {
+        const rowData = row.split(',');
+        const tr = document.createElement('tr');
+        rowData.forEach((value, index) => {
+          const td = document.createElement('td');
+          td.textContent = dataType[index] === 'number' ? parseFloat(value) : value;
+          tr.appendChild(td);
+        });
+        table.appendChild(tr);
+      });
+    } catch (error) {
+      console.error('Error populating table:', error);
+    }
+  }
+
+  /**
+   * Sorts the table by a specific field and order.
+   * @param {string} field - The field to sort by.
+   * @param {string} order - The sort order ('asc' or 'desc').
+   */
+  async function sortTable(field, order) {
+    try {
+      const response = await fetch(`/sort_csv?field=${encodeURIComponent(field)}&order=${encodeURIComponent(order)}`);
+      const result = await response.json();
+      if (result.message) {
+        populateTable(); // Refresh the table after sorting
+      }
+    } catch (error) {
+      console.error('Error sorting table:', error);
+    }
+  }
+
+  let order = 'asc'; // Default sort order
 }
 
 // Helper Method for handleDataUpdate
-// Converts Hex Code to the Closest Math English Color Name
+// Converts Hex Code to the Closest Material Design Color Name
 
+// Object containing Material Design color palettes
 const matColors = {
   Amber: {
     50: '#fff8e1',
@@ -477,86 +468,82 @@ const matColors = {
     900: '#F57F17',
   },
 };
+
+/**
+ * Converts an RGB color string to its hexadecimal representation.
+ * @param {string} rgb - The RGB color string, e.g., 'rgb(255, 0, 0)'.
+ * @returns {string} - The hexadecimal color code, e.g., '#ff0000'.
+ */
 function rgbToHex(rgb) {
+  // Extract RGB values and convert them to numbers
   const [r, g, b] = rgb.match(/\d+/g).map(Number);
+
+  // Convert RGB to Hex
   return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
 }
 
+/**
+ * Converts a hexadecimal color code to its Lab color representation.
+ * @param {string} hex - The hexadecimal color code, e.g., '#ff0000'.
+ * @returns {Object} - An object containing the Lab color values: { L, A, B }.
+ */
 function hexToLab(hex) {
-  let r = parseInt(hex.substring(1, 3), 16);
-  let g = parseInt(hex.substring(3, 5), 16);
-  let b = parseInt(hex.substring(5, 7), 16);
+  // Convert hex to RGB
+  let r = parseInt(hex.substring(1, 3), 16) / 255.0;
+  let g = parseInt(hex.substring(3, 5), 16) / 255.0;
+  let b = parseInt(hex.substring(5, 7), 16) / 255.0;
 
-  // Convert sRGB to XYZ
-  r /= 255.0;
-  g /= 255.0;
-  b /= 255.0;
+  // Convert sRGB to linear RGB
+  r = (r > 0.04045) ? Math.pow((r + 0.055) / 1.055, 2.4) : r / 12.92;
+  g = (g > 0.04045) ? Math.pow((g + 0.055) / 1.055, 2.4) : g / 12.92;
+  b = (b > 0.04045) ? Math.pow((b + 0.055) / 1.055, 2.4) : b / 12.92;
 
-  if (r > 0.04045) {
-    r = Math.pow((r + 0.055) / 1.055, 2.4);
-  } else {
-    r = r / 12.92;
-  }
-  if (g > 0.04045) {
-    g = Math.pow((g + 0.055) / 1.055, 2.4);
-  } else {
-    g = g / 12.92;
-  }
-  if (b > 0.04045) {
-    b = Math.pow((b + 0.055) / 1.055, 2.4);
-  } else {
-    b = b / 12.92;
-  }
-
+  // Convert linear RGB to XYZ
   r *= 100.0;
   g *= 100.0;
   b *= 100.0;
 
-  let x = r * 0.4124 + g * 0.3576 + b * 0.1805;
-  let y = r * 0.2126 + g * 0.7152 + b * 0.0722;
-  let z = r * 0.0193 + g * 0.1192 + b * 0.9505;
+  const x = r * 0.4124 + g * 0.3576 + b * 0.1805;
+  const y = r * 0.2126 + g * 0.7152 + b * 0.0722;
+  const z = r * 0.0193 + g * 0.1192 + b * 0.9505;
 
-  // Normalize XYZ
-  x /= 95.047;
-  y /= 100.0;
-  z /= 108.883;
+  // Normalize XYZ values
+  const xNormalized = x / 95.047;
+  const yNormalized = y / 100.0;
+  const zNormalized = z / 108.883;
 
   // Convert XYZ to Lab
-  if (x > 0.008856) {
-    x = Math.pow(x, 1.0 / 3.0);
-  } else {
-    x = 7.787 * x + 16.0 / 116.0;
-  }
-  if (y > 0.008856) {
-    y = Math.pow(y, 1.0 / 3.0);
-  } else {
-    y = 7.787 * y + 16.0 / 116.0;
-  }
-  if (z > 0.008856) {
-    z = Math.pow(z, 1.0 / 3.0);
-  } else {
-    z = 7.787 * z + 16.0 / 116.0;
-  }
+  const labX = (xNormalized > 0.008856) ? Math.cbrt(xNormalized) : (7.787 * xNormalized) + (16.0 / 116.0);
+  const labY = (yNormalized > 0.008856) ? Math.cbrt(yNormalized) : (7.787 * yNormalized) + (16.0 / 116.0);
+  const labZ = (zNormalized > 0.008856) ? Math.cbrt(zNormalized) : (7.787 * zNormalized) + (16.0 / 116.0);
 
-  const L = 116.0 * y - 16.0;
-  const A = 500.0 * (x - y);
-  const B = 200.0 * (y - z);
+  const L = 116.0 * labY - 16.0;
+  const A = 500.0 * (labX - labY);
+  const B = 200.0 * (labY - labZ);
 
   return { L, A, B };
 }
 
+/**
+ * Finds the closest color name from a set of colors based on the given color code.
+ * @param {string} colorCode - The color code in RGB or Hex format.
+ * @returns {string|null} - The name of the closest color or null if no match is found.
+ */
 function getColorName(colorCode) {
   let hexCode = colorCode;
 
-  // Check if the color code is in RGB format
+  // Convert RGB to Hex if necessary
   if (colorCode.startsWith('rgb')) {
     hexCode = rgbToHex(colorCode);
   }
 
+  // Convert the color to Lab color space
   const lab1 = hexToLab(hexCode);
+
   let minDeltaE = Number.MAX_VALUE;
   let closestColor = null;
 
+  // Find the closest color from predefined set
   for (const colorName in matColors) {
     if (matColors.hasOwnProperty(colorName)) {
       const shades = matColors[colorName];
@@ -564,12 +551,14 @@ function getColorName(colorCode) {
         if (shades.hasOwnProperty(shade)) {
           const hex = shades[shade];
           const lab2 = hexToLab(hex);
+
+          // Calculate the color difference (Delta E)
           const deltaL = lab1.L - lab2.L;
           const deltaA = lab1.A - lab2.A;
           const deltaB = lab1.B - lab2.B;
+          const deltaE = Math.sqrt(deltaL ** 2 + deltaA ** 2 + deltaB ** 2);
 
-          const deltaE = Math.sqrt(deltaL * deltaL + deltaA * deltaA + deltaB * deltaB);
-
+          // Update the closest color if necessary
           if (deltaE < minDeltaE) {
             minDeltaE = deltaE;
             closestColor = colorName;
@@ -582,344 +571,196 @@ function getColorName(colorCode) {
   return closestColor;
 }
 
-// const CSS21_HEX_TO_NAMES = {
-//   // CSS21 Color Names and Their Hex Values
-//   "#00ffff": "aqua",
-//   "#000000": "black",
-//   "#8a2be2": "blueviolet",
-//   "#808080": "grey",
-//   "#0000ff": "blue",
-//   "#ff00ff": "fuchsia",
-//   "#008000": "green",
-//   "#00ff00": "lime",
-//   "#800000": "maroon",
-//   "#000080": "navy",
-//   "#808000": "olive",
-//   "#800080": "purple",
-//   "#ff0000": "red",
-//   "#c0c0c0": "silver",
-//   "#008080": "teal",
-//   "#ffffff": "white",
-//   "#ffff00": "yellow",
-//   "#ffa500": "orange",
-//   "#964B00": "brown",
-//   "#00ffff": "cyan",
-//   "#00008b": "darkblue",
-//   "#006400": "darkgreen",
-//   "#556b2f": "darkolivegreen",
-//   "#8b0000": "darkred",
-//   "#add8e6": "lightblue",
-//   "#ffb6c1": "lightpink",
-//   "#90ee90": "lightgreen",
-//   "#ff4500": "orangered"
-// };
-
-// function hexToLab(hex) {
-//   // Convert HEX to RGB
-//   let r = parseInt(hex.substring(1, 3), 16);
-//   let g = parseInt(hex.substring(3, 5), 16);
-//   let b = parseInt(hex.substring(5, 7), 16);
-
-//   // Convert RGB to XYZ
-//   r /= 255.0;
-//   g /= 255.0;
-//   b /= 255.0;
-
-//   if (r > 0.04045) {
-//     r = Math.pow((r + 0.055) / 1.055, 2.4);
-//   } else {
-//     r = r / 12.92;
-//   }
-//   if (g > 0.04045) {
-//     g = Math.pow((g + 0.055) / 1.055, 2.4);
-//   } else {
-//     g = g / 12.92;
-//   }
-//   if (b > 0.04045) {
-//     b = Math.pow((b + 0.055) / 1.055, 2.4);
-//   } else {
-//     b = b / 12.92;
-//   }
-
-//   r *= 100.0;
-//   g *= 100.0;
-//   b *= 100.0;
-
-//   let x = r * 0.4124 + g * 0.3576 + b * 0.1805;
-//   let y = r * 0.2126 + g * 0.7152 + b * 0.0722;
-//   let z = r * 0.0193 + g * 0.1192 + b * 0.9505;
-
-//   // Convert XYZ to LAB
-//   x /= 95.047;
-//   y /= 100.0;
-//   z /= 108.883;
-
-//   if (x > 0.008856) {
-//     x = Math.pow(x, 1.0 / 3.0);
-//   } else {
-//     x = 7.787 * x + 16.0 / 116.0;
-//   }
-//   if (y > 0.008856) {
-//     y = Math.pow(y, 1.0 / 3.0);
-//   } else {
-//     y = 7.787 * y + 16.0 / 116.0;
-//   }
-//   if (z > 0.008856) {
-//     z = Math.pow(z, 1.0 / 3.0);
-//   } else {
-//     z = 7.787 * z + 16.0 / 116.0;
-//   }
-
-//   const L = 116.0 * y - 16.0;
-//   const A = 500.0 * (x - y);
-//   const B = 200.0 * (y - z);
-
-//   return { L, A, B };
-// }
-
-// function getColorName(hexCode) {
-//   const lab1 = hexToLab(hexCode);
-//   let minDeltaE = Number.MAX_VALUE;
-//   let closestColor = null;
-
-//   for (const hex in CSS21_HEX_TO_NAMES) {
-//     if (CSS21_HEX_TO_NAMES.hasOwnProperty(hex)) {
-//       const lab2 = hexToLab(hex);
-//       const deltaL = lab1.L - lab2.L;
-//       const deltaA = lab1.A - lab2.A;
-//       const deltaB = lab1.B - lab2.B;
-
-//       const deltaE = Math.sqrt(deltaL * deltaL + deltaA * deltaA + deltaB * deltaB);
-
-//       if (deltaE < minDeltaE) {
-//         minDeltaE = deltaE;
-//         closestColor = CSS21_HEX_TO_NAMES[hex];
-//       }
-//     }
-//   }
-
-//   return closestColor;
-// }
-// function getColorName(input) {
-//   const CSS21_HEX_TO_NAMES = {
-//     // CSS21 Color Names and Their Hex Values
-//     "#00ffff": "aqua",
-//     "#000000": "black",
-//     "#8a2be2": "blueviolet",
-//     "#808080": "grey",
-//     "#0000ff": "blue",
-//     "#ff00ff": "fuchsia",
-//     "#008000": "green",
-//     "#00ff00": "lime",
-//     "#800000": "maroon",
-//     "#000080": "navy",
-//     "#808000": "olive",
-//     "#800080": "purple",
-//     "#ff0000": "red",
-//     "#c0c0c0": "silver",
-//     "#008080": "teal",
-//     "#ffffff": "white",
-//     "#ffff00": "yellow",
-//     "#ffa500": "orange",
-//     "#964B00": "brown",
-//     "#00ffff": "cyan",
-//     "#00008b": "darkblue",
-//     "#006400": "darkgreen",
-//     "#556b2f": "darkolivegreen",
-//     "#8b0000": "darkred",
-//     "#add8e6": "lightblue",
-//     "#ffb6c1": "lightpink",
-//     "#90ee90": "lightgreen",
-//     "#ff4500": "orangered"
-//   };
-
-//   function hexToRgb(hex) {
-//     // Convert a Hexadecimal Color String to an RGB Triplet
-//     const r = parseInt(hex.slice(1, 3), 16);
-//     const g = parseInt(hex.slice(3, 5), 16);
-//     const b = parseInt(hex.slice(5, 7), 16);
-//     return [r, g, b];
-//   }
-
-//   const rgbRegex = /^rgb\(\s*\d+\s*,\s*\d+\s*,\s*\d+\s*\)$/i;
-//   let rgbTriplet = null;
-//   if (!rgbRegex.test(input)) {
-//     rgbTriplet = hexToRgb(input);
-//   } else {
-//     rgbTriplet = input
-//       .substring(4, input.length - 1)
-//       .split(",")
-//       .map(value => parseInt(value.trim(), 10));
-//   }
-
-//   const minColours = {};
-//   for (const key in CSS21_HEX_TO_NAMES) {
-//     const name = CSS21_HEX_TO_NAMES[key];
-//     const [rC, gC, bC] = hexToRgb(key);
-//     const rd = Math.pow(rC - rgbTriplet[0], 2);
-//     const gd = Math.pow(gC - rgbTriplet[1], 2);
-//     const bd = Math.pow(bC - rgbTriplet[2], 2);
-//     minColours[rd + gd + bd] = name;
-//   }
-
-//   const minDistance = Math.min(...Object.keys(minColours));
-//   return minColours[minDistance];
-// }
-
-// Sends Question to OpenAPI and Casts Output Answer to DOM Elements
-// No Specific Agent is Used
+/**
+ * Sends a question to the OpenAPI endpoint and returns the response.
+ * 
+ * @param {string} question - The question to send.
+ * @param {string} gpt_model - The GPT model to use.
+ * @returns {Promise<string>} The response from the API.
+ */
 export async function sendPromptDefault(question, gpt_model) {
-  console.log("prompt", question);
-  return fetch("/api/prompt?question=" + question + "&gpt_model=" + gpt_model, { redirect: 'manual' })
-    .then(function (response) {
-      return response.json();
-    })
-    .then(function (data) {
-      console.log("response", data["response"]);
-      return data["response"];
-    });
+  console.log("Prompt:", question);
+  try {
+    const response = await fetch(`/api/prompt?question=${encodeURIComponent(question)}&gpt_model=${encodeURIComponent(gpt_model)}`, { redirect: 'manual' });
+    const data = await response.json();
+    console.log("Response:", data["response"]);
+    return data["response"];
+  } catch (error) {
+    console.error("Error:", error);
+  }
 }
 
-// export async function sendPromptEvaluation(question) {
-//   console.log("prompt", question);
-//   return fetch("/api/prompt-gpt4?question=" + question, { redirect: 'manual' })
-//     .then(function (response) {
-//       return response.json();
-//     })
-//     .then(function (data) {
-//       console.log("response", data["response"]);
-//       return data["response"];
-//     })
-// }
-
+/**
+ * Inserts a substring into a main string at a specific index.
+ * 
+ * @param {string} mainString - The original string.
+ * @param {string} substringToInsert - The substring to insert.
+ * @param {number} indexOfSubstring - The index where the substring should be inserted.
+ * @param {string} mainStringAnchor - The anchor string used to locate the index.
+ * @returns {string} The modified string or an error message.
+ */
 function insertString(mainString, substringToInsert, indexOfSubstring, mainStringAnchor) {
   if (indexOfSubstring !== -1 && indexOfSubstring < mainString.length) {
-    let modifiedString =
-      mainString.substring(0, indexOfSubstring + mainStringAnchor.length) +
-      substringToInsert +
-      mainString.substring(indexOfSubstring + mainStringAnchor.length);
-
-    return modifiedString;
+    return mainString.substring(0, indexOfSubstring + mainStringAnchor.length) +
+           substringToInsert +
+           mainString.substring(indexOfSubstring + mainStringAnchor.length);
   } else {
     return "Invalid index or substring not found.";
   }
 }
 
-
+/**
+ * Generates subsequent suggestions based on the provided supplement, question, and response.
+ * 
+ * @param {string} supplement - Supplementary text to use in suggestions.
+ * @param {string} question - The original question.
+ * @param {string} response - The response to the original question.
+ * @returns {Promise<string>} The generated subsequent suggestions.
+ */
 export async function generateSubsequentSuggestions(supplement, question, response) {
-  return fetch("/api/get-backend-file?file_path=gptPrompts/subsequentSuggestionPrompt.txt", { redirect: 'manual' })
-    .then(function (response) {
-      return response.json();
-    })
-    .then(async function (subsequentSuggestionsPromptRaw) {
-      let extractedString = supplement.match(/first child of the head:(.*?)(?=Active Element)/s)[1];
-      console.log("EXTRACTED", extractedString);
+  try {
+    const response = await fetch("/api/get-backend-file?file_path=gptPrompts/subsequentSuggestionPrompt.txt", { redirect: 'manual' });
+    const subsequentSuggestionsPromptRaw = await response.json();
 
-      var subsequentSuggestionsPrompt = subsequentSuggestionsPromptRaw["contents"];
-      let indexOfHead = subsequentSuggestionsPrompt.indexOf("first child of the head:");
-      subsequentSuggestionsPrompt = insertString(subsequentSuggestionsPrompt, extractedString, indexOfHead, "first child of the head:");
-      let indexOfQuestion = subsequentSuggestionsPrompt.indexOf("a blind user asked the question:");
-      subsequentSuggestionsPrompt = insertString(subsequentSuggestionsPrompt, question, indexOfQuestion, "a blind user asked the question:")
-      let indexOfResponse = subsequentSuggestionsPrompt.indexOf("my application responded:");
-      subsequentSuggestionsPrompt = insertString(subsequentSuggestionsPrompt, response, indexOfResponse, "my application responded:");
-      // console.log(subsequentSuggestionsPrompt);
-      return sendPromptDefault(subsequentSuggestionsPrompt, "gpt-3.5-turbo-1106")
-        .then(function (output) {
-          return output; // Return the output value if needed for further processing
-        })
-        .catch(function (error) {
-          console.error(error);
-        });
-    })
+    // Extract relevant portion from supplement
+    const extractedString = supplement.match(/first child of the head:(.*?)(?=Active Element)/s)[1];
+    console.log("Extracted String:", extractedString);
+
+    // Prepare subsequent suggestions prompt
+    let subsequentSuggestionsPrompt = subsequentSuggestionsPromptRaw["contents"];
+    let indexOfHead = subsequentSuggestionsPrompt.indexOf("first child of the head:");
+    subsequentSuggestionsPrompt = insertString(subsequentSuggestionsPrompt, extractedString, indexOfHead, "first child of the head:");
+
+    let indexOfQuestion = subsequentSuggestionsPrompt.indexOf("a blind user asked the question:");
+    subsequentSuggestionsPrompt = insertString(subsequentSuggestionsPrompt, question, indexOfQuestion, "a blind user asked the question:");
+
+    let indexOfResponse = subsequentSuggestionsPrompt.indexOf("my application responded:");
+    subsequentSuggestionsPrompt = insertString(subsequentSuggestionsPrompt, response, indexOfResponse, "my application responded:");
+
+    // Send the updated prompt and return the output
+    const output = await sendPromptDefault(subsequentSuggestionsPrompt, "gpt-3.5-turbo-1106");
+    return output;
+  } catch (error) {
+    console.error("Error:", error);
+  }
 }
 
-// Sends Question to OpenAPI and Casts Output Answer to DOM Elements
-// LLM Uses a Specific CSV Agent
+/**
+ * Sends a question to a specific agent endpoint and handles the response.
+ * Updates the DOM based on the response and manages loading status.
+ * 
+ * @param {string} supplement - Supplementary text to include in the prompt.
+ * @param {string} question - The question to send.
+ * @param {number} loadingAnnouncement - The interval ID for the loading announcement.
+ * @param {string} classificationExplanation - Explanation of the classification.
+ * @param {boolean} isTest - Indicates whether this is a test.
+ * @returns {Promise<string>} The response from the agent.
+ */
 export async function sendPromptAgent(supplement, question, loadingAnnouncement, classificationExplanation, isTest) {
-  console.log("prompt", supplement + question);
+  console.log("Prompt:", supplement + question);
   if (!isTest) {
     document.getElementById("subsequentSuggestionsContainer").style.display = "none";
   }
-  return fetch("/api/apply-agent?question=" + supplement + question, { redirect: 'manual' })
-    .then(function (response) {
-      return response.json();
-    })
-    .then(function (data) {
-      if (!isTest) {
-        const loadStatus = document.getElementById("load-status");
-        const loadContent = document.getElementById("load-content");
-        const responseInfo = document.getElementById("response-info");
 
-        // Clear the loading announcement
-        clearInterval(loadingAnnouncement);
+  try {
+    const response = await fetch(`/api/apply-agent?question=${encodeURIComponent(supplement + question)}`, { redirect: 'manual' });
+    const data = await response.json();
 
-        // Step 4
-        loadStatus.innerHTML = "Response Generated";
+    if (!isTest) {
+      // Update DOM elements based on response
+      const loadStatus = document.getElementById("load-status");
+      const loadContent = document.getElementById("load-content");
+      const responseInfo = document.getElementById("response-info");
 
-        // Step 5
-        responseInfo.style.display = "block";
-        document.getElementById("prompt").innerText = "Question: " + classificationExplanation;
+      // Clear the loading announcement
+      clearInterval(loadingAnnouncement);
 
-        if (data.response.startsWith("The variables you mentioned") || data.response.includes("I am sorry but I cannot understand the question") || data.response.includes("Agent stopped due to iteration limit or time limit")) {
-          document.getElementById("subsequentSuggestionsContainer").style.display = "flex";
-          generateSubsequentSuggestions(supplement, question, data.response)
-            .then(function (output) {
-              console.log(output);
-              const subsequentSuggestionButtons = document.getElementsByClassName("subsequentSuggestionButton");
-              const questions = output.split(/Question [1-3]: /).slice(1);
-              for (var i = 0; i < subsequentSuggestionButtons.length; ++i) {
-                subsequentSuggestionButtons[i].innerText = questions[i];
-              }
-            });
+      // Update status and display response info
+      loadStatus.innerHTML = "Response Generated";
+      responseInfo.style.display = "block";
+      document.getElementById("prompt").innerText = "Question: " + classificationExplanation;
+
+      if (data.response.startsWith("The variables you mentioned") || 
+          data.response.includes("I am sorry but I cannot understand the question") || 
+          data.response.includes("Agent stopped due to iteration limit or time limit")) {
+
+        document.getElementById("subsequentSuggestionsContainer").style.display = "flex";
+        const output = await generateSubsequentSuggestions(supplement, question, data.response);
+        console.log(output);
+
+        const subsequentSuggestionButtons = document.getElementsByClassName("subsequentSuggestionButton");
+        const questions = output.split(/Question [1-3]: /).slice(1);
+        for (let i = 0; i < subsequentSuggestionButtons.length; ++i) {
+          subsequentSuggestionButtons[i].innerText = questions[i];
         }
       }
-      else {
-        document.getElementById("prompt").innerText = "Question: " + question;
-      }
+    } else {
+      document.getElementById("prompt").innerText = "Question: " + question;
+    }
 
-      (data.response != "Agent stopped due to iteration limit or time limit.") ? document.getElementById("response").textContent = "Answer: " + data.response : document.getElementById("response").textContent = "Answer: I'm sorry; the process has been terminated because it either took too long to arrive at an answer or your question was too long.";
-      return data.response;
-    })
+    // Display the response or an error message
+    document.getElementById("response").textContent = 
+      data.response !== "Agent stopped due to iteration limit or time limit."
+      ? "Answer: " + data.response
+      : "Answer: I'm sorry; the process has been terminated because it either took too long to arrive at an answer or your question was too long.";
+
+    return data.response;
+  } catch (error) {
+    console.error("Error:", error);
+  }
 }
 
+/**
+ * Sends a navigation query to the API and returns the response.
+ * 
+ * @param {string} question - The question to send.
+ * @returns {Promise<string>} The response from the API.
+ */
 export async function handleNavigationQuery(question) {
-  return fetch("/api/get-backend-file?file_path=gptPrompts/navigationQuery.txt", { redirect: 'manual' })
-    .then(function (response) {
-      return response.json();
-    })
-    .then(async function (navigationQuery) {
-      var navigationQueryContents = navigationQuery["contents"];
+  try {
+    const response = await fetch("/api/get-backend-file?file_path=gptPrompts/navigationQuery.txt", { redirect: 'manual' });
+    const navigationQuery = await response.json();
 
-      return sendPromptDefault(navigationQueryContents + question, "gpt-3.5-turbo-1106")
-        .then(function (output) {
-          return output; // Return the output value if needed for further processing
-        })
-        .catch(function (error) {
-          console.error(error);
-        });
-    });
+    const navigationQueryContents = navigationQuery["contents"];
+    const output = await sendPromptDefault(navigationQueryContents + question, "gpt-3.5-turbo-1106");
+    return output;
+  } catch (error) {
+    console.error("Error:", error);
+  }
 }
 
+/**
+ * Gets the active address from the hierarchy based on the active element.
+ * 
+ * @param {string} activeElement - The active element string.
+ * @param {string} hierarchy - The hierarchy string to search in.
+ * @returns {string|null} The active address or null if not found.
+ */
 export function getActiveAddress(activeElement, hierarchy) {
   activeElement = activeElement.replace("Press t to open table.", "").replace("1 value.", "").replace(" equals", ":");
-  let firstPeriodIndex = activeElement.indexOf(".");
-  let ofIndex = activeElement.indexOf(" of ");
+  const firstPeriodIndex = activeElement.indexOf(".");
+  const ofIndex = activeElement.indexOf(" of ");
 
   if (ofIndex !== -1 && firstPeriodIndex !== -1 && ofIndex < firstPeriodIndex) {
     activeElement = activeElement.slice(firstPeriodIndex + 2);
   }
-  console.log(activeElement);
+
   const hierarchyArray = hierarchy.split("\n");
-  for (let element of hierarchyArray) {
+  for (const element of hierarchyArray) {
     if (element.includes(activeElement)) {
       const index = element.indexOf("//");
-      const activeAddress = element.substring(0, index);
-      return activeAddress;
+      return element.substring(0, index);
     }
   }
   return null;
 }
 
+/**
+ * Processes a string of instructions and summarizes them.
+ * 
+ * @param {string} inputString - The instructions to process.
+ * @returns {Object} The processed instructions and the number of instructions.
+ */
 export function processInstructions(inputString) {
   const instructions = inputString.split('.');
   const processedInstructions = [];
@@ -930,22 +771,17 @@ export function processInstructions(inputString) {
     if (instructions[i] === currentInstruction) {
       iterationCount++;
     } else {
-      processedInstructions.push(
-        `Press the ${currentInstruction} arrow key ${iterationCount} times`
-      );
+      processedInstructions.push(`Press the ${currentInstruction} arrow key ${iterationCount} times`);
       currentInstruction = instructions[i];
       iterationCount = 1;
     }
   }
 
-  processedInstructions.push(
-    `Press the ${currentInstruction} arrow key ${iterationCount} times`
-  );
-
-  const final_string = processedInstructions.join('. ');
+  processedInstructions.push(`Press the ${currentInstruction} arrow key ${iterationCount} times`);
+  const finalString = processedInstructions.join('. ');
 
   return {
-    final_string,
+    final_string: finalString,
     iterationCount: processedInstructions.length,
   };
 }

@@ -60,10 +60,6 @@ const handleVegaLiteSpecChange = async function (event) {
   // Code to Render the Olli Treeview
   const olliContainer = document.getElementById("olli-container");
 
-
-  // STEP 1.5 -> Check for User Keyboard Navigation of the Olli Treeview
-
-
   // Stack used to Track Active Elements within Treeview
   const activeElementStack = new Stack();
 
@@ -186,10 +182,6 @@ const handleVegaLiteSpecChange = async function (event) {
 // Initialize Event Listener for Loading in VegaLite Spec
 document.addEventListener('vegaLiteSpecChange', handleVegaLiteSpecChange);
 
-
-// STEP 2 -> OpenAPI Question and Answer Integration
-
-
 // Attach the Submit Event Listener Outside of handleVegaLiteSpecChange
 // Handles User QnA
 const suggestionButtons = document.getElementsByClassName('suggestion-button');
@@ -259,12 +251,7 @@ function handleSubmit(event, question, hierarchy, loadingAnnouncement) {
 
   // Initialize Variables
   const descrPre = "\nHere's a structural layout of a data set. Note, this is not the entire data set, and is just a broad, top view. This is a hierarchy/tree data structure, where each sentence is preceded by its placement within the tree. For instance, 1.1.2 refers to the second child of the first child of the head:\n";
-  // let descrPost = "\nBefore you output the answer check for the following:\nMake sure to format all numerical responses appropriately, using things such as commas, dollar signs, appropriate rounding, and other identifiers when necessary.\nYour answers should be verbose and must repeat the question.\nIf the question refers to data or variables that are not implied in the dataset and that you cannot reasonably extrapolate or calculate, respond with \"The variables you mentioned: {Specify which information triggered this response} are not provided in the dataset. Therefore, the question cannot be answered.\" and nothing more.\nUse this information along with everything else you are given to answer the following question: \n";
-  // let descrPost = "\nBefore you output the answer check for the following:\nYou must follow the structure of Observation, Thought, Action, Action Input, etc.\nMake sure to format all numerical responses appropriately, using things such as commas, dollar signs, appropriate rounding, and other identifiers when necessary.\nYour answers should be specific, explanatory, and verbose, and must repeat the question.\n These answers will be read by a broad audience; you must avoid technical terms like 'dataframe' in your responses.\nUse everything you are given to answer the following question: \n";
   const descrPostFilePath = "gptPrompts/descrPost.txt";
-  // const descrPostRaw = await fetch("/api/get-backend-file?file_path=" + descrPostFilePath);
-  // const descrPostJSON = await descrPostRaw.json();
-  // const descrPost = descrPostJSON["contents"];
   let supplement = descrPre + hierarchy + "Active Element: " + (activeElementNodeAddress + " // " + activeElementNodeInnerText + "\n");
 
   console.log("sending the question to the server", supplement + question);
@@ -275,9 +262,6 @@ function handleSubmit(event, question, hierarchy, loadingAnnouncement) {
     // Apply Answering Pipeline Based on Classification Response
     document.getElementById("user-query").value = "";
     let classificationExplanation = "";
-    // descrPost = "\nBefore you output the answer check for the following:\nYou must follow the structure of Observation, Thought, Action, Action Input, etc.\nIf your answer contains any technical words like \"dataframe\", \"python\", \"pd\", \"python_repl_ast\", or anything else related to programming, then go back and reevaluate your answer.\nOtherwise, make sure to format all numerical responses appropriately, using things such as commas, dollar signs, appropriate rounding, and other identifiers when necessary.\nYour answers should be specific, explanatory, and verbose, and must repeat the question.\nUse everything you are given to answer the following question: \n";
-    // descrPost = "\nBefore you output any answer:\nYou must follow the set structure of Question, Observation, Thought, Action, Action Input when using the pd dataframe.\nTo avoid errors, your Action Input should always be formatted accordingly. Do not format your action input like this: Action Input: \n```python\n{Insert Code Here}\n```\nInstead format it like this: \"Action Input: {Insert Code Here on One Line}\"\nKeep in mind that it is possible for the user question to be incomplete, or not relate to the dataframe at all in which you cannot answer the question.\nMake sure the FINAL Answer is verbose and explanatory, and that it rephrases the user question. The answer should explain the process.\nIf the FINAL Answer contains a number or any value, make sure to format it appropriately, either through rounding, adding percents, or including labels.\nDo not use the words \"dataframe\" or \"python_repl_ast\" in your FINAL response\n";
-
     const improveUserQueryPromptFilePath = "gptPrompts/improveUserQueryPrompt.txt";
     let supplementCondensed = "";
     let startPattern = "1 //";
@@ -318,7 +302,6 @@ function handleSubmit(event, question, hierarchy, loadingAnnouncement) {
                   const descrPost = descrPostJSON["contents"];
                   classificationExplanation = "Your question \"" + question + "\" was categorized as being data-driven, and as such, has been answered based on the data in the chart.";
                   sendPromptAgent(supplement + descrPost, questionRevised, loadingAnnouncement, classificationExplanation, isTest);
-                  // Use descrPost variable or perform actions with its value here
                 })
                 .catch((error) => {
                   // Handle any errors that occur during the fetch or processing
@@ -404,7 +387,6 @@ function handleSubmit(event, question, hierarchy, loadingAnnouncement) {
                   }
                 }
 
-
                 // Clear the loading announcement
                 clearInterval(loadingAnnouncement);
                 loadStatus.innerHTML = "Response Generated";
@@ -421,25 +403,11 @@ function handleSubmit(event, question, hierarchy, loadingAnnouncement) {
                   const descrPost = descrPostJSON["contents"];
                   classificationExplanation = "Your question \"" + question + "\" was categorized as being data-driven, and as such, has been answered based on the data in the chart.";
                   sendPromptAgent(supplement + descrPost, questionRevised, loadingAnnouncement, classificationExplanation, isTest);
-                  // Use descrPost variable or perform actions with its value here
                 })
                 .catch((error) => {
                   // Handle any errors that occur during the fetch or processing
                   console.error('Error:', error);
                 });
-              // classificationExplanation = "Your question \"" + question + "\" could not be properly categorized.";
-              // sendPromptAgent(supplement + descrPost, question, loadingAnnouncement, classificationExplanation, isTest);
-              // const loadStatus = document.getElementById("load-status");
-              // const responseInfo = document.getElementById("response-info");
-
-              // // Clear the loading announcement
-              // clearInterval(loadingAnnouncement);
-
-              // loadStatus.innerHTML = "Response Generated";
-              // responseInfo.style.display = "block";
-
-              // document.getElementById("prompt").textContent = classificationExplanation;
-              // document.getElementById("response").textContent = queryType;
 
               document.getElementById("subsequentSuggestionsContainer").style.display = "flex";
               generateSubsequentSuggestions(supplement, questionRevised, classificationExplanation)
@@ -451,8 +419,6 @@ function handleSubmit(event, question, hierarchy, loadingAnnouncement) {
                     subsequentSuggestionButtons[i].innerText = questions[i];
                   }
                 });
-              // question.removeAttribute("aria-live");
-              // question.value = '';
             }
           })
           .catch(function (error) {

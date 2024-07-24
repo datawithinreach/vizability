@@ -1,114 +1,5 @@
-/******************************************************************************
-START Glitch hello-app default styles
-
-The styles in this section do some minimal CSS resets, set default fonts and 
-colors, and handle the layout for our footer and "Remix on Glitch" button. If
-you're new to CSS they may seem a little complicated, but you can scroll down
-to this section's matching END comment to see page-specific styles.
-******************************************************************************/
-/* Our default values set as CSS variables */
-:root {
-  --color-bg: #BDC9FF;
-  --color-text-main: #000000;
-  --color-primary: #AFECE0;
-  --wrapper-height: 87vh;
-  --image-max-width: 300px;
-  --image-margin: 3rem;
-  --font-family: 'Hanken Grotesk', sans-serif;
-  --font-family-header: 'Hanken Grotesk', sans-serif;
-}
-
-/* Basic page style resets */
-* {
-  box-sizing: border-box;
-}
-
-[hidden] {
-  display: none !important;
-}
-
-/* Import fonts */
-/* @font-face {
-  font-family: HK Grotesk;
-  src: url("https://cdn.glitch.me/605e2a51-d45f-4d87-a285-9410ad350515%2FHKGrotesk-Regular.otf?v=1603136326027") format("opentype");
-}
-
-@font-face {
-  font-family: HK Grotesk;
-  font-weight: bold;
-  src: url("https://cdn.glitch.me/605e2a51-d45f-4d87-a285-9410ad350515%2FHKGrotesk-Bold.otf?v=1603136323437") format("opentype");
-} */
-
-/* Our remix on glitch button */
-.btn--remix {
-  font-family: HK Grotesk;
-  padding: 0.75rem 1rem;
-  font-size: 1.1rem;
-  line-height: 1rem;
-  font-weight: 500;
-  height: 2.75rem;
-  align-items: center;
-  cursor: pointer;
-  background: #FFFFFF;
-  border: 1px solid #000000;
-  box-sizing: border-box;
-  border-radius: 4px;
-  text-decoration: none;
-  color: #000;
-  white-space: nowrap;
-  margin-left: auto;
-}
-
-.btn--remix img {
-  margin-right: 0.5rem;
-}
-
-.btn--remix:hover {
-  background-color: #D0FFF1;
-}
-
-/* Navigation grid */
-.footer {
-  display: flex;
-  justify-content: space-between;
-  margin: 1rem auto 0;
-  padding: 1rem 0 0.75rem 0;
-  width: 100%;
-  flex-wrap: wrap;
-  border-top: 4px solid #fff;
-}
-
-.footer a:not(.btn--remix):link,
-a:not(.btn--remix):visited {
-  font-family: HK Grotesk;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 1.1rem;
-  color: #000;
-  text-decoration: none;
-  border-style: none;
-}
-
-.footer a:hover {
-  background: var(--color-primary);
-}
-
-.footer .links {
-  padding: 0.5rem 1rem 1.5rem;
-  white-space: nowrap;
-}
-
-.divider {
-  padding: 0 1rem;
-}
-
-/******************************************************************************
-  END Glitch hello-app default styles
-  ******************************************************************************/
-
 body {
   font-family: 'Hanken Grotesk', sans-serif;
-  /*   background-color: var(--color-bg); */
 }
 
 /* Page structure */
@@ -226,12 +117,10 @@ h2 {
   font-size: 20px;
   line-height: 200px;
   cursor: pointer;
-  /* Add cursor style to indicate it's clickable */
 }
 
 .hidden {
   display: none;
-  /* Hide the file input element */
 }
 
 /* Navigate to Evaluation Button */
@@ -254,8 +143,8 @@ h2 {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  margin: 50px auto; /* Optional: To center the container on the page */
-  overflow: hidden; /* Hide any overflow */
+  margin: 50px auto;
+  overflow: hidden;
 }
 
 .dynamic-button {
@@ -277,27 +166,6 @@ h2 {
 
 .dynamic-button:hover {
   background-color: #12476a;
-}
-
-/* #response-info, #question-info {
-  display: none;
-}
-
-#response-info strong {
-  display: block;
-} */
-
-/* style.css */
-/* .table-container {
-  max-width: 1000px;
-  max-height: 500px;
-  margin: 0 auto;
-  padding: 20px;
-  overflow: auto;
-}
-
-h1 {
-  text-align: center;
 }
 
 table {
@@ -325,8 +193,6 @@ button {
   margin-right: 10px;
   cursor: pointer;
 } */
-
-/* style.css */
 
 .container {
   max-width: 800px;
@@ -363,6 +229,7 @@ th, td {
 th {
   background-color: #f2f2f2;
 }
+
 /* Style for the button container */
 #suggestion-container {
   display: grid;
@@ -391,7 +258,6 @@ th {
 .qna-form {
   display: block;
   width: 100%;
-  /* Add any other styles you need */
 }
 
 .input-container {
@@ -401,7 +267,6 @@ th {
 
 #user-query {
   width: 90%;
-  /* Adjust styles for the input field as needed */
 }
 
 #recordButton {
@@ -413,14 +278,11 @@ th {
   display: flex;
   justify-content: center;
   align-items: center;
-  /* Adjust styles for the button as needed */
 }
 
-/* Adjust icon size if needed */
 .fas.fa-microphone {
   font-size: 20px;
 }
-
 
 #subsequentSuggestionsContainer {
   display: flex;
@@ -429,27 +291,28 @@ th {
   height: 100%;
   width: 100%;
 }
+
 .first-row {
   width: 100%;
   text-align: center;
-  /* padding: 20px 0; */
-  /* background-color: #f0f0f0; */
   margin-bottom: 20px;
 }
+
 .two-columns {
   display: flex;
   justify-content: space-between;
   width: 100%;
 }
+
 .column {
-  width: 48%; /* Adjust the width as needed */
+  width: 48%;
   margin-bottom: 10px;
 }
+
 .subsequentSuggestionButton {
   display: block;
   width: 100%;
   min-height: 75px;
-  /* padding: 10px 15px; */
   background-color: #226291;
   color: white;
   border: none;
