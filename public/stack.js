@@ -1,15 +1,28 @@
-// General Purpose Stack Data Structure
+/**
+ * A general-purpose stack data structure.
+ */
 export class Stack {
+  /**
+   * Creates an instance of the Stack.
+   * Initializes an empty stack.
+   */
   constructor() {
     this.items = [];
   }
 
-  // Add an element to the top of the stack
+  /**
+   * Adds an element to the top of the stack.
+   * @param {*} item - The element to be added to the stack.
+   */
   push(item) {
     this.items.push(item);
   }
 
-  // Remove and return the top element from the stack
+  /**
+   * Removes and returns the top element from the stack.
+   * @returns {*} The top element of the stack.
+   * @throws {Error} If the stack is empty.
+   */
   pop() {
     if (this.isEmpty()) {
       throw new Error("Stack is empty");
@@ -17,7 +30,11 @@ export class Stack {
     return this.items.pop();
   }
 
-  // Return the top element of the stack without removing it
+  /**
+   * Returns the top element of the stack without removing it.
+   * @returns {*} The top element of the stack.
+   * @throws {Error} If the stack is empty.
+   */
   peek() {
     if (this.isEmpty()) {
       throw new Error("Stack is empty");
@@ -25,17 +42,25 @@ export class Stack {
     return this.items[this.items.length - 1];
   }
 
-  // Check if the stack is empty
+  /**
+   * Checks if the stack is empty.
+   * @returns {boolean} True if the stack is empty, otherwise false.
+   */
   isEmpty() {
     return this.items.length === 0;
   }
 
-  // Return the number of elements in the stack
+  /**
+   * Returns the number of elements in the stack.
+   * @returns {number} The number of elements in the stack.
+   */
   size() {
     return this.items.length;
   }
 
-  // Clear all elements from the stack
+  /**
+   * Clears all elements from the stack.
+   */
   clear() {
     this.items = [];
   }
