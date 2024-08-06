@@ -67,5 +67,8 @@
       }
     ]
   },
-  "config": {"mark": {"invalid": null}}
+  "config": {
+    "mark": {"invalid": null},
+    "background": "#FAF9F6"
+  }
 }

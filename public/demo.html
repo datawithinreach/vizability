@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="style.css" rel="stylesheet" type="text/css" />
+  <link href="indexStyle.css" rel="stylesheet" type="text/css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300&display=swap" rel="stylesheet">
+  <!-- Font Awesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+  <title>My Website</title>
+
+  <!-- Vega and Vega-Lite libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+
+  <!-- Olli libraries -->
+  <script src="https://cdn.jsdelivr.net/gh/datawithinreach/olli@main/docs/olli/olli.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/datawithinreach/olli@main/docs/olli/adapters.js"></script>
+
+  <!-- Additional scripts -->
+  <!-- <script type="text/javascript" src="https://chir.ag/projects/ntc/ntc.js"></script> -->
+</head>
+
+<body>
+  <header>
+    <div class="logo">
+      <span class="logo-icon">V</span>
+      <span class="logo-text"><a href="index.html"><b>VizAbility</b> - Data Visualization</a></span>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="demo.html">Demo</a></li>
+        <li><a href="#">Features</a></li>
+        <li><a href="#">About</a></li>
+      </ul>
+    </nav>
+  </header>
+  <div class="content" role="main">
+    <!-- Main header and description -->
+    <h1 class="title">VizAbility [Demo]</h1>
+    <!-- <h2>Load in a chart by selecting one of the options or upload your own file.<br>Explore the chart structure and
+      components through a text representation.<br>Supplement your knowledge by asking questions through typing or voice
+      input.</h2> -->
+
+    <!-- File selection and upload options -->
+    <div id="user-file-select">
+      <div class="button-container">
+        <!-- Predefined chart options -->
+        <button class="dynamic-button method-1" data-value="chart1">Line Chart</button>
+        <button class="dynamic-button method-1" data-value="chart2">Bar Chart</button>
+        <button class="dynamic-button method-1" data-value="chart3">Scatter Plot</button>
+        <button class="dynamic-button method-1" data-value="chart4">Choropleth Map</button>
+        <!-- Upload file button -->
+        <button class="dynamic-button" id="fileButton">Upload Local File</button>
+      </div>
+      <!-- Hidden file input for uploading Vega-Lite specs -->
+      <input type="file" id="fileInput" class="hidden" accept=".json, .vg">
+    </div>
+
+    <!-- Containers for Vega and other visualizations -->
+    <div id="vega-container" aria-hidden="true"></div>
+
+    <hr id="top-hr" style="display: none;">
+
+    <!-- <div id="first-container">
+      <button id="toggle-olli" class="hidden">Toggle Olli</button>
+      <button id="toggle-table" class="hidden">Toggle Table</button>
+      <div id="olli-container" class="hidden"></div>
+      <div id="table-container" class="hidden">
+        <h1>Data Table</h1>
+        <table id="csv-table">
+        </table>
+      </div>
+    </div> -->
+
+    <div id="accordion-container" style="display: none;">
+      <div class="accordion-item">
+        <button class="accordion-header" id="toggle-olli"><b>Toggle Olli</b></button>
+        <div class="accordion-content hidden" id="olli-container">
+          <!-- Olli content goes here -->
+        </div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-header" id="toggle-table"><b>Toggle Table</b></button>
+        <div class="accordion-content hidden" id="table-container">
+          <h1>Data Table</h1>
+          <table id="csv-table">
+            <!-- Table content will be populated here -->
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <hr> 
+    <!-- <div id="aria-info" aria-live="polite"> -->
+      <div id="qna-div" style="display: flex; justify-content: center; align-items: center;">
+        <h2 id="QnA-header" style="display: none;"><b>Question and Answer Module</b></h2>
+      </div>
+      <div id="suggestion-container" style="display: none;">
+        <!-- Suggestion buttons -->
+        <button class="suggestion-button" id="suggestion-button-1">Button 1</button>
+        <button class="suggestion-button" id="suggestion-button-2">Button 2</button>
+        <button class="suggestion-button" id="suggestion-button-3">Button 3</button>
+        <button class="suggestion-button" id="suggestion-button-4">Button 4</button>
+      </div>
+      <!-- Form for asking questions -->
+      <form class="qna-form" id="ask-question" style="display: none;">
+        <div class="input-container" style="height: 50px;">
+          <input id="user-query" name="user-query" type="text" autocomplete="off" aria-label="Text Input" placeholder="Enter Query Here..."/>
+          <button id="recordButton" type="button"
+            aria-label="To begin voice input press enter. To end and submit, press enter again">
+            <i id="record-button-i" class="fas fa-microphone"></i>
+            <p id="record-button-p" style="display: none;">Stop</p>
+          </button>
+          <button id="ask-question-button" type="submit" style="display: none;"></button>
+        </div>
+      </form>
+    <!-- </div> -->
+
+    <!-- Content loading and response display -->
+    <div id="load-content" aria-live="assertive" style="display: none;">
+      <h3 id="load-status"></h3>
+      <div id="response-info" style="display: none;" aria-live="polite">
+        <p id="prompt"></p>
+        <p id="response"></p>
+      </div>
+    </div>
+
+    <!-- Container for subsequent suggestions -->
+    <div id="subsequentSuggestionsContainer" style="display: none;">
+      <div class="first-row">
+        <div>
+          <p>Try one of these questions instead.</p>
+        </div>
+      </div>
+      <div class="two-columns">
+        <div class="column">
+          <button class="subsequentSuggestionButton">Button 1</button>
+        </div>
+        <div class="column">
+          <button class="subsequentSuggestionButton">Button 2</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="text">
+    <div id="instruction-text" class="instruction-text" style="display: none;">
+      Use the buttons to select one of four example charts, or upload a local file.
+    </div>
+    <div id="svg-instruction-text" class="instruction-text" style="display: none;">
+      Click anywhere to continue.
+    </div>
+    <div id="olli-instruction-text" class="instruction-text" style="display: none;">
+      Toggle Olli or a Data Table to generate a text representation of the data. Click anywhere outside the accordion to continue.
+    </div>
+    <div id="question-example-instruction-text" class="instruction-text" style="display: none;">
+      Try out one of four pre-generated questions.
+    </div>
+    <div id="olli-treeview-instruction-text" class="instruction-text" style="display: none;">
+      Press 'enter' on the treeview to explore the contents of the chart. Navigate using the arrows keys. To exit, press 'escape'.
+    </div>
+    <div id="data-table-instruction-text" class="instruction-text" style="display: none;">
+      Click on a column header to arrange the data by the correspoding variable.
+    </div>
+    <div id="load-content-instruction-text" class="instruction-text" style="display: none;">
+      The answer to your query and a brief justification are provided above. Click anywhere to continue.
+    </div>
+    <div id="personal-question-instruction-text" class="instruction-text" style="display: none;">
+      Enter your own question into the textbox. Click enter to submit query.
+    </div>
+    <div id="finished-instruction-text" class="instruction-text" style="display: none;">
+      This concludes the tutorial. Continue querying this chart or invesitgate other visual stimuli.
+    </div>
+  </div>
+
+  <!-- Overlay -->
+  <div class="overlay">
+    <div id="overlay-content">
+      <h1>Welcome to VizAbility!</h1>
+      <button id="get-started" class="welcome-button">Get Started &rarr;</button>
+      <button id="skip-tutorial" class="welcome-button" style="background-color: black; color: white;">Skip Tutorial
+        &times;</button>
+    </div>
+    <div id="overlay-bg"></div>
+    <button id="close-overlay" class="close-button">&times;</button>
+  </div>
+
+
+  <!-- Import JavaScript files -->
+  <script src="vegaLiteHandler.js" type="module"></script>
+  <script src="main.js" type="module"></script>
+  <script src="helperFunctions.js" type="module"></script>
+  <script src="recordAudio.js" type="module"></script>
+  <script src="tutorial.js"></script>
+</body>
+
+</html>

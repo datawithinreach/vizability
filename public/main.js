@@ -13,6 +13,26 @@ const isTest = false;
 
 
 // Load VegaLite Spec and Keyboard Navigable Chart Representation
+document.querySelectorAll('.accordion-header').forEach(header => {
+  header.addEventListener('click', () => {
+    const content = header.nextElementSibling;
+
+    // Toggle the clicked section
+    if (content.classList.contains('visible')) {
+      content.classList.remove('visible');
+    } else {
+      // Hide all other sections
+      document.querySelectorAll('.accordion-content').forEach(c => {
+        c.classList.remove('visible');
+      });
+
+      // Show the clicked section
+      content.classList.add('visible');
+    }
+  });
+});
+
+
 
 // Toggle between different keyboard navigable chart representations
 document.getElementById("toggle-olli").addEventListener("click", (event) => {
@@ -115,19 +135,23 @@ const handleVegaLiteSpecChange = async function (event) {
     const olliRender = olli(olliVisSpec);
     console.log(olliRender);
     olliContainer.innerHTML = "";
-    var olliInfo = document.createElement("p"); // Create the <p> element
-    olliInfo.id = "olli-instructions";
-    olliInfo.setAttribute("role", "region");
-    olliInfo.setAttribute("tabindex", "0");
+    olliContainer.style.paddingTop = "20px";
+    olliContainer.style.paddingBottom = "20px";
+    olliContainer.style.backgroundColor = "#FAF9F6";
+    olliContainer.style.border = '1px solid black';
+    // var olliInfo = document.createElement("p"); // Create the <p> element
+    // olliInfo.id = "olli-instructions";
+    // olliInfo.setAttribute("role", "region");
+    // olliInfo.setAttribute("tabindex", "0");
 
-    var strongElement = document.createElement("strong");
-    strongElement.textContent = "Explore the structure and components of the chart through a text representation.\nInstructions: Press enter on the treeview to explore the contents of the chart. Navigate using the arrows keys. To exit, press escape.";
+    // var strongElement = document.createElement("strong");
+    // strongElement.textContent = "Explore the structure and components of the chart through a text representation.\nInstructions: Press enter on the treeview to explore the contents of the chart. Navigate using the arrows keys. To exit, press escape.";
 
     // Append the <strong> element to the <p> element
-    olliInfo.appendChild(strongElement);
+    // olliInfo.appendChild(strongElement);
 
-    olliContainer.append(olliInfo);
-    olliInfo.focus();
+    // olliContainer.append(olliInfo);
+    // olliInfo.focus();
     olliContainer.append(olliRender);
 
     // Hierarchical Tree Representation of Olli Treeview
@@ -248,6 +272,7 @@ document.getElementById("ask-question").addEventListener('submit', (event) => {
 function handleSubmit(event, question, hierarchy, loadingAnnouncement) {
   event.preventDefault();
   document.getElementById("suggestion-container").style.display = "none";
+  document.getElementById("load-content").style.display = "flex";
 
   // Initialize Variables
   const descrPre = "\nHere's a structural layout of a data set. Note, this is not the entire data set, and is just a broad, top view. This is a hierarchy/tree data structure, where each sentence is preceded by its placement within the tree. For instance, 1.1.2 refers to the second child of the first child of the head:\n";
@@ -372,9 +397,9 @@ function handleSubmit(event, question, hierarchy, loadingAnnouncement) {
                   let startNode = tree.getNodeFromAddress(startingAddress);
                   console.log("Start Node: ", startingAddress);
                   // navigationResponse = tree.getShortestPath(startNode, endNode);
-                  navigationResponse = "Temporary Response while We Improve Breadth Search Algorithm"
+                  // navigationResponse = "Temporary Response while We Improve Breadth Search Algorithm"
                   // To Be Implemented
-                  // navigationResponse = processInstructions(tree.getShortestPath(startNode, endNode)).final_string;
+                  navigationResponse = processInstructions(tree.getShortestPath(startNode, endNode)).final_string;
                 }
                 else {
                   if (startingAddressMatch) {

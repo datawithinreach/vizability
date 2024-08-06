@@ -10,5 +10,8 @@
   "encoding": {
     "x": {"title": "Date", "field": "date", "type": "temporal"},
     "y": {"title": "Number of Homes for Sale", "field": "inventory", "type": "quantitative", "axis": {"tickCount": 6}}
+  },
+  "config": {
+    "background": "#FAF9F6"
   }
 }

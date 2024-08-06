@@ -56,5 +56,8 @@
                 ]
             }
         }
+    },
+    "config": {
+        "background": "#FAF9F6"
     }
 }
