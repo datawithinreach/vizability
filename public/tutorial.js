@@ -190,9 +190,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 // Define the click event handler function
                 function handleClick(event) {
-                    console.log("CLICK", formSubmitCount);
                     if (tutorial && formSubmitCount < 1) {
-                        console.log("formSubmit: ", formSubmitCount);
                         const loadContentInstructionText = document.getElementById("load-content-instruction-text");
                         loadContentInstructionText.style.display = "none";
                         const personalQuestionInstructionText = document.getElementById("personal-question-instruction-text");
@@ -203,12 +201,8 @@ document.addEventListener("DOMContentLoaded", () => {
                         const askQuestion = document.getElementById("ask-question");
                         askQuestion.style.zIndex = "9995";
 
-                        // remove this treat as two seperate event listeners, not one nested in the other
-                        // askQuestion.addEventListener("submit", handleFormSubmit);
                     }
                     else if (tutorial && formSubmitCount == 1) {
-                        // finishedTutorial = true;
-                        // console.log(finishedTutorial);
                         const finishedInstructionText = document.getElementById("finished-instruction-text");
                         finishedInstructionText.style.display = "block";
                         const loadContentInstructionText = document.getElementById("load-content-instruction-text");
@@ -287,7 +281,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 qnaHeader.style.color = "#226291";
 
                 const loadContent = document.getElementById("load-content");
-                loadContent.style.zIndex = "9997";
+                loadContent.style.zIndex = "9993";
                 // loadContent.style.color = "#FAF9F6";
 
                 const questionExampleInstructionText = document.getElementById("question-example-instruction-text");
@@ -305,8 +299,8 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("skip-tutorial").click();
         document.getElementById("QnA-header").style.color = "#226291";
         const instructionTexts = document.getElementsByClassName("instruction-text");
-        instructionTexts.forEach(instructionText => {
-            instructionText.style.display = "none";
-        })
-    });
+        for (let i = 0; i < instructionTexts.length; i++) {
+            instructionTexts[i].style.display = "none";
+        }
+    });    
 });
