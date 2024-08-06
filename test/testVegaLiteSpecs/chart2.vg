@@ -30,5 +30,8 @@
       "type": "nominal",
       "scale": {"range": ["#226291", "#E3242B"]}
     }
+  },
+  "config": {
+    "background": "#FAF9F6"
   }
 }

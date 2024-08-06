@@ -762,26 +762,40 @@ export function getActiveAddress(activeElement, hierarchy) {
  * @returns {Object} The processed instructions and the number of instructions.
  */
 export function processInstructions(inputString) {
-  const instructions = inputString.split('.');
+  // Split the input string by ". " to account for periods followed by spaces
+  const instructions = inputString.split('. ').filter(instruction => instruction);
   const processedInstructions = [];
-  let currentInstruction = instructions[0];
+  let currentInstruction = extractDirection(instructions[0]);
   let iterationCount = 1;
 
   for (let i = 1; i < instructions.length; i++) {
-    if (instructions[i] === currentInstruction) {
+    const instruction = extractDirection(instructions[i]);
+    if (instruction === currentInstruction) {
       iterationCount++;
     } else {
-      processedInstructions.push(`Press the ${currentInstruction} arrow key ${iterationCount} times`);
-      currentInstruction = instructions[i];
+      processedInstructions.push(`Press the ${currentInstruction} arrow key${iterationCount > 1 ? ` ${iterationCount} times` : ''}`);
+      currentInstruction = instruction;
       iterationCount = 1;
     }
   }
 
-  processedInstructions.push(`Press the ${currentInstruction} arrow key ${iterationCount} times`);
+  // Push the last instruction
+  processedInstructions.push(`Press the ${currentInstruction} arrow key${iterationCount > 1 ? ` ${iterationCount} times` : ''}`);
   const finalString = processedInstructions.join('. ');
 
   return {
     final_string: finalString,
     iterationCount: processedInstructions.length,
   };
+}
+
+/**
+ * Extracts the direction of the arrow key from the instruction string.
+ * 
+ * @param {string} instruction - The instruction string.
+ * @returns {string} The direction of the arrow key.
+ */
+function extractDirection(instruction) {
+  const match = instruction.match(/Press the (\w+) arrow key/);
+  return match ? match[1] : '';
 }

@@ -17,9 +17,12 @@ buttons.forEach(button => {
  * Loads a hardcoded benchmark dataset and sends it to the backend.
  */
 async function handleMethod1ButtonClick() {
+    document.getElementById("load-content").style.display = "none";
     document.getElementById("suggestion-container").style.display = "none";
     document.getElementById("ask-question").style.display = "none";
     document.getElementById("QnA-header").style.display = "none";
+    document.getElementById("accordion-container").style.display = "block";
+    document.getElementById("top-hr").style.display = "block";
     document.getElementById("toggle-olli").classList.remove("hidden");
     document.getElementById("toggle-table").classList.remove("hidden");
     document.getElementById("response-info").style.display = "none";

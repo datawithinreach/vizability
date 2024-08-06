@@ -1,5 +1,7 @@
 body {
-  font-family: 'Hanken Grotesk', sans-serif;
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
 }
 
 /* Page structure */
@@ -25,9 +27,9 @@ p {
 /* Title h1 style */
 .title {
   color: #226291;
-  font-family: 'Hanken Grotesk', sans-serif;
+  /* font-family: 'Hanken Grotesk', sans-serif;
   font-style: normal;
-  font-weight: bold;
+  font-weight: bold; */
   font-size: 100px;
   line-height: 105%;
   margin: 2rem 0 0;
@@ -84,7 +86,7 @@ input {
   font-family: inherit;
   font-size: 100%;
   background: #FFFFFF;
-  border: 1px solid #000000;
+  border: 2px solid #000000;
   box-sizing: border-box;
   border-radius: 4px;
   padding: 0.5rem 1rem;
@@ -156,11 +158,12 @@ h2 {
   font-size: 18px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  width: calc(20% - 10px); /* Set the width of each button to 20% of the container width with spacing */
+  width: calc(20% - 10px);
+  /* Set the width of each button to 20% of the container width with spacing */
 }
 
 /* Add spacing between buttons */
-.dynamic-button + .dynamic-button {
+.dynamic-button+.dynamic-button {
   margin-left: 10px;
 }
 
@@ -174,7 +177,8 @@ table {
   margin-top: 20px;
 }
 
-th, td {
+th,
+td {
   border: 1px solid #ddd;
   padding: 8px;
   text-align: left;
@@ -192,22 +196,27 @@ button {
   padding: 8px;
   margin-right: 10px;
   cursor: pointer;
-} */
+}
 
-.container {
+*/ .container {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
   display: flex;
-  flex-direction: row; /* Arrange sorting menu and table side by side */
-  align-items: flex-start; /* Align items to the top of the container */
+  flex-direction: row;
+  /* Arrange sorting menu and table side by side */
+  align-items: flex-start;
+  /* Align items to the top of the container */
 }
 
 #table-container {
-  width: 100%; /* Adjust the width as needed */
+  width: 100%;
+  /* Adjust the width as needed */
   padding: 10px;
-  max-height: 500px;
+  max-height: 400px;
   overflow: auto;
+  border: 1px solid black;
+  background-color: #FAF9F6;
 }
 
 h1 {
@@ -220,7 +229,8 @@ table {
   margin-top: 20px;
 }
 
-th, td {
+th,
+td {
   border: 1px solid #ddd;
   padding: 8px;
   text-align: left;
@@ -320,4 +330,178 @@ th {
   text-align: center;
   text-decoration: none;
   cursor: pointer;
+}
+
+#vega-container {
+  display: flex;
+  justify-content: center; /* Centers horizontally */
+  align-items: center;    /* Centers vertically */
+  height: 100%;           /* Ensure the container has height */
+}
+
+/* Overlay styles */
+#overlay-bg {
+  background: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9980; /* Ensure background is below content */
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9990; /* Ensure overlay is above background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#overlay-content {
+  color: white;
+  text-align: center;
+  position: absolute;
+  z-index: 9991; /* Ensure content is above background */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.welcome-button {
+  background-color: white;
+  color: black;
+  border: none;
+  padding: 15px 30px;
+  margin: 10px 0; /* Vertical margin to stack buttons */
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 1.5em;
+}
+
+.welcome-button#skip-tutorial {
+  background-color: black;
+  color: white;
+}
+
+.welcome-button:hover {
+  background-color: lightgray;
+}
+
+.welcome-button#skip-tutorial:hover {
+  background-color: #333;
+}
+
+#text {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9995;
+}
+
+.instruction-text {
+  color: white;
+  text-align: center;
+  padding: 10px 15px;
+  font-size: 1.5em; /* Increase font size */
+  z-index: 9995;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+hr {
+  color: black;
+  border: none; /* Removes default border */
+  height: 1px; /* Sets the height of the line */
+  background-color: black; /* Sets the color of the line */
+  margin-top: 20px; /* Sets the margin above the line */
+  margin-bottom: 20px; /* Sets the margin below the line */
+  width: 100%; /* Ensures the line spans the entire width of the document */
+}
+
+/* Basic styling for the accordion */
+#accordion-container {
+  width: 100%;
+}
+
+.accordion-header {
+  background-color: #f1f1f1;
+  border: 1px solid #ccc;
+  padding: 10px;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+}
+
+.accordion-content {
+  overflow: hidden;
+  background-color: white;
+  padding: 0 10px;
+  display: none; /* Hidden by default */
+}
+
+.accordion-content.visible {
+  display: block;
+}
+
+#load-content {
+  margin-bottom: 7.5vh;
+  margin-top: 5vh;
+  background-color: #f1f1f1;
+  color: black;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid black; /* For visualization */
+}
+
+#response-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 20px;
+}
+
+/* Optional: Add some spacing between the prompt and response */
+#response-info p {
+  margin: 20px 0; /* Adjust spacing as needed */
+  text-align: center;
+}
+
+#user-query {
+  background: #FAF9F6;
+}
+
+/* Close button styles */
+.close-button {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background-color: white;
+  color: black;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5em;
+  cursor: pointer;
+  z-index: 10001; /* Ensure close button is above everything else */
+}
+
+.close-button:hover {
+  background-color: lightgray;
 }

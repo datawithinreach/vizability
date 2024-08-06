@@ -237,7 +237,31 @@ export class CondensedOlliRender {
      * @returns {boolean} - Whether the node has been visited.
      */
     checkIfInVisited(visited, newAddress, currentAddress) {
-        return visited.some(visit => visit[newAddress] && visit[newAddress][0] === currentAddress);
+        // maybe check only for result node. For instance if u have 1 as a result of 1.1 up and 1 as a result of 1.2 up only consider 1
+        // return visited.some(visit => visit[newAddress] && visit[newAddress][0] === currentAddress);
+        return visited.some(visit => visit[newAddress]);
+    }
+
+
+    /**
+    * Checks if a node is already in the queue of nodes to be investigated.
+    * Prevents repetitive traversal of the node network
+    * @param {TreeItem} node - The node to be inserted into the queue.
+    * @param {Queue} queue - The queue for BFS traversal. 
+    * @returns {boolean} - Whether the node is already present in the queue.
+    */
+    checkIfNodeInQueueAlready(node, queue) {
+        console.log("NODE: ", node)
+        console.log("QUEUE: ", queue)
+        // Iterate through the elements in the queue
+        for (let i = 0; i < queue.size(); i++) {
+            // Check if the node is already present in the queue
+            if (queue.elements[i] === node) {
+                return true;
+            }
+        }
+        // If the node is not found, return false
+        return false;
     }
 
     /**
@@ -259,17 +283,17 @@ export class CondensedOlliRender {
 
         movements.forEach(({ direction, condition, newIndex }) => {
             if (condition) {
-                const newAddress = this.calculateNewAddress(currentAddress, direction, newIndex, activeChildAddress);
+                const newAddress = this.calculateNewAddress(currentAddress, direction, activeChildAddress);
                 if (newAddress && this.treeItemDictionary[newAddress]) {
                     const newNode = this.getNodeFromAddress(newAddress);
-                    queue.enqueue({
-                        node: newNode,
-                        address: newAddress,
-                        activeChildAddress: this.getActiveChildAddress(newNode),
-                        indexWithinParent: this.getIndexWithinParent(newNode)
-                    });
                     if (!this.checkIfInVisited(visited, newAddress, currentAddress)) {
                         visited.push({ [newAddress]: [currentAddress, direction] });
+                        queue.enqueue({
+                            node: newNode,
+                            address: newAddress,
+                            activeChildAddress: this.getActiveChildAddress(newNode),
+                            indexWithinParent: this.getIndexWithinParent(newNode)
+                        })
                     }
                 }
             }
@@ -284,13 +308,19 @@ export class CondensedOlliRender {
      * @param {string} activeChildAddress - The active child address.
      * @returns {string|null} - The new address.
      */
-    calculateNewAddress(currentAddress, direction, newIndex, activeChildAddress) {
+    calculateNewAddress(currentAddress, direction, activeChildAddress) {
+        // Find the index of the last period in the string
+        let lastIndex = currentAddress.lastIndexOf('.');
+        let addressPrefix = currentAddress.substring(0, lastIndex + 1);
+        let addressSuffix = parseInt(currentAddress.substring(lastIndex + 1, currentAddress.length), 10);
         switch (direction) {
             case "left":
+                    return addressPrefix + (addressSuffix - 1);
             case "right":
-                return currentAddress.slice(0, -1) + (newIndex + 1);
+                // return currentAddress.slice(0, -1) + (newIndex + 1);
+                return addressPrefix + (addressSuffix + 1);
             case "up":
-                return currentAddress.slice(0, newIndex);
+                return currentAddress.slice(0, lastIndex);
             case "down":
                 return activeChildAddress;
             default:
