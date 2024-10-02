@@ -297,5 +297,7 @@ async def sort_csv(field: str, order: str):
 
 # Mount the "public" directory as a static file directory to serve the frontend
 # Order of routes matters to avoid conflicts with API routes
-app.mount("/", StaticFiles(directory="public", html=True), name="public")
 
+# change to docs
+# app.mount("/", StaticFiles(directory="public", html=True), name="public")
+app.mount("/", StaticFiles(directory="docs", html=True), name="docs")

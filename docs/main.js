@@ -3,6 +3,10 @@ import { CondensedOlliRender } from "./condenseOlliRender.js";
 import { Stack } from "./stack.js";
 
 // Initialize All Global Variables
+const isProduction = window.location.hostname !== '127.0.0.1';
+const serverAddress = isProduction
+  ? "https://vizability-1006314949515.us-central1.run.app"
+  : "http://127.0.0.1:8000";
 let activeElement = '';
 let activeElementNode = null;
 let activeElementNodeAddress = null;
@@ -160,7 +164,7 @@ const handleVegaLiteSpecChange = async function (event) {
     console.log(condensedString);
 
     async function populateSuggestionButton() {
-      return fetch("/api/get-backend-file?file_path=gptPrompts/initialSuggestionPrompt.txt", { redirect: 'manual' })
+      return fetch(`${serverAddress}/api/get-backend-file?file_path=gptPrompts/initialSuggestionPrompt.txt`, { redirect: 'manual' })
         .then(function (response) {
           return response.json();
         })
@@ -298,7 +302,7 @@ function handleSubmit(event, question, hierarchy, loadingAnnouncement) {
     if (startIndex !== -1 && endIndex !== -1 && startIndex < endIndex) {
       supplementCondensed = supplement.substring(startIndex, endIndex);
     }
-    fetch(("/api/get-backend-file?file_path=" + improveUserQueryPromptFilePath), { redirect: 'manual' })
+    fetch((`${serverAddress}/api/get-backend-file?file_path=${improveUserQueryPromptFilePath}`), { redirect: 'manual' })
       .then(function (improveUserQueryPromptRaw) {
         return improveUserQueryPromptRaw.json();
       })
@@ -321,7 +325,7 @@ function handleSubmit(event, question, hierarchy, loadingAnnouncement) {
             }
             console.log("REVISED QUESTION", questionRevised);
             if (queryType.includes("Analytical Query") || queryType.includes("Visual Query")) {
-              fetch("/api/get-backend-file?file_path=" + descrPostFilePath)
+              fetch(`${serverAddress}/api/get-backend-file?file_path=${descrPostFilePath}`)
                 .then((descrPostRaw) => descrPostRaw.json())
                 .then((descrPostJSON) => {
                   const descrPost = descrPostJSON["contents"];
@@ -422,7 +426,7 @@ function handleSubmit(event, question, hierarchy, loadingAnnouncement) {
             }
             // Query Cannot be Classified by LLM
             else {
-              fetch("/api/get-backend-file?file_path=" + descrPostFilePath)
+              fetch(`${serverAddress}/api/get-backend-file?file_path=${descrPostFilePath}`)
                 .then((descrPostRaw) => descrPostRaw.json())
                 .then((descrPostJSON) => {
                   const descrPost = descrPostJSON["contents"];
