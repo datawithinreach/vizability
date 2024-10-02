@@ -74,7 +74,10 @@ document.addEventListener("DOMContentLoaded", () => {
     document.addEventListener("click", function (event) {
         if (monitoringClicksTextRepresentation) {
             const svgInstructionText = document.getElementById("svg-instruction-text");
-            if (svgInstructionText.style.display === "block" && !event.target.closest(".dynamic-button")) {
+            // if (svgInstructionText.style.display === "block" && event.target.id === "#close-overlay") {
+                
+            // }
+            if (svgInstructionText.style.display === "block" && !event.target.closest(".dynamic-button") && event.target.id != 'close-overlay') {
                 svgInstructionText.style.display = "none";
                 const olliInstructionText = document.getElementById("olli-instruction-text");
                 olliInstructionText.style.display = "block";
@@ -102,7 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.addEventListener("click", function (event) {
         if (monitoringClicksExampleQuestions) {
             const olliInstructionText = document.getElementById("olli-instruction-text");
-            if (!event.target.closest(".accordion-item")) {
+            if (!event.target.closest(".accordion-item") && event.target.id != 'close-overlay') {
                 exampleQuestionsClickCounter++;
 
                 // Check if it's the second click

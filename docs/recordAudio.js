@@ -1,3 +1,8 @@
+const isProduction = window.location.hostname !== '127.0.0.1';
+const serverAddress = isProduction
+  ? "https://vizability-6lvi554ivq-uc.a.run.app"
+  : "http://127.0.0.1:8000";
+
 /**
  * Array to store audio data chunks during recording.
  * @type {Blob[]}
@@ -88,7 +93,7 @@ async function sendAudioData(audioBlob) {
   formData.append("audioFile", audioBlob, "recorded_audio.wav");
 
   try {
-    const response = await fetch("/api/upload-audio", {
+    const response = await fetch(`${serverAddress}/api/upload-audio`, {
       method: "POST",
       body: formData,
     });

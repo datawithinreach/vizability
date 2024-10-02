@@ -1,3 +1,8 @@
+const isProduction = window.location.hostname !== '127.0.0.1';
+const serverAddress = isProduction
+  ? "https://vizability-6lvi554ivq-uc.a.run.app"
+  : "http://127.0.0.1:8000";
+
 /**
  * Loads a VegaLite specification from the provided object and sends it to the backend.
  * @param {Object} vegaLiteInfo - Object containing VegaLite specification data.
@@ -10,7 +15,7 @@ export function loadVGandSendToBackend(vegaLiteInfo) {
         vgSpec: vegaLiteSpec,
       };
   
-      fetch("/api/process-vega-lite-spec", {
+      fetch(`${serverAddress}/api/process-vega-lite-spec`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -39,7 +44,7 @@ export function loadVGandSendToBackend(vegaLiteInfo) {
     const filePath = "./spec/vega-lite-spec.vg";
     
     try {
-      const response = await fetch(`/api/get-backend-file?file_path=${encodeURIComponent(filePath)}`);
+      const response = await fetch(`${serverAddress}/api/get-backend-file?file_path=${encodeURIComponent(filePath)}`);
       
       if (!response.ok) {
         throw new Error('Failed to fetch VegaLite spec from backend.');

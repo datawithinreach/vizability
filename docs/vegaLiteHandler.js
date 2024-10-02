@@ -1,5 +1,10 @@
 import { loadVGandSendToBackend } from "./vgLoader.js";
 
+const isProduction = window.location.hostname !== '127.0.0.1';
+const serverAddress = isProduction
+  ? "https://vizability-6lvi554ivq-uc.a.run.app"
+  : "http://127.0.0.1:8000";
+
 // Stores loaded VegaLite Spec and accompanying URL/Values
 let vegaLiteInfo = {};
 
@@ -30,7 +35,7 @@ async function handleMethod1ButtonClick() {
     console.log("Button clicked: " + this.textContent);
     
     // Fetch the VegaLite Spec from the backend
-    const response = await fetch(`/api/get-backend-file?file_path=./test/testVegaLiteSpecs/${this.dataset.value}.vg`);
+    const response = await fetch(`${serverAddress}/api/get-backend-file?file_path=./test/testVegaLiteSpecs/${this.dataset.value}.vg`);
     const data = await response.json();
     const vLSpec = JSON.parse(data.contents);
 

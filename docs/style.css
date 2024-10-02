@@ -151,8 +151,8 @@ h2 {
 
 .dynamic-button {
   flex: 1;
-  background-color: #226291;
-  color: #fff;
+  background-color: #f1f1f2;
+  color: black;
   border: none;
   padding: 15px 25px;
   font-size: 18px;
@@ -168,7 +168,7 @@ h2 {
 }
 
 .dynamic-button:hover {
-  background-color: #12476a;
+  background-color: #ccc;
 }
 
 table {
@@ -251,8 +251,8 @@ th {
 /* Style for the buttons */
 .suggestion-button {
   padding: 10px 20px;
-  background-color: #226291;
-  color: white;
+  background-color: #f1f1f1;
+  color: black;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -261,7 +261,7 @@ th {
 }
 
 .suggestion-button:hover {
-  background-color: #f0f0f0;
+  background-color: #ccc;
   color: black;
 }
 

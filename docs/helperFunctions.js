@@ -1,4 +1,8 @@
 // Helper Functions for main.js and eval/test.js
+const isProduction = window.location.hostname !== '127.0.0.1';
+const serverAddress = isProduction
+  ? "https://vizability-6lvi554ivq-uc.a.run.app"
+  : "http://127.0.0.1:8000";
 
 /**
  * Classifies a user's query by sending it to an API and getting a response from GPT-3.5.
@@ -8,7 +12,7 @@
 export async function classifyQuery(question) {
   try {
     // Fetch classification query from the server
-    const response = await fetch(`/api/get-validation-few-shot-prompting?user_query=${encodeURIComponent(question)}`, { redirect: 'manual' });
+    const response = await fetch(`${serverAddress}/api/get-validation-few-shot-prompting?user_query=${encodeURIComponent(question)}`, { redirect: 'manual' });
     const classificationQuery = await response.json();
     const classificationQueryContents = classificationQuery["contents"];
 
@@ -135,7 +139,7 @@ export function handleDataUpdate(view, vegaLiteSpec, isTest) {
   });
 
   // Send transformed data to the backend
-  fetch("/api/process-json", {
+  fetch(`${serverAddress}/api/process-json`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -162,7 +166,7 @@ export function handleDataUpdate(view, vegaLiteSpec, isTest) {
   async function populateTable() {
     try {
       // Fetch CSV data
-      const response = await fetch('/api/get-backend-file?file_path=data/file.csv');
+      const response = await fetch(`${serverAddress}/api/get-backend-file?file_path=data/file.csv`);
       const text = await response.json();
       const csvData = text["contents"].trim().split('\n');
       const headers = csvData.shift().split(',');
@@ -221,7 +225,7 @@ export function handleDataUpdate(view, vegaLiteSpec, isTest) {
    */
   async function sortTable(field, order) {
     try {
-      const response = await fetch(`/sort_csv?field=${encodeURIComponent(field)}&order=${encodeURIComponent(order)}`);
+      const response = await fetch(`${serverAddress}/sort_csv?field=${encodeURIComponent(field)}&order=${encodeURIComponent(order)}`);
       const result = await response.json();
       if (result.message) {
         populateTable(); // Refresh the table after sorting
@@ -581,7 +585,7 @@ function getColorName(colorCode) {
 export async function sendPromptDefault(question, gpt_model) {
   console.log("Prompt:", question);
   try {
-    const response = await fetch(`/api/prompt?question=${encodeURIComponent(question)}&gpt_model=${encodeURIComponent(gpt_model)}`, { redirect: 'manual' });
+    const response = await fetch(`${serverAddress}/api/prompt?question=${encodeURIComponent(question)}&gpt_model=${encodeURIComponent(gpt_model)}`, { redirect: 'manual' });
     const data = await response.json();
     console.log("Response:", data["response"]);
     return data["response"];
@@ -619,7 +623,7 @@ function insertString(mainString, substringToInsert, indexOfSubstring, mainStrin
  */
 export async function generateSubsequentSuggestions(supplement, question, response) {
   try {
-    const response = await fetch("/api/get-backend-file?file_path=gptPrompts/subsequentSuggestionPrompt.txt", { redirect: 'manual' });
+    const response = await fetch(`${serverAddress}/api/get-backend-file?file_path=gptPrompts/subsequentSuggestionPrompt.txt`, { redirect: 'manual' });
     const subsequentSuggestionsPromptRaw = await response.json();
 
     // Extract relevant portion from supplement
@@ -663,7 +667,7 @@ export async function sendPromptAgent(supplement, question, loadingAnnouncement,
   }
 
   try {
-    const response = await fetch(`/api/apply-agent?question=${encodeURIComponent(supplement + question)}`, { redirect: 'manual' });
+    const response = await fetch(`${serverAddress}/api/apply-agent?question=${encodeURIComponent(supplement + question)}`, { redirect: 'manual' });
     const data = await response.json();
 
     if (!isTest) {
@@ -718,7 +722,7 @@ export async function sendPromptAgent(supplement, question, loadingAnnouncement,
  */
 export async function handleNavigationQuery(question) {
   try {
-    const response = await fetch("/api/get-backend-file?file_path=gptPrompts/navigationQuery.txt", { redirect: 'manual' });
+    const response = await fetch(`${serverAddress}/api/get-backend-file?file_path=gptPrompts/navigationQuery.txt`, { redirect: 'manual' });
     const navigationQuery = await response.json();
 
     const navigationQueryContents = navigationQuery["contents"];

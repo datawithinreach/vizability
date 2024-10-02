@@ -6,7 +6,9 @@ Using the layout of the dataset, the user question, and what you know, clarify t
 
 Here are a few examples containing questions, their revised counterparts, and a sentence of rationale:
 
-For a dataset with the following variables: country, percent_working_age, color, GDP
+For a dataset with the following variables: country, percent_working_age, color, GDP.
+Active Element: GDP
+
 Question: Which country has 50%?
 Refined Question: For what country is 50% percent of the population of working age?
 Rationale: Clarify question by explicitly stating implied variable 'percent_working_age'. 
@@ -22,6 +24,10 @@ Rationale: Question is relevant enough and does not need to be clarified further
 Question: Which country has the highest GDP?
 Refined Question: Accoridng to the dataset, which country has the highest value for GDP?
 Rationale: Clarifies question without introducing unecessary variables such as percent_working_age or color.
+
+Question: What's the average?
+Refined Question: What is the average GDP?
+Rationale: The question is likely referencing just the active element, which in this case is GDP.
 
 Output the revised question like this:
 
