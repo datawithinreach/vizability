@@ -18,7 +18,7 @@
 
 ## Deployment
 
-The live website is available: https://multimodal-accvis-6lvi554ivq-uc.a.run.app/
+The live website is available: https://dwr.bc.edu/vizability 
 
 The website & api service is currently deployed through Google Cloud Build that is triggered upon a new commit. The trigger will generate and add a docker image to Container Registery and deploy the image through Cloud Run.
 
