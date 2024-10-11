@@ -2,7 +2,7 @@ import { loadVGandSendToBackend } from "./vgLoader.js";
 
 const isProduction = window.location.hostname !== '127.0.0.1';
 const serverAddress = isProduction
-  ? "https://vizability-6lvi554ivq-uc.a.run.app"
+  ? "https://vizability-1006314949515.us-central1.run.app"
   : "http://127.0.0.1:8000";
 
 // Stores loaded VegaLite Spec and accompanying URL/Values
