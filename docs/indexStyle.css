@@ -70,3 +70,48 @@ nav {
     border-radius: 5px;
     text-decoration: none;
 }
+
+/* Add space below the h1 element */
+.display-4 {
+    margin-bottom: 30px;
+}
+
+/* Add space below the paragraph */
+.content-text {
+    margin-bottom: 30px;
+}
+
+/* Add space between the buttons and the image */
+.button-container {
+    margin-bottom: 40px;
+}
+
+/* Add space between the image and the section below */
+.overflow-hidden {
+    margin-top: 20px;
+}
+
+.dynamic-button {
+    flex: 1;
+    background-color: #f1f1f2;
+    color: black;
+    border: none;
+    padding: 10px 20px; /* Reduced padding to make button narrower */
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 120px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dynamic-button .icon {
+    margin-right: 8px; /* Space between icon and text */
+}
+
+.dynamic-button:hover {
+    background-color: #ccc;
+}
+
+  
