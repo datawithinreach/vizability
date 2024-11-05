@@ -178,7 +178,7 @@ const handleVegaLiteSpecChange = async function (event) {
           } else {
             console.log("Substring 'follows:' not found in the initialSuggestions string.");
           }
-          return sendPromptDefault(modifiedString, "gpt-3.5-turbo-1106")
+          return sendPromptDefault(modifiedString, "gpt-3.5-turbo")
             .then(function (output) {
               return output; // Return the output value if needed for further processing
             })
@@ -338,7 +338,7 @@ function handleSubmit(event, question, hierarchy, loadingAnnouncement) {
                 });
             }
             else if (queryType.includes("Contextual Query")) {
-              sendPromptDefault("Here is a description of a dataset:" + hierarchy + "Use this description of the dataset along with outside knowledge to answer the following question:\nQuestion: " + questionRevised, "gpt-3.5-turbo-1106").then(function (response) {
+              sendPromptDefault("Here is a description of a dataset:" + hierarchy + "Use this description of the dataset along with outside knowledge to answer the following question:\nQuestion: " + questionRevised, "gpt-3.5-turbo").then(function (response) {
                 classificationExplanation = "Your question \"" + question + "\" was categorized as being context-seeking, and as such, has been answered based on information found on the web.";
 
                 const loadStatus = document.getElementById("load-status");

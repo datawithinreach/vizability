@@ -17,7 +17,7 @@ export async function classifyQuery(question) {
     const classificationQueryContents = classificationQuery["contents"];
 
     // Send prompt to GPT-3.5 and return the result
-    const output = await sendPromptDefault(classificationQueryContents + question, "gpt-3.5-turbo-1106");
+    const output = await sendPromptDefault(classificationQueryContents + question, "gpt-3.5-turbo");
     return output;
   } catch (error) {
     console.error('Error in classifyQuery:', error);
@@ -642,7 +642,7 @@ export async function generateSubsequentSuggestions(supplement, question, respon
     subsequentSuggestionsPrompt = insertString(subsequentSuggestionsPrompt, response, indexOfResponse, "my application responded:");
 
     // Send the updated prompt and return the output
-    const output = await sendPromptDefault(subsequentSuggestionsPrompt, "gpt-3.5-turbo-1106");
+    const output = await sendPromptDefault(subsequentSuggestionsPrompt, "gpt-3.5-turbo");
     return output;
   } catch (error) {
     console.error("Error:", error);
@@ -726,7 +726,7 @@ export async function handleNavigationQuery(question) {
     const navigationQuery = await response.json();
 
     const navigationQueryContents = navigationQuery["contents"];
-    const output = await sendPromptDefault(navigationQueryContents + question, "gpt-3.5-turbo-1106");
+    const output = await sendPromptDefault(navigationQueryContents + question, "gpt-3.5-turbo");
     return output;
   } catch (error) {
     console.error("Error:", error);
