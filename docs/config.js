@@ -2,7 +2,7 @@
 // The public site (GitHub Pages at dwr.bc.edu/vizability) calls the API hosted on Vercel.
 // When the page is served by the backend itself (Vercel, or `uvicorn main:app` on port 8000)
 // it calls the same origin. Any other local server (e.g. VS Code Live Server) uses the local backend.
-const PRODUCTION_API = "https://vizability.vercel.app";
+const PRODUCTION_API = "https://vizability-two.vercel.app";
 const PRODUCTION_HOSTS = ["dwr.bc.edu", "datawithinreach.github.io"];
 
 const { hostname, port } = window.location;
