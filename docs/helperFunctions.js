@@ -1,8 +1,42 @@
 // Helper Functions for main.js and eval/test.js
-const isProduction = window.location.hostname !== '127.0.0.1';
-const serverAddress = isProduction
-  ? "https://vizability-1006314949515.us-central1.run.app"
-  : "http://127.0.0.1:8000";
+import { serverAddress } from "./config.js";
+
+// The current chart's data as CSV. It lives in the browser and is sent with each
+// data question, so the backend does not have to remember anything between requests.
+let currentChartCsv = "";
+
+/**
+ * Converts a list of records to CSV text. Missing values become "None" and nested
+ * objects become "Non-String", matching what the answering prompts expect.
+ * @param {Object[]} rows - The records to convert.
+ * @returns {{headers: string[], cells: string[][], csv: string}}
+ */
+function toCsv(rows) {
+  if (rows.length === 0) return { headers: [], cells: [], csv: "" };
+  const headers = Object.keys(rows[0]);
+  const cells = rows.map(row => headers.map(key => {
+    const value = row[key];
+    if (value === null || value === undefined || value === "") return "None";
+    if (typeof value === "object") return "Non-String";
+    return String(value);
+  }));
+  const escape = value => /[",\n\r]/.test(value) ? `"${value.replace(/"/g, '""')}"` : value;
+  const csv = [headers, ...cells].map(line => line.map(escape).join(",")).join("\n") + "\n";
+  return { headers, cells, csv };
+}
+
+/**
+ * Gzip-compresses text so large datasets stay well under the API's request size limit.
+ * @param {string} text - The text to compress.
+ * @returns {Promise<Blob>}
+ */
+async function gzipText(text) {
+  if (typeof CompressionStream === "undefined") {
+    return new Blob([text], { type: "text/csv" });
+  }
+  const stream = new Blob([text]).stream().pipeThrough(new CompressionStream("gzip"));
+  return new Response(stream).blob();
+}
 
 /**
  * Classifies a user's query by sending it to an API and getting a response from GPT-3.5.
@@ -16,8 +50,8 @@ export async function classifyQuery(question) {
     const classificationQuery = await response.json();
     const classificationQueryContents = classificationQuery["contents"];
 
-    // Send prompt to GPT-3.5 and return the result
-    const output = await sendPromptDefault(classificationQueryContents + question, "gpt-3.5-turbo");
+    // Send prompt to the fast model and return the result
+    const output = await sendPromptDefault(classificationQueryContents + question, "fast");
     return output;
   } catch (error) {
     console.error('Error in classifyQuery:', error);
@@ -138,104 +172,63 @@ export function handleDataUpdate(view, vegaLiteSpec, isTest) {
     return newItem;
   });
 
-  // Send transformed data to the backend
-  fetch(`${serverAddress}/api/process-json`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ content: transformedDataPolished })
-  })
-    .then(response => {
-      if (response.ok) {
-        console.log('CSV file sent successfully!');
-        if (!isTest) {
-          populateTable();
-        }
-      } else {
-        console.error('Failed to send CSV file.');
-      }
-    })
-    .catch(error => {
-      console.error('Error:', error);
+  // Keep the data in the browser; it is sent along with each data question
+  const { headers, cells, csv } = toCsv(transformedDataPolished);
+  currentChartCsv = csv;
+  if (!isTest) {
+    populateTable(headers, cells);
+  }
+}
+
+/**
+ * Renders the chart's data in the data table. Clicking a column header sorts by
+ * that column, toggling between ascending and descending order.
+ * @param {string[]} headers - Column names.
+ * @param {string[][]} cells - Row values, as shown in the CSV.
+ */
+function populateTable(headers, cells) {
+  const table = document.getElementById('csv-table');
+  if (!table) return;
+  let order = 'desc';
+
+  const isNumeric = value => value.trim() !== "" && !isNaN(value);
+  const compare = (a, b) => (isNumeric(a) && isNumeric(b))
+    ? parseFloat(a) - parseFloat(b)
+    : a.localeCompare(b);
+
+  function render(rows) {
+    table.innerHTML = '';
+
+    const headerRow = document.createElement('tr');
+    headers.forEach((header, columnIndex) => {
+      const th = document.createElement('th');
+      th.textContent = header;
+      th.addEventListener('click', () => {
+        order = order === 'asc' ? 'desc' : 'asc';
+        const sorted = [...rows].sort((x, y) => compare(x[columnIndex], y[columnIndex]));
+        render(order === 'asc' ? sorted : sorted.reverse());
+      });
+      headerRow.appendChild(th);
     });
+    table.appendChild(headerRow);
 
-  /**
-   * Fetches and populates the data table with CSV data.
-   */
-  async function populateTable() {
-    try {
-      // Fetch CSV data
-      const response = await fetch(`${serverAddress}/api/get-backend-file?file_path=data/file.csv`);
-      const text = await response.json();
-      const csvData = text["contents"].trim().split('\n');
-      const headers = csvData.shift().split(',');
+    // A column is shown as numbers if any of its values is numeric
+    const numericColumns = headers.map((_, i) => rows.some(row => isNumeric(row[i])));
 
-      // Initialize table
-      const table = document.getElementById('csv-table');
-      table.innerHTML = '';
-
-      // Add table headers
-      const headerRow = document.createElement('tr');
-      headers.forEach(header => {
-        const th = document.createElement('th');
-        th.textContent = header;
-
-        // Add sorting functionality
-        th.addEventListener('click', async () => {
-          order = order === 'asc' ? 'desc' : 'asc'; // Toggle sort order
-          await sortTable(header, order);
-          populateTable(); // Refresh the table
-        });
-
-        headerRow.appendChild(th);
+    const fragment = document.createDocumentFragment();
+    rows.forEach(row => {
+      const tr = document.createElement('tr');
+      row.forEach((value, i) => {
+        const td = document.createElement('td');
+        td.textContent = numericColumns[i] && isNumeric(value) ? parseFloat(value) : value;
+        tr.appendChild(td);
       });
-      table.appendChild(headerRow);
-
-      // Determine data types for columns
-      const dataType = headers.map(() => 'string');
-      csvData.forEach(row => {
-        row.split(',').forEach((value, index) => {
-          if (!isNaN(value)) {
-            dataType[index] = 'number';
-          }
-        });
-      });
-
-      // Add table rows
-      csvData.forEach(row => {
-        const rowData = row.split(',');
-        const tr = document.createElement('tr');
-        rowData.forEach((value, index) => {
-          const td = document.createElement('td');
-          td.textContent = dataType[index] === 'number' ? parseFloat(value) : value;
-          tr.appendChild(td);
-        });
-        table.appendChild(tr);
-      });
-    } catch (error) {
-      console.error('Error populating table:', error);
-    }
+      fragment.appendChild(tr);
+    });
+    table.appendChild(fragment);
   }
 
-  /**
-   * Sorts the table by a specific field and order.
-   * @param {string} field - The field to sort by.
-   * @param {string} order - The sort order ('asc' or 'desc').
-   */
-  async function sortTable(field, order) {
-    try {
-      const response = await fetch(`${serverAddress}/sort_csv?field=${encodeURIComponent(field)}&order=${encodeURIComponent(order)}`);
-      const result = await response.json();
-      if (result.message) {
-        populateTable(); // Refresh the table after sorting
-      }
-    } catch (error) {
-      console.error('Error sorting table:', error);
-    }
-  }
-
-  let order = 'asc'; // Default sort order
+  render(cells);
 }
 
 // Helper Method for handleDataUpdate
@@ -576,17 +569,25 @@ function getColorName(colorCode) {
 }
 
 /**
- * Sends a question to the OpenAPI endpoint and returns the response.
+ * Sends a prompt to the language model and returns its reply.
  * 
- * @param {string} question - The question to send.
- * @param {string} gpt_model - The GPT model to use.
+ * @param {string} question - The prompt to send.
+ * @param {"fast"|"smart"} model - Which model tier to use. The backend maps tiers to
+ *   actual OpenAI models, so models can be upgraded without changing the frontend.
  * @returns {Promise<string>} The response from the API.
  */
-export async function sendPromptDefault(question, gpt_model) {
+export async function sendPromptDefault(question, model = "fast") {
   console.log("Prompt:", question);
   try {
-    const response = await fetch(`${serverAddress}/api/prompt?question=${encodeURIComponent(question)}&gpt_model=${encodeURIComponent(gpt_model)}`, { redirect: 'manual' });
+    const response = await fetch(`${serverAddress}/api/prompt`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ question, model }),
+    });
     const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.detail || `Request failed with status ${response.status}`);
+    }
     console.log("Response:", data["response"]);
     return data["response"];
   } catch (error) {
@@ -642,7 +643,7 @@ export async function generateSubsequentSuggestions(supplement, question, respon
     subsequentSuggestionsPrompt = insertString(subsequentSuggestionsPrompt, response, indexOfResponse, "my application responded:");
 
     // Send the updated prompt and return the output
-    const output = await sendPromptDefault(subsequentSuggestionsPrompt, "gpt-3.5-turbo");
+    const output = await sendPromptDefault(subsequentSuggestionsPrompt, "fast");
     return output;
   } catch (error) {
     console.error("Error:", error);
@@ -667,8 +668,15 @@ export async function sendPromptAgent(supplement, question, loadingAnnouncement,
   }
 
   try {
-    const response = await fetch(`${serverAddress}/api/apply-agent?question=${encodeURIComponent(supplement + question)}`, { redirect: 'manual' });
+    // Send the question together with the chart's data
+    const formData = new FormData();
+    formData.append("question", supplement + question);
+    formData.append("data", await gzipText(currentChartCsv), "chart_data.csv.gz");
+    const response = await fetch(`${serverAddress}/api/apply-agent`, { method: "POST", body: formData });
     const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.detail || `Request failed with status ${response.status}`);
+    }
 
     if (!isTest) {
       // Update DOM elements based on response
@@ -726,7 +734,7 @@ export async function handleNavigationQuery(question) {
     const navigationQuery = await response.json();
 
     const navigationQueryContents = navigationQuery["contents"];
-    const output = await sendPromptDefault(navigationQueryContents + question, "gpt-3.5-turbo");
+    const output = await sendPromptDefault(navigationQueryContents + question, "fast");
     return output;
   } catch (error) {
     console.error("Error:", error);

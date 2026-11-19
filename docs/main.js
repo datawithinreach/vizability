@@ -1,12 +1,9 @@
 import { handleDataUpdate, sendPromptAgent, sendPromptDefault, classifyQuery, handleNavigationQuery, processInstructions, generateSubsequentSuggestions } from "./helperFunctions.js";
 import { CondensedOlliRender } from "./condenseOlliRender.js";
 import { Stack } from "./stack.js";
+import { serverAddress } from "./config.js";
 
 // Initialize All Global Variables
-const isProduction = window.location.hostname !== '127.0.0.1';
-const serverAddress = isProduction
-  ? "https://vizability-1006314949515.us-central1.run.app"
-  : "http://127.0.0.1:8000";
 let activeElement = '';
 let activeElementNode = null;
 let activeElementNodeAddress = null;
@@ -75,8 +72,9 @@ const handleVegaLiteSpecChange = async function (event) {
   const sliderInput = document.querySelector('input[type="range"]');
   if (sliderInput) {
     const parameterName = sliderInput.getAttribute("name");
-    sliderInput.addEventListener("input", () => {
-      view.signal(parameterName, parseInt(sliderInput.value, 10)).runAsync();
+    sliderInput.addEventListener("input", async () => {
+      // Wait for Vega to apply the new value before reading the filtered data
+      await view.signal(parameterName, parseInt(sliderInput.value, 10)).runAsync();
       handleDataUpdate(view, vegaLiteSpec, false);
     });
   }
@@ -178,7 +176,7 @@ const handleVegaLiteSpecChange = async function (event) {
           } else {
             console.log("Substring 'follows:' not found in the initialSuggestions string.");
           }
-          return sendPromptDefault(modifiedString, "gpt-3.5-turbo")
+          return sendPromptDefault(modifiedString, "fast")
             .then(function (output) {
               return output; // Return the output value if needed for further processing
             })
@@ -314,7 +312,7 @@ function handleSubmit(event, question, hierarchy, loadingAnnouncement) {
           .replace("{Description}", supplementCondensed)
           .replace("{Question}", question);
 
-        sendPromptDefault(improveUserQueryPrompt, "gpt-4")
+        sendPromptDefault(improveUserQueryPrompt, "smart")
           .then(function (questionRevised) {
             if (questionRevised.startsWith("Question:")) {
               questionRevised = questionRevised.slice("Question:".length).trim();
@@ -338,7 +336,7 @@ function handleSubmit(event, question, hierarchy, loadingAnnouncement) {
                 });
             }
             else if (queryType.includes("Contextual Query")) {
-              sendPromptDefault("Here is a description of a dataset:" + hierarchy + "Use this description of the dataset along with outside knowledge to answer the following question:\nQuestion: " + questionRevised, "gpt-3.5-turbo").then(function (response) {
+              sendPromptDefault("Here is a description of a dataset:" + hierarchy + "Use this description of the dataset along with outside knowledge to answer the following question:\nQuestion: " + questionRevised, "fast").then(function (response) {
                 classificationExplanation = "Your question \"" + question + "\" was categorized as being context-seeking, and as such, has been answered based on information found on the web.";
 
                 const loadStatus = document.getElementById("load-status");

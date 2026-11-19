@@ -1,9 +1,4 @@
-import { loadVGandSendToBackend } from "./vgLoader.js";
-
-const isProduction = window.location.hostname !== '127.0.0.1';
-const serverAddress = isProduction
-  ? "https://vizability-1006314949515.us-central1.run.app"
-  : "http://127.0.0.1:8000";
+import { serverAddress } from "./config.js";
 
 // Stores loaded VegaLite Spec and accompanying URL/Values
 let vegaLiteInfo = {};
@@ -41,9 +36,6 @@ async function handleMethod1ButtonClick() {
 
     const vLData = { "contents": vLSpec };
 
-    // Load VegaLite Spec to the backend
-    loadVGandSendToBackend(vLData);
-
     // Show the QnA section
     document.getElementById("ask-question").style.display = "block";
 
@@ -65,8 +57,6 @@ function openFileExplorer() {
 document.getElementById('fileInput').addEventListener('change', async function (event) {
     vegaLiteInfo = await processFile(event.target.files);
     if (vegaLiteInfo) {
-        loadVGandSendToBackend(vegaLiteInfo);
-
         // Create and dispatch a custom event with the updated vegaLiteSpec
         const vegaLiteSpecEvent = new CustomEvent('vegaLiteSpecChange', {
             detail: vegaLiteInfo["contents"]

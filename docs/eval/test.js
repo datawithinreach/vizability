@@ -1,5 +1,5 @@
 import { CondensedOlliRender } from "../condenseOlliRender.js";
-import { loadVGandSendToBackend } from "./../vgLoader.js";
+import { serverAddress } from "../config.js";
 import { handleDataUpdate, sendPromptDefault, sendPromptAgent, getActiveAddress, handleNavigationQuery } from "../helperFunctions.js";
 
 // Initialize Global Variables
@@ -51,16 +51,13 @@ async function clickHandler(isEvaluate) {
     for (var [key, value] of Object.entries(testingSetSample)) {
         try {
             // Render VegaLite Spec Corresponding to the Query being Asked
-            const response = await fetch("/api/get-backend-file?file_path=./test/testVegaLiteSpecs/" + key + ".vg");
+            const response = await fetch(serverAddress + "/api/get-backend-file?file_path=./test/testVegaLiteSpecs/" + key + ".vg");
             const data = await response.json();
             const vLSpec = JSON.parse(data.contents);
 
             const vLData = {
                 "contents": vLSpec
             };
-
-            // Load VegaLite Spec to the Backend
-            loadVGandSendToBackend(vLData);
 
             const vegaSpec = await vegaLite.compile(vLSpec).spec;
             const runtime = await vega.parse(vegaSpec);
@@ -86,7 +83,7 @@ async function clickHandler(isEvaluate) {
 
             // Initialize Supplement
             const descrPostFilePath = "gptPrompts/descrPost.txt";
-            let descrPostRaw = await fetch("/api/get-backend-file?file_path=" + descrPostFilePath);
+            let descrPostRaw = await fetch(serverAddress + "/api/get-backend-file?file_path=" + descrPostFilePath);
             let descrPostJSON = await descrPostRaw.json();
             const descrPost = descrPostJSON["contents"];
             const supplement = descrPre + condensedString + descrPost;
@@ -163,7 +160,7 @@ async function getQuestions(testingSetURL) {
 
 
 
-    // return fetch("/api/get-backend-file?file_path=" + filePath)
+    // return fetch(serverAddress + "/api/get-backend-file?file_path=" + filePath)
     //     .then(function (response) {
     //         return response.json();
     //     })
@@ -204,9 +201,9 @@ function convertStringToDictionary(csvString) {
 // Update Data Dictionary with OpenAPI Predicted Classifications
 async function classifyQuestions(value) {
     // const filePath = "gptPrompts/queryClassification.txt";
-    // const classificationResponse = await fetch("/api/get-backend-file?file_path=" + filePath, { redirect: 'manual' });
+    // const classificationResponse = await fetch(serverAddress + "/api/get-backend-file?file_path=" + filePath, { redirect: 'manual' });
     // console.log(value.question);
-    // const classificationResponse = await fetch("/api/get-validation-few-shot-prompting?user_query=" + value.question, { redirect: 'manual' });
+    // const classificationResponse = await fetch(serverAddress + "/api/get-validation-few-shot-prompting?user_query=" + value.question, { redirect: 'manual' });
     // const classificationQuery = await classificationResponse.json();
     // const classificationQueryContents = classificationQuery["contents"];
 
@@ -215,10 +212,10 @@ async function classifyQuestions(value) {
         const groundTruth = classificationObj.ground_truth;
         let classificationAssessment = "Incorrect Classification";
 
-        const classificationTemplate = await fetch("/api/get-validation-few-shot-prompting?user_query=" + question, { redirect: 'manual' });
+        const classificationTemplate = await fetch(serverAddress + "/api/get-validation-few-shot-prompting?user_query=" + question, { redirect: 'manual' });
         const classificationQuery = await classificationTemplate.json();
         const classificationQueryContents = classificationQuery["contents"];
-        const classificationResponse = await sendPromptDefault(classificationQueryContents + question, "gpt-3.5-turbo-1106");
+        const classificationResponse = await sendPromptDefault(classificationQueryContents + question, "fast");
         if (classificationResponse.includes("Analytical Query")) { classificationObj.classification = "Analytical Query" }
         else if (classificationResponse.includes("Visual Query")) { classificationObj.classification = "Visual Query" }
         else if (classificationResponse.includes("Contextual Query")) { classificationObj.classification = "Contextual Query" }
@@ -240,7 +237,7 @@ async function answerQuestions(value, supplement) {
         const question = questionObj.question;
         // Insert Here
         const improveUserQueryPromptFilePath = "gptPrompts/improveUserQueryPrompt.txt";
-        const improveUserQueryPromptRaw = await fetch(`/api/get-backend-file?file_path=${improveUserQueryPromptFilePath}`, { redirect: 'manual' });
+        const improveUserQueryPromptRaw = await fetch(`${serverAddress}/api/get-backend-file?file_path=${improveUserQueryPromptFilePath}`, { redirect: 'manual' });
         const improveUserQueryPromptJSON = await improveUserQueryPromptRaw.json();
         console.log(improveUserQueryPromptJSON);
 
@@ -249,7 +246,7 @@ async function answerQuestions(value, supplement) {
             .replace("{Description}", supplement)
             .replace("{Question}", question);
 
-        let questionRevised = await sendPromptDefault(improveUserQueryPrompt, "gpt-4");
+        let questionRevised = await sendPromptDefault(improveUserQueryPrompt, "smart");
 
         if (questionRevised.startsWith("Answer:")) {
             questionRevised = questionRevised.slice("Answer:".length).trim();
@@ -263,7 +260,7 @@ async function answerQuestions(value, supplement) {
             questionObj.answer = response;
         }
         else if (classification.includes("Contextual Query")) {
-            const response = await sendPromptDefault(questionRevised, "gpt-3.5-turbo-1106");
+            const response = await sendPromptDefault(questionRevised, "fast");
             document.getElementById("prompt").textContent = question;
             document.getElementById("response").textContent = response;
             questionObj.answer = response;
@@ -295,7 +292,7 @@ async function answerQuestions(value, supplement) {
         }
 
         const assessmentQuestionFilePath = "gptPrompts/evaluationQuery.txt";
-        const assessmentQuestionTemplateRaw = await fetch("/api/get-backend-file?file_path=" + assessmentQuestionFilePath);
+        const assessmentQuestionTemplateRaw = await fetch(serverAddress + "/api/get-backend-file?file_path=" + assessmentQuestionFilePath);
         const assessmentQuestionTemplateJSON = await assessmentQuestionTemplateRaw.json();
         let assessmentQuestionTemplate = assessmentQuestionTemplateJSON["contents"];
 
@@ -304,13 +301,13 @@ async function answerQuestions(value, supplement) {
             .replace("{Response A}", groundTruth)
             .replace("{Response B}", questionObj.answer);
 
-        const assessment = await sendPromptDefault(assessmentQuestionTemplate, "gpt-3.5-turbo-1106");
+        const assessment = await sendPromptDefault(assessmentQuestionTemplate, "fast");
         console.log("Assessment", assessment);
 
         questionObj.assessment = assessment;
 
         // const assessmentQuestionFilePath = "gptPrompts/likertScaleEvaluationQuery.txt";
-        // const assessmentQuestionTemplateRaw = await fetch("/api/get-backend-file?file_path=" + assessmentQuestionFilePath);
+        // const assessmentQuestionTemplateRaw = await fetch(serverAddress + "/api/get-backend-file?file_path=" + assessmentQuestionFilePath);
         // const assessmentQuestionTemplateJSON = await assessmentQuestionTemplateRaw.json();
         // let assessmentQuestionTemplate = assessmentQuestionTemplateJSON["contents"];
 
@@ -346,7 +343,7 @@ async function answerQuestions(value, supplement) {
         // questionObj.assessment = assessment;
 
         // const binaryAssessmentQuestionFilePath = "gptPrompts/binaryEvaluationQuery.txt";
-        // const binaryAssessmentQuestionTemplateRaw = await fetch("/api/get-backend-file?file_path=" + binaryAssessmentQuestionFilePath);
+        // const binaryAssessmentQuestionTemplateRaw = await fetch(serverAddress + "/api/get-backend-file?file_path=" + binaryAssessmentQuestionFilePath);
         // const binaryAssessmentQuestionTemplateJSON = await binaryAssessmentQuestionTemplateRaw.json();
         // let binaryAssessmentQuestionTemplate = binaryAssessmentQuestionTemplateJSON["contents"];
 
@@ -407,7 +404,7 @@ async function generateValidationAndTestingSets() {
         };
 
         try {
-            const response = await fetch("/api/process-eval-sets", requestOptions);
+            const response = await fetch(serverAddress + "/api/process-eval-sets", requestOptions);
             if (response.ok) {
                 console.log('Data sent successfully to the backend!');
             } else {

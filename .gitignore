@@ -160,3 +160,8 @@ cython_debug/
 #.idea/
 
 .DS_Store
+# Runtime files written by older versions of the backend
+audio/
+data/
+spec/
+.vercel

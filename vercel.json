@@ -1,0 +1,9 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "main.py": {
+      "maxDuration": 120,
+      "excludeFiles": "{evaluation/**,test/validationAndTraining/testingSet*.csv,test/testQuestions.csv,.vscode/**,Dockerfile,cloudbuild.yaml}"
+    }
+  }
+}
