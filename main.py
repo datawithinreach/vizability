@@ -54,6 +54,9 @@ MAX_DATA_BYTES = 50 * 1024 * 1024       # decompressed CSV sent to the agent
 MAX_AUDIO_BYTES = 25 * 1024 * 1024      # OpenAI transcription limit
 AGENT_TIMEOUT_SECONDS = 100             # keep below maxDuration in vercel.json
 AGENT_STOPPED_MESSAGE = "Agent stopped due to iteration limit or time limit."
+# Datasets up to this size are also shown to the model directly, so it can answer
+# simple lookups without starting the Python sandbox (much faster). Set 0 to disable.
+INLINE_DATA_MAX_BYTES = int(os.getenv("INLINE_DATA_MAX_BYTES", "50000"))
 
 # Files the frontend may read through /api/get-backend-file
 READABLE_DIRS = (ROOT / "gptPrompts", ROOT / "test" / "testVegaLiteSpecs")
@@ -82,6 +85,10 @@ Keep the answer to two or three sentences. Never list more than five values: whe
 many values, summarize them (range, overall trend, highest and lowest) and say the user can ask about
 specific ones. Write plain text only, with no Markdown, bullet points, bold text, or headings.
 Do not mention code, Python, pandas, files, or dataframes in your answer."""
+
+AGENT_INLINE_DATA_NOTE = """The full dataset is also included below between <data> tags.
+If the answer is a single value you can read directly from one row, answer from the data below without running code.
+For anything that needs calculation, counting, sorting, filtering, or comparing many rows, use Python on the file."""
 
 # --------------------------------------------------------------------------
 # App
@@ -288,9 +295,13 @@ async def apply_agent(question: str = Form(...), data: UploadFile = File(...)):
             expires_after={"anchor": "created_at", "seconds": 3600},  # cleanup backstop
         )
         uploaded_at = time.perf_counter()
+        inline = len(raw) <= INLINE_DATA_MAX_BYTES
+        instructions = AGENT_INSTRUCTIONS
+        if inline:
+            instructions += "\n\n" + AGENT_INLINE_DATA_NOTE + "\n<data>\n" + raw.decode("utf-8", "replace") + "</data>"
         response = await create_response(
             model=MODEL_AGENT,
-            instructions=AGENT_INSTRUCTIONS,
+            instructions=instructions,
             input=question,
             tools=[{"type": "code_interpreter", "container": {"type": "auto", "file_ids": [uploaded.id]}}],
             max_tool_calls=12,
@@ -300,7 +311,7 @@ async def apply_agent(question: str = Form(...), data: UploadFile = File(...)):
         code_runs = sum(1 for item in response.output if item.type == "code_interpreter_call")
         print(
             f"agent timing: upload {uploaded_at - started:.1f}s, model {time.perf_counter() - uploaded_at:.1f}s, "
-            f"code runs {code_runs}, data {len(raw)} bytes"
+            f"code runs {code_runs}, data {len(raw)} bytes{' (inline)' if inline else ''}"
         )
     except APITimeoutError:
         answer = AGENT_STOPPED_MESSAGE
