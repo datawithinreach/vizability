@@ -1,7 +1,4 @@
-const isProduction = window.location.hostname !== '127.0.0.1';
-const serverAddress = isProduction
-  ? "https://vizability-1006314949515.us-central1.run.app"
-  : "http://127.0.0.1:8000";
+import { serverAddress } from "./config.js";
 
 /**
  * Array to store audio data chunks during recording.
@@ -51,8 +48,10 @@ async function toggleRecording() {
 
       // Handle stopping of recording
       mediaRecorder.onstop = () => {
-        const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
-        const audioUrl = URL.createObjectURL(audioBlob);
+        // Label the recording with the format the browser actually recorded (usually WebM or MP4),
+        // so the transcription service can decode it.
+        const mimeType = (mediaRecorder.mimeType || "audio/webm").split(";")[0];
+        const audioBlob = new Blob(audioChunks, { type: mimeType });
 
         // Send audio data to the backend
         sendAudioData(audioBlob);
@@ -90,7 +89,8 @@ async function toggleRecording() {
  */
 async function sendAudioData(audioBlob) {
   const formData = new FormData();
-  formData.append("audioFile", audioBlob, "recorded_audio.wav");
+  const extension = { "audio/webm": "webm", "audio/mp4": "mp4", "audio/ogg": "ogg", "audio/wav": "wav", "audio/mpeg": "mp3" }[audioBlob.type] || "webm";
+  formData.append("audioFile", audioBlob, `recording.${extension}`);
 
   try {
     const response = await fetch(`${serverAddress}/api/upload-audio`, {
