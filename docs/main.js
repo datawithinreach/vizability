@@ -325,6 +325,10 @@ function handleSubmit(event, question, hierarchy, loadingAnnouncement) {
       return sendPromptDefault(improveUserQueryPrompt, "smart");
     });
 
+  // Load the answer guidelines now so data questions don't wait for them later
+  const answerGuidelines = fetch(`${serverAddress}/api/get-backend-file?file_path=${descrPostFilePath}`)
+    .then((descrPostRaw) => descrPostRaw.json());
+
   // Classify the question and rewrite it at the same time; neither step depends on the other.
   // Classification Categories Include: Analytical Query; Visual Query; Contextual Query; Navigation Query
   Promise.all([classifyQuery(question), rewriteQuestion])
@@ -341,8 +345,7 @@ function handleSubmit(event, question, hierarchy, loadingAnnouncement) {
     }
     console.log("REVISED QUESTION", questionRevised);
     if (queryType.includes("Analytical Query") || queryType.includes("Visual Query")) {
-      fetch(`${serverAddress}/api/get-backend-file?file_path=${descrPostFilePath}`)
-        .then((descrPostRaw) => descrPostRaw.json())
+      answerGuidelines
         .then((descrPostJSON) => {
           const descrPost = descrPostJSON["contents"];
           classificationExplanation = "Your question \"" + question + "\" was categorized as being data-driven, and as such, has been answered based on the data in the chart.";
@@ -442,8 +445,7 @@ function handleSubmit(event, question, hierarchy, loadingAnnouncement) {
     }
     // Query Cannot be Classified by LLM
     else {
-      fetch(`${serverAddress}/api/get-backend-file?file_path=${descrPostFilePath}`)
-        .then((descrPostRaw) => descrPostRaw.json())
+      answerGuidelines
         .then((descrPostJSON) => {
           const descrPost = descrPostJSON["contents"];
           classificationExplanation = "Your question \"" + question + "\" was categorized as being data-driven, and as such, has been answered based on the data in the chart.";

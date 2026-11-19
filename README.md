@@ -37,5 +37,6 @@ The backend keeps no state: the browser sends the chart's data with each questio
 | `OPENAI_MODEL_EMBEDDING` | `text-embedding-3-small` | Picking few-shot examples for classification |
 | `OPENAI_MODEL_TRANSCRIBE` | `gpt-transcribe` | Voice questions |
 | `OPENAI_REASONING_EFFORT` | `low` | Lower is faster; set empty to use each model's default |
+| `INLINE_DATA_MAX_BYTES` | `50000` | Datasets up to this size are shown to the model directly so simple lookups skip the Python sandbox; `0` disables |
 
 Models can be changed by editing these variables and redeploying; no code change is needed.
