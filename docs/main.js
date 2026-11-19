@@ -50,6 +50,7 @@ document.getElementById("toggle-table").addEventListener("click", (event) => {
 const handleVegaLiteSpecChange = async function (event) {
   // Update the vegaLiteSpec variable with the new value
   vegaLiteSpec = event.detail;
+  document.getElementById("suggestions-loading").style.display = "flex";
 
 
   // DOM Element Container that Houses VegaLite SVG
@@ -198,12 +199,29 @@ const handleVegaLiteSpecChange = async function (event) {
         document.getElementById("suggestion-container").style.display = "grid";
         document.getElementById("ask-question").style.display = "block";
         document.getElementById("QnA-header").style.display = "block";
+      })
+      .catch(function (error) {
+        // Still let the user type their own question
+        console.error(error);
+        document.getElementById("ask-question").style.display = "block";
+      })
+      .finally(function () {
+        document.getElementById("suggestions-loading").style.display = "none";
       });
 
     setUpEventListener(olliContainer, activeElementStack);
   });
 
 };
+
+// Show the spinner whenever the status says the answer is still being worked on.
+// Watching the status text keeps the spinner in sync with every code path that updates it.
+const loadStatusElement = document.getElementById("load-status");
+const loadSpinner = document.getElementById("load-spinner");
+new MutationObserver(() => {
+  const working = ["Working. Please Wait", "Still Loading"].includes(loadStatusElement.textContent.trim());
+  loadSpinner.style.display = working ? "block" : "none";
+}).observe(loadStatusElement, { childList: true, characterData: true, subtree: true });
 
 // Initialize Event Listener for Loading in VegaLite Spec
 document.addEventListener('vegaLiteSpecChange', handleVegaLiteSpecChange);

@@ -505,3 +505,46 @@ hr {
 .close-button:hover {
   background-color: lightgray;
 }
+/* Loading indicators */
+.loading-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+#suggestions-loading {
+  margin: 16px 0;
+  font-size: 1.1rem;
+}
+
+.spinner {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border: 4px solid #c9c9c9;
+  border-top-color: #1a4d8f;
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+
+.spinner-small {
+  width: 20px;
+  height: 20px;
+  border-width: 3px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* People who ask for less motion get a gentle pulse instead of a spinning wheel */
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.35; }
+  }
+}

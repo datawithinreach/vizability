@@ -280,12 +280,14 @@ async def apply_agent(question: str = Form(...), data: UploadFile = File(...)):
 
     client = openai_client()
     uploaded = None
+    started = time.perf_counter()
     try:
         uploaded = await client.files.create(
             file=("chart_data.csv", raw, "text/csv"),
             purpose="user_data",
             expires_after={"anchor": "created_at", "seconds": 3600},  # cleanup backstop
         )
+        uploaded_at = time.perf_counter()
         response = await create_response(
             model=MODEL_AGENT,
             instructions=AGENT_INSTRUCTIONS,
@@ -295,6 +297,11 @@ async def apply_agent(question: str = Form(...), data: UploadFile = File(...)):
             timeout=AGENT_TIMEOUT_SECONDS,
         )
         answer = response.output_text.strip() or AGENT_STOPPED_MESSAGE
+        code_runs = sum(1 for item in response.output if item.type == "code_interpreter_call")
+        print(
+            f"agent timing: upload {uploaded_at - started:.1f}s, model {time.perf_counter() - uploaded_at:.1f}s, "
+            f"code runs {code_runs}, data {len(raw)} bytes"
+        )
     except APITimeoutError:
         answer = AGENT_STOPPED_MESSAGE
     except OpenAIError as e:
