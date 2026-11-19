@@ -36,5 +36,6 @@ The backend keeps no state: the browser sends the chart's data with each questio
 | `OPENAI_MODEL_AGENT` | same as smart | Answering data questions with code interpreter |
 | `OPENAI_MODEL_EMBEDDING` | `text-embedding-3-small` | Picking few-shot examples for classification |
 | `OPENAI_MODEL_TRANSCRIBE` | `gpt-transcribe` | Voice questions |
+| `OPENAI_REASONING_EFFORT` | `low` | Lower is faster; set empty to use each model's default |
 
 Models can be changed by editing these variables and redeploying; no code change is needed.

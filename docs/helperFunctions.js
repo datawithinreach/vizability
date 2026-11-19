@@ -719,6 +719,14 @@ export async function sendPromptAgent(supplement, question, loadingAnnouncement,
     return data.response;
   } catch (error) {
     console.error("Error:", error);
+    if (!isTest) {
+      // Stop "Still Loading" and tell the user the request failed
+      clearInterval(loadingAnnouncement);
+      document.getElementById("load-status").innerHTML = "Something went wrong";
+      document.getElementById("response-info").style.display = "block";
+      document.getElementById("prompt").textContent = "";
+      document.getElementById("response").textContent = "Sorry, the answer could not be generated. Please try again.";
+    }
   }
 }
 

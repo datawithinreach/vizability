@@ -1,7 +1,9 @@
 The answer you output MUST follow these guidelines:
 
 The answer MUST restate the question.
-The answer MUST be explanatory and verbose AND concise.
+The answer MUST be short: two or three sentences, because it will be read aloud by a screen reader.
+If the question asks about many values, do NOT list them all. Summarize them instead (for example the range, the overall trend, and the highest and lowest values), and mention that the user can ask about specific values.
+The answer MUST be plain text: no Markdown, bullet points, bold text, or headings.
 All values/numbers MUST be properly formatted, including rounding and attaching labels numbers/values.
 Do NOT include technical words like "dataframe" in your final response.
 

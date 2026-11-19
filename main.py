@@ -21,7 +21,7 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from openai import APITimeoutError, AsyncOpenAI, OpenAIError
+from openai import APITimeoutError, AsyncOpenAI, BadRequestError, OpenAIError
 from pydantic import BaseModel
 
 load_dotenv()
@@ -37,6 +37,9 @@ MODEL_SMART = os.getenv("OPENAI_MODEL_SMART", "gpt-6.2-sol")
 MODEL_AGENT = os.getenv("OPENAI_MODEL_AGENT", MODEL_SMART)
 MODEL_EMBEDDING = os.getenv("OPENAI_MODEL_EMBEDDING", "text-embedding-3-small")
 MODEL_TRANSCRIBE = os.getenv("OPENAI_MODEL_TRANSCRIBE", "gpt-transcribe")
+# Lower reasoning effort makes answers much faster; these tasks don't need deep reasoning.
+# Set to an empty string to use each model's default.
+REASONING_EFFORT = os.getenv("OPENAI_REASONING_EFFORT", "low")
 
 # The frontend asks for a tier, not a model name, so models can be swapped
 # here without touching the client. Legacy names are mapped for old clients.
@@ -71,10 +74,13 @@ CATEGORY_ANCHORS = {
     "Navigation Query": "What is my current position?",
 }
 
-AGENT_INSTRUCTIONS = """You answer questions about the dataset behind a chart, for a blind or low-vision user.
+AGENT_INSTRUCTIONS = """You answer questions about the dataset behind a chart, for a blind or low-vision user
+whose screen reader will read your answer aloud.
 The dataset is a CSV file that has been uploaded to /mnt/data/. Load it with pandas and use Python
 to look up values or compute the answer; do not guess numbers. Missing values appear as the text "None".
-Reply with a short plain-text answer that follows the guidelines in the user's message.
+Keep the answer to two or three sentences. Never list more than five values: when a question covers
+many values, summarize them (range, overall trend, highest and lowest) and say the user can ask about
+specific ones. Write plain text only, with no Markdown, bullet points, bold text, or headings.
 Do not mention code, Python, pandas, files, or dataframes in your answer."""
 
 # --------------------------------------------------------------------------
@@ -104,6 +110,27 @@ def openai_client() -> AsyncOpenAI:
             raise HTTPException(500, "OPENAI_API_KEY is not configured on the server.")
         _client = AsyncOpenAI()
     return _client
+
+
+_reasoning_unsupported: set[str] = set()
+
+
+async def create_response(**kwargs):
+    """Call the Responses API with the configured reasoning effort.
+
+    If a model does not accept the reasoning setting, retry without it and remember
+    that for later requests, so a model swap via env vars can't break the site.
+    """
+    model = kwargs["model"]
+    if REASONING_EFFORT and model not in _reasoning_unsupported:
+        try:
+            return await openai_client().responses.create(reasoning={"effort": REASONING_EFFORT}, **kwargs)
+        except BadRequestError as e:
+            if "reasoning" not in str(e).lower():
+                raise
+            print(f"{model} rejected reasoning effort '{REASONING_EFFORT}'; retrying without it")
+            _reasoning_unsupported.add(model)
+    return await openai_client().responses.create(**kwargs)
 
 
 def resolve_model(name: str) -> str:
@@ -148,7 +175,7 @@ async def prompt(req: PromptRequest):
         raise HTTPException(413, "Prompt is too long.")
     model = resolve_model(req.model)
     try:
-        response = await openai_client().responses.create(model=model, input=req.question)
+        response = await create_response(model=model, input=req.question)
     except OpenAIError as e:
         raise HTTPException(502, f"OpenAI request failed: {e}") from e
     return {"prompt": req.question, "response": response.output_text}
@@ -259,7 +286,7 @@ async def apply_agent(question: str = Form(...), data: UploadFile = File(...)):
             purpose="user_data",
             expires_after={"anchor": "created_at", "seconds": 3600},  # cleanup backstop
         )
-        response = await client.responses.create(
+        response = await create_response(
             model=MODEL_AGENT,
             instructions=AGENT_INSTRUCTIONS,
             input=question,
